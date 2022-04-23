@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
-        <title>Liangdi&#39;s Blog</title>
-        <link>https://example.com/</link>
-        <description>Recent content on Liangdi&#39;s Blog</description>
+        <title>云原生 on Liangdi&#39;s Blog</title>
+        <link>https://example.com/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/</link>
+        <description>Recent content in 云原生 on Liangdi&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Sat, 23 Apr 2022 16:59:14 +0800</lastBuildDate><atom:link href="https://example.com/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sat, 23 Apr 2022 16:59:14 +0800</lastBuildDate><atom:link href="https://example.com/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>渐进式云原生实践: 使用 podman 容器化你的应用</title>
         <link>https://example.com/p/%E6%B8%90%E8%BF%9B%E5%BC%8F%E4%BA%91%E5%8E%9F%E7%94%9F%E5%AE%9E%E8%B7%B5-%E4%BD%BF%E7%94%A8-podman-%E5%AE%B9%E5%99%A8%E5%8C%96%E4%BD%A0%E7%9A%84%E5%BA%94%E7%94%A8/</link>
         <pubDate>Sat, 23 Apr 2022 16:59:14 +0800</pubDate>
@@ -233,31 +233,6 @@
 &lt;li&gt;podman 中还有 pod 管理功能,这也是我选择 podman 的原因之一,这方面将会在下次容器有化中使用.&lt;/li&gt;
 &lt;li&gt;这次交付产物使用 -v 路径的方式告知容器,后续可以使用命名 volume 替代.&lt;/li&gt;
 &lt;/ul&gt;
-</description>
-        </item>
-        <item>
-        <title>Archives</title>
-        <link>https://example.com/archives/</link>
-        <pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate>
-        
-        <guid>https://example.com/archives/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>Search</title>
-        <link>https://example.com/search/</link>
-        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-        
-        <guid>https://example.com/search/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>关于</title>
-        <link>https://example.com/about/</link>
-        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-        
-        <guid>https://example.com/about/</guid>
-        <description>&lt;p&gt;啥都没有!&lt;/p&gt;
 </description>
         </item>
         

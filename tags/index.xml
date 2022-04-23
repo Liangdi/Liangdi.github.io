@@ -1,42 +1,35 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Tags on Liangdi&#39;s</title>
-    <link>http://liangdi.me/tags/</link>
-    <description>Recent content in Tags on Liangdi&#39;s</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>zh-CN</language>
-    <lastBuildDate>Mon, 29 Jul 2019 18:22:44 +0800</lastBuildDate>
-    
-	<atom:link href="http://liangdi.me/tags/index.xml" rel="self" type="application/rss+xml" />
-    
-    
-    <item>
-      <title>Flutter</title>
-      <link>http://liangdi.me/tags/flutter/</link>
-      <pubDate>Mon, 29 Jul 2019 18:22:44 +0800</pubDate>
-      
-      <guid>http://liangdi.me/tags/flutter/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Game</title>
-      <link>http://liangdi.me/tags/game/</link>
-      <pubDate>Mon, 29 Jul 2019 18:22:44 +0800</pubDate>
-      
-      <guid>http://liangdi.me/tags/game/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Iot</title>
-      <link>http://liangdi.me/tags/iot/</link>
-      <pubDate>Mon, 29 Jul 2019 18:22:44 +0800</pubDate>
-      
-      <guid>http://liangdi.me/tags/iot/</guid>
-      <description></description>
-    </item>
-    
-  </channel>
+    <channel>
+        <title>Tags on Liangdi&#39;s Blog</title>
+        <link>https://example.com/tags/</link>
+        <description>Recent content in Tags on Liangdi&#39;s Blog</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <lastBuildDate>Sat, 23 Apr 2022 16:59:14 +0800</lastBuildDate><atom:link href="https://example.com/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>podman</title>
+        <link>https://example.com/tags/podman/</link>
+        <pubDate>Sat, 23 Apr 2022 16:59:14 +0800</pubDate>
+        
+        <guid>https://example.com/tags/podman/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>容器技术</title>
+        <link>https://example.com/tags/%E5%AE%B9%E5%99%A8%E6%8A%80%E6%9C%AF/</link>
+        <pubDate>Sat, 23 Apr 2022 16:59:14 +0800</pubDate>
+        
+        <guid>https://example.com/tags/%E5%AE%B9%E5%99%A8%E6%8A%80%E6%9C%AF/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>云原生</title>
+        <link>https://example.com/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/</link>
+        <pubDate>Sat, 23 Apr 2022 16:59:14 +0800</pubDate>
+        
+        <guid>https://example.com/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/</guid>
+        <description></description>
+        </item>
+        
+    </channel>
 </rss>

@@ -1,23 +1,10 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Categories on Liangdi&#39;s</title>
-    <link>http://liangdi.me/categories/</link>
-    <description>Recent content in Categories on Liangdi&#39;s</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>zh-CN</language>
-    
-	<atom:link href="http://liangdi.me/categories/index.xml" rel="self" type="application/rss+xml" />
-    
-    
-    <item>
-      <title>Project</title>
-      <link>http://liangdi.me/categories/project/</link>
-      <pubDate>Mon, 29 Jul 2019 18:22:44 +0800</pubDate>
-      
-      <guid>http://liangdi.me/categories/project/</guid>
-      <description></description>
-    </item>
-    
-  </channel>
+    <channel>
+        <title>Categories on Liangdi&#39;s Blog</title>
+        <link>https://example.com/categories/</link>
+        <description>Recent content in Categories on Liangdi&#39;s Blog</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language><atom:link href="https://example.com/categories/index.xml" rel="self" type="application/rss+xml" />
+    </channel>
 </rss>
