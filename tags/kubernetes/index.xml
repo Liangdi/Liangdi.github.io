@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>kubernetes on Liangdi&#39;s Blog</title>
+        <link>https://liangdi.me/tags/kubernetes/</link>
+        <description>Recent content in kubernetes on Liangdi&#39;s Blog</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <lastBuildDate>Wed, 27 Apr 2022 16:30:35 +0800</lastBuildDate><atom:link href="https://liangdi.me/tags/kubernetes/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>选择 podman 的理由, 以及它和 Kubernetes , Docker 的区别</title>
+        <link>https://liangdi.me/p/what-is-podman-and-different-from-kubernetes-and-docker/</link>
+        <pubDate>Wed, 27 Apr 2022 16:30:35 +0800</pubDate>
+        
+        <guid>https://liangdi.me/p/what-is-podman-and-different-from-kubernetes-and-docker/</guid>
+        <description>&lt;img src="https://liangdi.me/p/what-is-podman-and-different-from-kubernetes-and-docker/assets/podman-vs-docker.jpg" alt="Featured image of post 选择 podman 的理由, 以及它和 Kubernetes , Docker 的区别" /&gt;&lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;
+&lt;p&gt;大家好,我是 Liangdi, podman 4.x 版本已经发布了, 我也从 docker 开始向 podman 迁移, 所以是合适的时候写点 podman 的文章了.&lt;/p&gt;
+&lt;h2 id=&#34;podman-是什么&#34;&gt;podman 是什么&lt;/h2&gt;
+&lt;p&gt;官方网站: &lt;a class=&#34;link&#34; href=&#34;https://podman.io&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;podman.io&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;官方自己的介绍: &lt;a class=&#34;link&#34; href=&#34;https://podman.io/whatis.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://podman.io/whatis.html&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;名称 &lt;code&gt;podman&lt;/code&gt; ,官方说明是 &lt;code&gt;Pod Manager&lt;/code&gt; , 所以它不仅可以管理 OCI 容器,还可以管理 pod , 这也是和 docker 的最大差别吧.&lt;/p&gt;
+&lt;h2 id=&#34;和-kubernetes-的区别&#34;&gt;和 kubernetes 的区别&lt;/h2&gt;
+&lt;p&gt;kubernetes(k8s) 是目前最流行的容器编排工具, 集群管理工具, 生态很完善, 也很&lt;code&gt;&amp;quot;重&amp;quot;&lt;/code&gt;, pod 的概念就来自 k8s , 虽然 podman 也是管理 pod, 但是远远不及 k8s 的编排功能, 同时 podman 也没有集群管理功能,如果需要管理集群, 需要第三方工具完成.&lt;/p&gt;
+&lt;p&gt;所以 podman 定位也不是编排和集群管理工具, 紧紧是一个 pod 和容器的管理工具. 所以不是一个级别的东西, 这里不做太多的比较.&lt;/p&gt;
+&lt;h2 id=&#34;和-docker-的区别&#34;&gt;和 docker 的区别&lt;/h2&gt;
+&lt;p&gt;如果仅仅从 &lt;code&gt;docker&lt;/code&gt; 和 &lt;code&gt;podman&lt;/code&gt; 两个命令提供的功能来讲,它们功能交集很大, podman 官方甚至推荐 &lt;code&gt;alias docker=podman&lt;/code&gt; 来过渡.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;docker 文档更齐全,  podman 可以借用一下 docker 的文档&lt;/li&gt;
+&lt;li&gt;docker 生态更加完善, podman 一时半会赶不上,但是如果你只是去跑容器, 那这是一样的&lt;/li&gt;
+&lt;li&gt;docker 有 docker-compose, podman 早期没有对应工具,后面也出了 podman-compose, 但是这个功能是否必须? 值得考虑,因为 podman 支持 pod 管理.&lt;/li&gt;
+&lt;li&gt;docker 有 machine , 让 windows 和 mac 支持 linux 容器, podman 也支持,而且已经比较完善.&lt;/li&gt;
+&lt;li&gt;docker 有 docker-desktop , podman-desktop 目前还比较简单.&lt;/li&gt;
+&lt;li&gt;docker 支持 rest api , podman 也支持 rest api, 这使得开发生态工具会比较简单.&lt;/li&gt;
+&lt;li&gt;docker 有 swarm 支持集群部署, podman 没有对应工具, 不过支持 remote , 调用远程机器上的 podman service 执行对应的功能 , 这样能满足很多轻量化的场景.&lt;/li&gt;
+&lt;li&gt;k8s 之前支持使用 docker-shim 和 docker 集成, 不过新版本也放弃这一层, 直接通过 CRI 调用 contained , podman 也不支持 CRI. 并且也没有什么计划.&lt;/li&gt;
+&lt;li&gt;docker 商业/开源并行, podman 只有开源版本, 目前没有哪家公司提供商业支持(不清楚 redhat 有没有对应的服务,可能集成在订阅里面了).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;为什么选-podman&#34;&gt;为什么选 podman&lt;/h2&gt;
+&lt;p&gt;上面讲了不少 docker 比 podman 有优势的方面, 这里开始讲 podman 的另外的东西, 这也是我选择 podman 主要原因.&lt;/p&gt;
+&lt;p&gt;先罗列一下 podman 适合的场景&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;没有很强的集群管理需求(或者说,已经有 overlay network 方案, podman 也是适用的)&lt;/li&gt;
+&lt;li&gt;仅仅为了容器化一些应用&lt;/li&gt;
+&lt;li&gt;团队内部轻量级使用,比如 ci/cd , 开发,测试环境等.&lt;/li&gt;
+&lt;li&gt;喜欢命令行或者脚本运维&lt;/li&gt;
+&lt;li&gt;感兴趣 podman 的生态建设(坑)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;那么 podman 比 docker 好的方面有哪些呢?&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;更加 rootless , 尽管 docker 也可以 rootless, 但是 podman 设计之初就开始支持&lt;/li&gt;
+&lt;li&gt;没有 daemon , 这使得 podman 在结合 namespace 和 cgroup 一起使用会更加灵活&lt;/li&gt;
+&lt;li&gt;pod , 和 k8s 基本一样的 pod , 一样支持 infra 容器. 这使得一些简单的容器&lt;code&gt;编排&lt;/code&gt; 工作, podman 也可以简单实现.&lt;/li&gt;
+&lt;li&gt;systemd service 集成, 由于没有 deamon , podman 通过 generate 子命令, 可以生成 systemd service 配置, 来管理容器和 pod 的作为服务启动.&lt;/li&gt;
+&lt;li&gt;k8s 关联, podman 可以生成 kubectl 的 yaml 配置文件, 也通过 podman play kube 来运行 k8s 的配置, 也可以作为 k8s 的一个过渡吧, 而且 podman 也没有去实现 CRI 的计划, 这应该也是官方的态度, 不会参和到 k8s 生态中, 保持自己的轻量化工具的定位吧.&lt;/li&gt;
+&lt;li&gt;remote , podman 通过 ssh 隧道或者 tcp 端口, 可以连接到远程机器上的 podman service, 从而实现远程机器上的容器和 pod 管理.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;所以 podman 提供了一些轻量化而又灵活的功能特性,满足容器化,以及小批量服务器的场景.&lt;/p&gt;
+&lt;h2 id=&#34;最后聊聊-podman-所在的-httpsgithubcomcontainers-组织&#34;&gt;最后聊聊 podman 所在的 &lt;code&gt;https://github.com/containers&lt;/code&gt; 组织&lt;/h2&gt;
+&lt;p&gt;查看这个组织的仓库可以看到,他们真的是在做容器工具, 而且写了很多轮子, 包括 buildah 和 skopeo 这两个工具,与 podman 一起被称为下一代容器工具.&lt;/p&gt;
+&lt;p&gt;runc 是一个有名的 low-level OCI rumtime, 他们就开发了一个 crun . podman 早期版本使用 runc, 最新的版本已经使用 crun 了.&lt;/p&gt;
+&lt;p&gt;众所周知, golang 是容器生态的主要语言, podman 也是 go 写的,但是在 podman 4 的版本中, podman 增加了非 CNI 的网络栈支持, 这几个工具是 netavark 和 aardvark-dns, 这两个工具是 rust 写的, 而且还有 youki 这个 rust 写的 low-level OCI runtime, 不知道将来某一天 podman 会不会默认使用 youki , 还有好几个 rust 写的容器技术相关的应用和库, 这是要与 golang 分天下的节奏.&lt;/p&gt;
+&lt;p&gt;如果你也对 podman 以及其生态感兴趣, 关注我吧, 我会给你带来 podman 最新的动态以及实践方案.&lt;/p&gt;
+&lt;p&gt;我的技术 Blog:&lt;a class=&#34;link&#34; href=&#34;https://liangdi.me&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://liangdi.me&lt;/a&gt;&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

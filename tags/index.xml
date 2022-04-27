@@ -2,56 +2,80 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>Tags on Liangdi&#39;s Blog</title>
-        <link>https://example.com/tags/</link>
+        <link>https://liangdi.me/tags/</link>
         <description>Recent content in Tags on Liangdi&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Tue, 26 Apr 2022 11:06:35 +0800</lastBuildDate><atom:link href="https://example.com/tags/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title>java</title>
-        <link>https://example.com/tags/java/</link>
-        <pubDate>Tue, 26 Apr 2022 11:06:35 +0800</pubDate>
+        <lastBuildDate>Wed, 27 Apr 2022 16:30:35 +0800</lastBuildDate><atom:link href="https://liangdi.me/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>docker</title>
+        <link>https://liangdi.me/tags/docker/</link>
+        <pubDate>Wed, 27 Apr 2022 16:30:35 +0800</pubDate>
         
-        <guid>https://example.com/tags/java/</guid>
+        <guid>https://liangdi.me/tags/docker/</guid>
         <description></description>
         </item>
         <item>
-        <title>rust</title>
-        <link>https://example.com/tags/rust/</link>
-        <pubDate>Tue, 26 Apr 2022 11:06:35 +0800</pubDate>
+        <title>k8s</title>
+        <link>https://liangdi.me/tags/k8s/</link>
+        <pubDate>Wed, 27 Apr 2022 16:30:35 +0800</pubDate>
         
-        <guid>https://example.com/tags/rust/</guid>
+        <guid>https://liangdi.me/tags/k8s/</guid>
         <description></description>
         </item>
         <item>
-        <title>容器化</title>
-        <link>https://example.com/tags/%E5%AE%B9%E5%99%A8%E5%8C%96/</link>
-        <pubDate>Tue, 26 Apr 2022 11:06:35 +0800</pubDate>
+        <title>kubernetes</title>
+        <link>https://liangdi.me/tags/kubernetes/</link>
+        <pubDate>Wed, 27 Apr 2022 16:30:35 +0800</pubDate>
         
-        <guid>https://example.com/tags/%E5%AE%B9%E5%99%A8%E5%8C%96/</guid>
+        <guid>https://liangdi.me/tags/kubernetes/</guid>
         <description></description>
         </item>
         <item>
         <title>podman</title>
-        <link>https://example.com/tags/podman/</link>
-        <pubDate>Sat, 23 Apr 2022 16:59:14 +0800</pubDate>
+        <link>https://liangdi.me/tags/podman/</link>
+        <pubDate>Wed, 27 Apr 2022 16:30:35 +0800</pubDate>
         
-        <guid>https://example.com/tags/podman/</guid>
+        <guid>https://liangdi.me/tags/podman/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>java</title>
+        <link>https://liangdi.me/tags/java/</link>
+        <pubDate>Tue, 26 Apr 2022 11:06:35 +0800</pubDate>
+        
+        <guid>https://liangdi.me/tags/java/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>rust</title>
+        <link>https://liangdi.me/tags/rust/</link>
+        <pubDate>Tue, 26 Apr 2022 11:06:35 +0800</pubDate>
+        
+        <guid>https://liangdi.me/tags/rust/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>容器化</title>
+        <link>https://liangdi.me/tags/%E5%AE%B9%E5%99%A8%E5%8C%96/</link>
+        <pubDate>Tue, 26 Apr 2022 11:06:35 +0800</pubDate>
+        
+        <guid>https://liangdi.me/tags/%E5%AE%B9%E5%99%A8%E5%8C%96/</guid>
         <description></description>
         </item>
         <item>
         <title>容器技术</title>
-        <link>https://example.com/tags/%E5%AE%B9%E5%99%A8%E6%8A%80%E6%9C%AF/</link>
+        <link>https://liangdi.me/tags/%E5%AE%B9%E5%99%A8%E6%8A%80%E6%9C%AF/</link>
         <pubDate>Sat, 23 Apr 2022 16:59:14 +0800</pubDate>
         
-        <guid>https://example.com/tags/%E5%AE%B9%E5%99%A8%E6%8A%80%E6%9C%AF/</guid>
+        <guid>https://liangdi.me/tags/%E5%AE%B9%E5%99%A8%E6%8A%80%E6%9C%AF/</guid>
         <description></description>
         </item>
         <item>
         <title>云原生</title>
-        <link>https://example.com/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/</link>
+        <link>https://liangdi.me/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/</link>
         <pubDate>Sat, 23 Apr 2022 16:59:14 +0800</pubDate>
         
-        <guid>https://example.com/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/</guid>
+        <guid>https://liangdi.me/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/</guid>
         <description></description>
         </item>
         

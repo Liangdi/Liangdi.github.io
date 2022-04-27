@@ -2,49 +2,61 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://example.com/</loc>
+    <loc>https://liangdi.me/</loc>
+    <lastmod>2022-04-27T16:30:35+08:00</lastmod>
+  </url><url>
+    <loc>https://liangdi.me/tags/docker/</loc>
+    <lastmod>2022-04-27T16:30:35+08:00</lastmod>
+  </url><url>
+    <loc>https://liangdi.me/tags/k8s/</loc>
+    <lastmod>2022-04-27T16:30:35+08:00</lastmod>
+  </url><url>
+    <loc>https://liangdi.me/tags/kubernetes/</loc>
+    <lastmod>2022-04-27T16:30:35+08:00</lastmod>
+  </url><url>
+    <loc>https://liangdi.me/tags/podman/</loc>
+    <lastmod>2022-04-27T16:30:35+08:00</lastmod>
+  </url><url>
+    <loc>https://liangdi.me/post/</loc>
+    <lastmod>2022-04-27T16:30:35+08:00</lastmod>
+  </url><url>
+    <loc>https://liangdi.me/tags/</loc>
+    <lastmod>2022-04-27T16:30:35+08:00</lastmod>
+  </url><url>
+    <loc>https://liangdi.me/p/what-is-podman-and-different-from-kubernetes-and-docker/</loc>
+    <lastmod>2022-04-27T16:30:35+08:00</lastmod>
+  </url><url>
+    <loc>https://liangdi.me/tags/java/</loc>
     <lastmod>2022-04-26T11:06:35+08:00</lastmod>
   </url><url>
-    <loc>https://example.com/tags/java/</loc>
+    <loc>https://liangdi.me/tags/rust/</loc>
     <lastmod>2022-04-26T11:06:35+08:00</lastmod>
   </url><url>
-    <loc>https://example.com/post/</loc>
+    <loc>https://liangdi.me/p/a-tiny-app-migrate-from-java-to-rust/</loc>
     <lastmod>2022-04-26T11:06:35+08:00</lastmod>
   </url><url>
-    <loc>https://example.com/tags/rust/</loc>
+    <loc>https://liangdi.me/tags/%E5%AE%B9%E5%99%A8%E5%8C%96/</loc>
     <lastmod>2022-04-26T11:06:35+08:00</lastmod>
   </url><url>
-    <loc>https://example.com/tags/</loc>
-    <lastmod>2022-04-26T11:06:35+08:00</lastmod>
-  </url><url>
-    <loc>https://example.com/p/a-tiny-app-migrate-from-java-to-rust/</loc>
-    <lastmod>2022-04-26T11:06:35+08:00</lastmod>
-  </url><url>
-    <loc>https://example.com/tags/%E5%AE%B9%E5%99%A8%E5%8C%96/</loc>
-    <lastmod>2022-04-26T11:06:35+08:00</lastmod>
-  </url><url>
-    <loc>https://example.com/tags/podman/</loc>
+    <loc>https://liangdi.me/p/progressive-cloud-native-with-podman/</loc>
     <lastmod>2022-04-23T16:59:14+08:00</lastmod>
   </url><url>
-    <loc>https://example.com/p/progressive-cloud-native-with-podman/</loc>
+    <loc>https://liangdi.me/tags/%E5%AE%B9%E5%99%A8%E6%8A%80%E6%9C%AF/</loc>
     <lastmod>2022-04-23T16:59:14+08:00</lastmod>
   </url><url>
-    <loc>https://example.com/tags/%E5%AE%B9%E5%99%A8%E6%8A%80%E6%9C%AF/</loc>
+    <loc>https://liangdi.me/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/</loc>
     <lastmod>2022-04-23T16:59:14+08:00</lastmod>
   </url><url>
-    <loc>https://example.com/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/</loc>
-    <lastmod>2022-04-23T16:59:14+08:00</lastmod>
-  </url><url>
-    <loc>https://example.com/archives/</loc>
+    <loc>https://liangdi.me/archives/</loc>
     <lastmod>2019-05-28T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://example.com/page/</loc>
+    <loc>https://liangdi.me/page/</loc>
     <lastmod>2019-05-28T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://example.com/categories/</loc>
+    <loc>https://liangdi.me/categories/</loc>
   </url><url>
-    <loc>https://example.com/search/</loc>
+    <loc>https://liangdi.me/search/</loc>
   </url><url>
-    <loc>https://example.com/about/</loc>
+    <loc>https://liangdi.me/about/</loc>
   </url>
 </urlset>

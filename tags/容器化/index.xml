@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>容器化 on Liangdi&#39;s Blog</title>
-        <link>https://example.com/tags/%E5%AE%B9%E5%99%A8%E5%8C%96/</link>
+        <link>https://liangdi.me/tags/%E5%AE%B9%E5%99%A8%E5%8C%96/</link>
         <description>Recent content in 容器化 on Liangdi&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Tue, 26 Apr 2022 11:06:35 +0800</lastBuildDate><atom:link href="https://example.com/tags/%E5%AE%B9%E5%99%A8%E5%8C%96/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 26 Apr 2022 11:06:35 +0800</lastBuildDate><atom:link href="https://liangdi.me/tags/%E5%AE%B9%E5%99%A8%E5%8C%96/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>记录一次 java 小项目的 rust 迁移过程</title>
-        <link>https://example.com/p/a-tiny-app-migrate-from-java-to-rust/</link>
+        <link>https://liangdi.me/p/a-tiny-app-migrate-from-java-to-rust/</link>
         <pubDate>Tue, 26 Apr 2022 11:06:35 +0800</pubDate>
         
-        <guid>https://example.com/p/a-tiny-app-migrate-from-java-to-rust/</guid>
-        <description>&lt;img src="https://example.com/p/a-tiny-app-migrate-from-java-to-rust/assets/java-rust.png" alt="Featured image of post 记录一次 java 小项目的 rust 迁移过程" /&gt;&lt;h2 id=&#34;概述&#34;&gt;概述&lt;/h2&gt;
-&lt;p&gt;使用 rust 也挺长时间了,但是一直是内部小大小闹,没有往客户那边推, 这次和客户商量好,拿一个很小的 java spring boot 项目开刀.&lt;/p&gt;
+        <guid>https://liangdi.me/p/a-tiny-app-migrate-from-java-to-rust/</guid>
+        <description>&lt;img src="https://liangdi.me/p/a-tiny-app-migrate-from-java-to-rust/assets/java-rust.png" alt="Featured image of post 记录一次 java 小项目的 rust 迁移过程" /&gt;&lt;h2 id=&#34;概述&#34;&gt;概述&lt;/h2&gt;
+&lt;p&gt;使用 rust 也挺长时间了,但是一直是内部小打小闹,没有往客户那边推, 这次和客户商量好,拿一个很小的 java spring boot 项目开刀.&lt;/p&gt;
 &lt;p&gt;这个项目小到 tiny 级别, 主要功能是: 请求一个服务, 对数据进行业务逻辑处理后, 使用 freemarker 渲染呈现给终端用户, rest api 也就 10 多个.&lt;/p&gt;
 &lt;h2 id=&#34;迁移准备&#34;&gt;迁移准备&lt;/h2&gt;
 &lt;p&gt;首先,业务逻辑使用 rust 实现,肯定是没有大问题, 关键在于一些中间件和第三方库是否有替代,这样可以让运维或者交付更加平滑一点, 由于项目比较简单,第三方库也很通用,基本在 rust 这边也有对等的选择,所以本次迁移也将会简单很多.&lt;/p&gt;
@@ -84,7 +84,7 @@
 &lt;h3 id=&#34;程序尺寸&#34;&gt;程序尺寸&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;spring boot jar 大小 20MB, 即使是 spring-native 打包也要 60 多 mb, 并且 spring-native 打包的程序没法正常运行,因为 spring-native 还没有 GA ,所以也没有去深究.&lt;/li&gt;
-&lt;li&gt;rust 的程序使用 &lt;code&gt;x86_64-unknown-linux-musl&lt;/code&gt; target release 静态编译打包(默认配置,无其他优化), 程序 stripe 后是 9.3MB , 相比 jar 也小了一半, 还没考虑 jdk.&lt;/li&gt;
+&lt;li&gt;rust 的程序使用 &lt;code&gt;x86_64-unknown-linux-musl&lt;/code&gt; target release 静态编译打包(默认配置,无其他优化), 程序 strip 后是 9.3MB , 相比 jar 也小了一半, 还没考虑 jdk.&lt;/li&gt;
 &lt;li&gt;容器化, 这点 rust 的优势就体现出来了, 使用 &lt;code&gt;FROM scratch&lt;/code&gt; 打包出来的镜像大小是 9.75MB , 相比 spring boot 项目, 基本的 openjdk:17-alpine 就有 320 多 MB 加上项目程序,也要 340 多 MB 了.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id=&#34;性能&#34;&gt;性能&lt;/h3&gt;
