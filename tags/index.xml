@@ -6,7 +6,31 @@
         <description>Recent content in Tags on Liangdi&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Wed, 27 Apr 2022 16:30:35 +0800</lastBuildDate><atom:link href="https://liangdi.me/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Fri, 06 May 2022 00:38:25 +0800</lastBuildDate><atom:link href="https://liangdi.me/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>rust</title>
+        <link>https://liangdi.me/tags/rust/</link>
+        <pubDate>Fri, 06 May 2022 00:38:25 +0800</pubDate>
+        
+        <guid>https://liangdi.me/tags/rust/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>WebDriver</title>
+        <link>https://liangdi.me/tags/webdriver/</link>
+        <pubDate>Fri, 06 May 2022 00:38:25 +0800</pubDate>
+        
+        <guid>https://liangdi.me/tags/webdriver/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>爬虫</title>
+        <link>https://liangdi.me/tags/%E7%88%AC%E8%99%AB/</link>
+        <pubDate>Fri, 06 May 2022 00:38:25 +0800</pubDate>
+        
+        <guid>https://liangdi.me/tags/%E7%88%AC%E8%99%AB/</guid>
+        <description></description>
+        </item>
+        <item>
         <title>docker</title>
         <link>https://liangdi.me/tags/docker/</link>
         <pubDate>Wed, 27 Apr 2022 16:30:35 +0800</pubDate>
@@ -44,14 +68,6 @@
         <pubDate>Tue, 26 Apr 2022 11:06:35 +0800</pubDate>
         
         <guid>https://liangdi.me/tags/java/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>rust</title>
-        <link>https://liangdi.me/tags/rust/</link>
-        <pubDate>Tue, 26 Apr 2022 11:06:35 +0800</pubDate>
-        
-        <guid>https://liangdi.me/tags/rust/</guid>
         <description></description>
         </item>
         <item>
