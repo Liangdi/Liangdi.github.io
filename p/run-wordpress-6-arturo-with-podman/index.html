@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='前言 今天看到 WordPress 6 发布了,回想多年以前在使用 WordPress 的时候,一顿 yum 命令安装 nginx, php, mysql, php-fpm , 然后再配置 nginx, 经过一阵子配置, WordPress 就运行成功了, 如今在云原生时代, 可以用 k8s , docker , Podman 等工具来安装这些系统了, 今天就使用 Podman 安装 WordPress , 人生苦短, 我用 podman !
+认知准备  这次是安装一个业务系统(WordPress) , 所以不象一些 hello world 的文章, 更多要关注底层的一些东西 网络(network): WordPress 要和 mysql 连接, 所以需要网络支持 数据卷(volume): mysql 数据要保存, WordPress 的文章数据保存在数据库中,但是插件/主题,上传图片等都是保存在文件系统中, 文件系统的内容要保存下来, 就要使用到数据卷功能. 使用 Podman 4.1.0 版本  安装过程 网络 使用 podman network ls , 可以查看 Podman 的网络列表, 默认会有一个 Podman 的网络, 这里我们会创建一个新的网络叫做 wp-net , 使用如下命令:'><title>使用 Podman 运行 WordPress 6 Arturo</title>
+
+<link rel='canonical' href='https://liangdi.me/p/run-wordpress-6-arturo-with-podman/'>
+
+<link rel="stylesheet" href="/scss/style.min.450926226e724574a6b936335ea06111f8aeb253d932c86cb2cc807341cd2889.css"><meta property='og:title' content='使用 Podman 运行 WordPress 6 Arturo'>
+<meta property='og:description' content='前言 今天看到 WordPress 6 发布了,回想多年以前在使用 WordPress 的时候,一顿 yum 命令安装 nginx, php, mysql, php-fpm , 然后再配置 nginx, 经过一阵子配置, WordPress 就运行成功了, 如今在云原生时代, 可以用 k8s , docker , Podman 等工具来安装这些系统了, 今天就使用 Podman 安装 WordPress , 人生苦短, 我用 podman !
+认知准备  这次是安装一个业务系统(WordPress) , 所以不象一些 hello world 的文章, 更多要关注底层的一些东西 网络(network): WordPress 要和 mysql 连接, 所以需要网络支持 数据卷(volume): mysql 数据要保存, WordPress 的文章数据保存在数据库中,但是插件/主题,上传图片等都是保存在文件系统中, 文件系统的内容要保存下来, 就要使用到数据卷功能. 使用 Podman 4.1.0 版本  安装过程 网络 使用 podman network ls , 可以查看 Podman 的网络列表, 默认会有一个 Podman 的网络, 这里我们会创建一个新的网络叫做 wp-net , 使用如下命令:'>
+<meta property='og:url' content='https://liangdi.me/p/run-wordpress-6-arturo-with-podman/'>
+<meta property='og:site_name' content='Liangdi&#39;s Blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='podman' /><meta property='article:tag' content='wordpress' /><meta property='article:published_time' content='2022-06-02T12:37:58&#43;08:00'/><meta property='article:modified_time' content='2022-06-02T12:37:58&#43;08:00'/><meta property='og:image' content='https://liangdi.me/p/run-wordpress-6-arturo-with-podman/assets/podman-wordpress.png' />
+<meta name="twitter:title" content="使用 Podman 运行 WordPress 6 Arturo">
+<meta name="twitter:description" content="前言 今天看到 WordPress 6 发布了,回想多年以前在使用 WordPress 的时候,一顿 yum 命令安装 nginx, php, mysql, php-fpm , 然后再配置 nginx, 经过一阵子配置, WordPress 就运行成功了, 如今在云原生时代, 可以用 k8s , docker , Podman 等工具来安装这些系统了, 今天就使用 Podman 安装 WordPress , 人生苦短, 我用 podman !
+认知准备  这次是安装一个业务系统(WordPress) , 所以不象一些 hello world 的文章, 更多要关注底层的一些东西 网络(network): WordPress 要和 mysql 连接, 所以需要网络支持 数据卷(volume): mysql 数据要保存, WordPress 的文章数据保存在数据库中,但是插件/主题,上传图片等都是保存在文件系统中, 文件系统的内容要保存下来, 就要使用到数据卷功能. 使用 Podman 4.1.0 版本  安装过程 网络 使用 podman network ls , 可以查看 Podman 的网络列表, 默认会有一个 Podman 的网络, 这里我们会创建一个新的网络叫做 wp-net , 使用如下命令:"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://liangdi.me/p/run-wordpress-6-arturo-with-podman/assets/podman-wordpress.png' />
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu28bd9f10f249b3300884b5b9ecc99bfa_1618568_300x0_resize_box_3.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🔥</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">Liangdi&#39;s Blog</a></h1>
+            <h2 class="site-description">关注开源技术.</h2>
+        </div>
+    </header><ol class="social-menu">
+            
+                <li>
+                    <a 
+                        href='https://github.com/Liangdi'
+                        target="_blank"
+                        title="GitHub"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>首页</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+
+        <div class="menu-bottom-section">
+            
+            
+                <li id="dark-mode-toggle">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                    <span>暗色模式</span>
+                </li>
+            
+        </div>
+    </ol>
+</aside>
+<main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/run-wordpress-6-arturo-with-podman/">
+                <img src="/p/run-wordpress-6-arturo-with-podman/assets/podman-wordpress_hu26d914e965d24c838e4aef4a305c3a00_65209_800x0_resize_box_3.png"
+                        srcset="/p/run-wordpress-6-arturo-with-podman/assets/podman-wordpress_hu26d914e965d24c838e4aef4a305c3a00_65209_800x0_resize_box_3.png 800w, /p/run-wordpress-6-arturo-with-podman/assets/podman-wordpress_hu26d914e965d24c838e4aef4a305c3a00_65209_1600x0_resize_box_3.png 1600w"
+                        width="800" 
+                        height="320" 
+                        loading="lazy"
+                        alt="Featured image of post 使用 Podman 运行 WordPress 6 Arturo" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/run-wordpress-6-arturo-with-podman/">使用 Podman 运行 WordPress 6 Arturo</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Jun 02, 2022</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 3 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="前言">前言</h2>
+<p>今天看到 WordPress 6 <a class="link" href="https://wordpress.org/news/2022/05/arturo/"  target="_blank" rel="noopener"
+    >发布</a>了,回想多年以前在使用 WordPress 的时候,一顿 yum 命令安装 nginx, php, mysql, php-fpm , 然后再配置 nginx, 经过一阵子配置, WordPress 就运行成功了, 如今在云原生时代, 可以用 k8s , docker , Podman 等工具来安装这些系统了, 今天就使用 Podman 安装 WordPress , 人生苦短, 我用 podman !</p>
+<h2 id="认知准备">认知准备</h2>
+<ul>
+<li>这次是安装一个业务系统(WordPress) , 所以不象一些 hello world 的文章, 更多要关注底层的一些东西</li>
+<li>网络(network): WordPress 要和 mysql 连接, 所以需要网络支持</li>
+<li>数据卷(volume): mysql 数据要保存, WordPress 的文章数据保存在数据库中,但是插件/主题,上传图片等都是保存在文件系统中, 文件系统的内容要保存下来, 就要使用到数据卷功能.</li>
+<li>使用 Podman 4.1.0 版本</li>
+</ul>
+<h2 id="安装过程">安装过程</h2>
+<h3 id="网络">网络</h3>
+<p>使用 podman network ls , 可以查看 Podman 的网络列表, 默认会有一个 Podman 的网络, 这里我们会创建一个新的网络叫做 <code>wp-net</code> , 使用如下命令:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">podman network create wp-net
+</span></span><span class="line"><span class="cl"><span class="c1"># 使用 podman network inspect 命令查看网络信息</span>
+</span></span><span class="line"><span class="cl">podman network inspect wp-net
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>输出内容</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">    <span class="o">{</span>
+</span></span><span class="line"><span class="cl">          <span class="s2">&#34;name&#34;</span>: <span class="s2">&#34;wp-net&#34;</span>,
+</span></span><span class="line"><span class="cl">          <span class="s2">&#34;id&#34;</span>: <span class="s2">&#34;a47201502d7f6450e7fda6c1ce7e449418350cb2b668feca2cf7d5048cb336cc&#34;</span>,
+</span></span><span class="line"><span class="cl">          <span class="s2">&#34;driver&#34;</span>: <span class="s2">&#34;bridge&#34;</span>,
+</span></span><span class="line"><span class="cl">          <span class="s2">&#34;network_interface&#34;</span>: <span class="s2">&#34;cni-podman2&#34;</span>,
+</span></span><span class="line"><span class="cl">          <span class="s2">&#34;created&#34;</span>: <span class="s2">&#34;2022-06-02T10:45:05.864113967+08:00&#34;</span>,
+</span></span><span class="line"><span class="cl">          <span class="s2">&#34;subnets&#34;</span>: <span class="o">[</span>
+</span></span><span class="line"><span class="cl">               <span class="o">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="s2">&#34;subnet&#34;</span>: <span class="s2">&#34;10.89.1.0/24&#34;</span>,
+</span></span><span class="line"><span class="cl">                    <span class="s2">&#34;gateway&#34;</span>: <span class="s2">&#34;10.89.1.1&#34;</span>
+</span></span><span class="line"><span class="cl">               <span class="o">}</span>
+</span></span><span class="line"><span class="cl">          <span class="o">]</span>,
+</span></span><span class="line"><span class="cl">          <span class="s2">&#34;ipv6_enabled&#34;</span>: false,
+</span></span><span class="line"><span class="cl">          <span class="s2">&#34;internal&#34;</span>: false,
+</span></span><span class="line"><span class="cl">          <span class="s2">&#34;dns_enabled&#34;</span>: true,
+</span></span><span class="line"><span class="cl">          <span class="s2">&#34;ipam_options&#34;</span>: <span class="o">{</span>
+</span></span><span class="line"><span class="cl">               <span class="s2">&#34;driver&#34;</span>: <span class="s2">&#34;host-local&#34;</span>
+</span></span><span class="line"><span class="cl">          <span class="o">}</span>
+</span></span><span class="line"><span class="cl">     <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">]</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="mysql">MySQL</h3>
+<p>创建好 wp-net, 后,我们创建 mysql 容器,并且把它加入到 wp-net 中 , 命令如下:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 创建存放 mysql 数据的临时目录</span>
+</span></span><span class="line"><span class="cl">mkdir -p /tmp/mysql-data
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">podman run --name mysql <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    --net wp-net <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    -e <span class="nv">MYSQL_ROOT_PASSWORD</span><span class="o">=</span>my-password <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    -v /tmp/mysql-data:/var/lib/mysql <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    -d docker.io/library/mysql:8
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>说明:</p>
+<ul>
+<li>&ndash;net wp-net 参数就是把创建的 mysql 容器加入到 wp-net 这个网络中, 并且使用 &ndash;name mysql , 这样网络中的其他容器就能使用 <code>mysql</code> 这个网络名,解析出 mysql 容器的 ip 了, 也可以使用 &ndash;hostname 参数来指定网络主机名.</li>
+<li>-e MYSQL_ROOT_PASSWORD 设定 mysql root 密码</li>
+<li>-v /tmp/mysql-data:/var/lib/mysql 将主机的 /tmp/mysql-data 目录映射到容器中 /var/lib/mysq 目录, 这就是数据卷(volume) 的功能,这样数据就可以保存到主机中,这里在 tmp 目录创建方便临时测试,volume 功能也可以使用 podman volume 命令创建命名的数据卷.</li>
+<li>这里没有使用 -p 3306:3306 类似的端口映射参数,因为我们 host 不需要去访问 mysql ,容器网络中访问不需要映射端口.</li>
+</ul>
+<p>创建好 mysql 容器后可以使用以下命令做些检查</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 使用 ps 命令可以查看运行中的容器, 这里应该可以看到 mysql 容器</span>
+</span></span><span class="line"><span class="cl">podman ps 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 使用 exec 命令可以运行容器中的程序, 这里运行 bash ,就可以进入容器的 bash 中运行其他命令了.</span>
+</span></span><span class="line"><span class="cl">podman <span class="nb">exec</span> -it mysql bash
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="wordpress">Wordpress</h3>
+<p>mysql 容器运行后,就可以去创建 WordPress 了, WordPress 镜像的详细信息可以去 docker hub 去看: <a class="link" href="https://hub.docker.com/_/wordpress"  target="_blank" rel="noopener"
+    >https://hub.docker.com/_/wordpress</a></p>
+<p>WordPress 中会用到的配置主要是: 数据连接信息, 可变的内容主要是 wp-conent 目录下的主题/插件,上传文件信息, 如果你不去使用环境变量配置数据库信息, 那么动态配置的 wp-config.php 也是可变的.</p>
+<p>运行 WordPress 的容器命令如下:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 我们先用最简单的命令运行 wordpress 容器, 尽快见一下久违的 wordpress</span>
+</span></span><span class="line"><span class="cl">podman run --name wordpress <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    --net wp-net <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    -p 8080:80 <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    -d docker.io/library/wordpress:6
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>创建好后, 我们就可以访问 http://localhost:8080/ 我见证 WordPress 的安装了, 因为没有配置数据库信息,所以 WordPress 进入了数据库配置页面:
+<img src="/p/run-wordpress-6-arturo-with-podman/assets/wp-install-1.png"
+	width="889"
+	height="822"
+	srcset="/p/run-wordpress-6-arturo-with-podman/assets/wp-install-1_huc2574eb8ca6899ec6dcc66a714561c67_93022_480x0_resize_box_3.png 480w, /p/run-wordpress-6-arturo-with-podman/assets/wp-install-1_huc2574eb8ca6899ec6dcc66a714561c67_93022_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
+	
+		alt="配置 wordpress"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="108"
+		data-flex-basis="259px"
+	
+></p>
+<p><img src="/p/run-wordpress-6-arturo-with-podman/assets/wp-install-2.png"
+	width="889"
+	height="822"
+	srcset="/p/run-wordpress-6-arturo-with-podman/assets/wp-install-2_hu3c5f9978211581e45c1798f754134214_74367_480x0_resize_box_3.png 480w, /p/run-wordpress-6-arturo-with-podman/assets/wp-install-2_hu3c5f9978211581e45c1798f754134214_74367_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
+	
+		alt="配置 wordpress"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="108"
+		data-flex-basis="259px"
+	
+></p>
+<p>这里 database host 只需要填写 <code>mysql</code> 即可, 容器中会自动解析 mysql 容器的 ip.</p>
+<p>WordPress 不会主动去创建数据库,所以我们需要进入 mysql 容器去创建一个 <code>wordpress</code> 的数据库. 命令如下:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 进入容器</span>
+</span></span><span class="line"><span class="cl">podman <span class="nb">exec</span> -it mysql bash
+</span></span><span class="line"><span class="cl"><span class="c1"># 使用 root 密码 my-password 登陆数据库</span>
+</span></span><span class="line"><span class="cl">mysql -u root -p
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 创建数据库</span>
+</span></span><span class="line"><span class="cl">create database <span class="sb">`</span>wordpress<span class="sb">`</span><span class="p">;</span> 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#完成后就可以退出了,继续下一步安装 wordpress</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/run-wordpress-6-arturo-with-podman/assets/wp-install-3.png"
+	width="889"
+	height="822"
+	srcset="/p/run-wordpress-6-arturo-with-podman/assets/wp-install-3_hu21e16e16e4e98b73d843ebf887329c63_101132_480x0_resize_box_3.png 480w, /p/run-wordpress-6-arturo-with-podman/assets/wp-install-3_hu21e16e16e4e98b73d843ebf887329c63_101132_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
+	
+		alt="配置 wordpress"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="108"
+		data-flex-basis="259px"
+	
+></p>
+<p><img src="/p/run-wordpress-6-arturo-with-podman/assets/wp6-1.png"
+	width="889"
+	height="822"
+	srcset="/p/run-wordpress-6-arturo-with-podman/assets/wp6-1_hub5ea15e5420384b01293d1818fb46441_108701_480x0_resize_box_3.png 480w, /p/run-wordpress-6-arturo-with-podman/assets/wp6-1_hub5ea15e5420384b01293d1818fb46441_108701_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
+	
+		alt="配置 wordpress"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="108"
+		data-flex-basis="259px"
+	
+></p>
+<p><img src="/p/run-wordpress-6-arturo-with-podman/assets/wp6-2.png"
+	width="889"
+	height="822"
+	srcset="/p/run-wordpress-6-arturo-with-podman/assets/wp6-2_hu995cdcaac56f8b1cccea0c289c4569d5_68269_480x0_resize_box_3.png 480w, /p/run-wordpress-6-arturo-with-podman/assets/wp6-2_hu995cdcaac56f8b1cccea0c289c4569d5_68269_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
+	
+		alt="配置 wordpress"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="108"
+		data-flex-basis="259px"
+	
+></p>
+<p>到此, WordPress 6 测试安装完成了.</p>
+<p>上面创建的 WordPress 容器没有使用数据卷功能, 那么如果你上传了一些图片信息,安装了一些插件,这些内容都保存在容器里面,如果有一天容器被删除了,也就没有了,我们现在重新创建这个 wordpress 容器,并且使用数据卷功能,将可变的目录映射到 host 中.</p>
+<p>先删除现有的 wordpress 容器</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">podman rm -f wordpress
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 创建用于测试的临时目录</span>
+</span></span><span class="line"><span class="cl">mkdir -p /tmp/wordpress/wp-content
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">podman run --name wordpress <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    --net wp-net <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    -p 8080:80 <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    -v /tmp/wordpress/wp-content:/var/www/html/wp-content/ <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    -e <span class="nv">WORDPRESS_DB_HOST</span><span class="o">=</span>mysql <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    -e <span class="nv">WORDPRESS_DB_USER</span><span class="o">=</span>root <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    -e <span class="nv">WORDPRESS_DB_PASSWORD</span><span class="o">=</span>my-password <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    -e <span class="nv">WORDPRESS_DB_NAME</span><span class="o">=</span>wordpress <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    -e <span class="nv">WORDPRESS_TABLE_PREFIX</span><span class="o">=</span>wp_ <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    -d docker.io/library/wordpress:6
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>现在我们去看 /tmp/wordpress/wp-content 目录, 可以看到已经有相关目录出现在其中了,这样容器即使被销毁,这些数据也是保存在 host 中了.
+<img src="/p/run-wordpress-6-arturo-with-podman/assets/wp-install-4.png"
+	width="760"
+	height="465"
+	srcset="/p/run-wordpress-6-arturo-with-podman/assets/wp-install-4_hu39ff185f411378e6e051becd9322da9e_35099_480x0_resize_box_3.png 480w, /p/run-wordpress-6-arturo-with-podman/assets/wp-install-4_hu39ff185f411378e6e051becd9322da9e_35099_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
+	
+		alt="配置 wordpress"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="163"
+		data-flex-basis="392px"
+	
+></p>
+<h2 id="总结">总结</h2>
+<p>5-10 分钟就将 WordPress 安装好了, 基本不需要去做系统配置(nginx,php,mysql). 这正式容器技术带来的便利.</p>
+<p>文章中使用了 Podman 的基本功能, 有以下方面需要注意</p>
+<ul>
+<li>Podman 容器默认不会跟随系统启动, 需要配合 systemd 服务启动, 具体可以查看 <a class="link" href="https://docs.podman.io/en/latest/markdown/podman-generate-systemd.1.html"  target="_blank" rel="noopener"
+    >https://docs.podman.io/en/latest/markdown/podman-generate-systemd.1.html</a></li>
+<li>数据卷(volume) 更多功能使用 podman volume &ndash;help 命令查看, 可以配置 nfs 的 volume 等.</li>
+<li>应用和数据库组合的容器组可以使用 podman-comose 实现, 也可以使用 Podman 的 pod 功能实现,具体查看官方文档.</li>
+</ul>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/podman/">podman</a>
+        
+            <a href="/tags/wordpress/">wordpress</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2022 Liangdi&#39;s Blog
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.11.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f334264cb8da1148de7654289682087c";
+      var s = document.getElementsByTagName("script")[0]; 
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+    
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#认知准备">认知准备</a></li>
+    <li><a href="#安装过程">安装过程</a>
+      <ol>
+        <li><a href="#网络">网络</a></li>
+        <li><a href="#mysql">MySQL</a></li>
+        <li><a href="#wordpress">Wordpress</a></li>
+      </ol>
+    </li>
+    <li><a href="#总结">总结</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

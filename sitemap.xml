@@ -3,15 +3,24 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://liangdi.me/</loc>
-    <lastmod>2022-05-06T00:38:25+08:00</lastmod>
+    <lastmod>2022-06-02T12:37:58+08:00</lastmod>
+  </url><url>
+    <loc>https://liangdi.me/tags/podman/</loc>
+    <lastmod>2022-06-02T12:37:58+08:00</lastmod>
   </url><url>
     <loc>https://liangdi.me/post/</loc>
-    <lastmod>2022-05-06T00:38:25+08:00</lastmod>
-  </url><url>
-    <loc>https://liangdi.me/tags/rust/</loc>
-    <lastmod>2022-05-06T00:38:25+08:00</lastmod>
+    <lastmod>2022-06-02T12:37:58+08:00</lastmod>
   </url><url>
     <loc>https://liangdi.me/tags/</loc>
+    <lastmod>2022-06-02T12:37:58+08:00</lastmod>
+  </url><url>
+    <loc>https://liangdi.me/tags/wordpress/</loc>
+    <lastmod>2022-06-02T12:37:58+08:00</lastmod>
+  </url><url>
+    <loc>https://liangdi.me/p/run-wordpress-6-arturo-with-podman/</loc>
+    <lastmod>2022-06-02T12:37:58+08:00</lastmod>
+  </url><url>
+    <loc>https://liangdi.me/tags/rust/</loc>
     <lastmod>2022-05-06T00:38:25+08:00</lastmod>
   </url><url>
     <loc>https://liangdi.me/tags/webdriver/</loc>
@@ -30,9 +39,6 @@
     <lastmod>2022-04-27T16:30:35+08:00</lastmod>
   </url><url>
     <loc>https://liangdi.me/tags/kubernetes/</loc>
-    <lastmod>2022-04-27T16:30:35+08:00</lastmod>
-  </url><url>
-    <loc>https://liangdi.me/tags/podman/</loc>
     <lastmod>2022-04-27T16:30:35+08:00</lastmod>
   </url><url>
     <loc>https://liangdi.me/p/what-is-podman-and-different-from-kubernetes-and-docker/</loc>
