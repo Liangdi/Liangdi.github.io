@@ -7,12 +7,12 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
         <lastBuildDate>Thu, 02 Jun 2022 19:30:20 +0800</lastBuildDate><atom:link href="https://liangdi.me/post/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title>Rust 黑客编程 - ICPM 协议 ping 的简单实现</title>
+        <title>Rust 黑客编程 - ICMP 协议 ping 的简单实现</title>
         <link>https://liangdi.me/p/rust-hacking-programing-icmp-ping/</link>
         <pubDate>Thu, 02 Jun 2022 19:30:20 +0800</pubDate>
         
         <guid>https://liangdi.me/p/rust-hacking-programing-icmp-ping/</guid>
-        <description>&lt;img src="https://liangdi.me/p/rust-hacking-programing-icmp-ping/assets/rust-icmp.png" alt="Featured image of post Rust 黑客编程 - ICPM 协议 ping 的简单实现" /&gt;&lt;h2 id=&#34;概述&#34;&gt;概述&lt;/h2&gt;
+        <description>&lt;img src="https://liangdi.me/p/rust-hacking-programing-icmp-ping/assets/rust-icmp.png" alt="Featured image of post Rust 黑客编程 - ICMP 协议 ping 的简单实现" /&gt;&lt;h2 id=&#34;概述&#34;&gt;概述&lt;/h2&gt;
 &lt;p&gt;记得在高中时期打开终端, ping 一个 IP ,这个操作在别人面前就会引来仰望大神的目光.&lt;/p&gt;
 &lt;p&gt;后来知道了底层是 ICMP 协议,然后就没有然后了, 仅停留在知道的层面, 入坑 Rust 以来,也没有什么特别的项目去做, 就从这方面入手,重温一下高中时期学习&amp;quot;黑客&amp;quot;技术时的热情,毕竟兴趣是最好的老师!&lt;/p&gt;
 &lt;h2 id=&#34;准备工作&#34;&gt;准备工作&lt;/h2&gt;
