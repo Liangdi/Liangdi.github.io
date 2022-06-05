@@ -6,10 +6,18 @@
         <description>Recent content in Tags on Liangdi&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Thu, 02 Jun 2022 19:30:20 +0800</lastBuildDate><atom:link href="https://liangdi.me/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Fri, 03 Jun 2022 16:01:32 +0800</lastBuildDate><atom:link href="https://liangdi.me/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>ddos</title>
+        <link>https://liangdi.me/tags/ddos/</link>
+        <pubDate>Fri, 03 Jun 2022 16:01:32 +0800</pubDate>
+        
+        <guid>https://liangdi.me/tags/ddos/</guid>
+        <description></description>
+        </item>
+        <item>
         <title>hacking programing</title>
         <link>https://liangdi.me/tags/hacking-programing/</link>
-        <pubDate>Thu, 02 Jun 2022 19:30:20 +0800</pubDate>
+        <pubDate>Fri, 03 Jun 2022 16:01:32 +0800</pubDate>
         
         <guid>https://liangdi.me/tags/hacking-programing/</guid>
         <description></description>
@@ -17,9 +25,25 @@
         <item>
         <title>rust</title>
         <link>https://liangdi.me/tags/rust/</link>
-        <pubDate>Thu, 02 Jun 2022 19:30:20 +0800</pubDate>
+        <pubDate>Fri, 03 Jun 2022 16:01:32 +0800</pubDate>
         
         <guid>https://liangdi.me/tags/rust/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>syn flood</title>
+        <link>https://liangdi.me/tags/syn-flood/</link>
+        <pubDate>Fri, 03 Jun 2022 16:01:32 +0800</pubDate>
+        
+        <guid>https://liangdi.me/tags/syn-flood/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>icmp</title>
+        <link>https://liangdi.me/tags/icmp/</link>
+        <pubDate>Thu, 02 Jun 2022 19:30:20 +0800</pubDate>
+        
+        <guid>https://liangdi.me/tags/icmp/</guid>
         <description></description>
         </item>
         <item>
