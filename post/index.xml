@@ -6,7 +6,213 @@
         <description>Recent content in Posts on Liangdi&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Fri, 03 Jun 2022 16:01:32 +0800</lastBuildDate><atom:link href="https://liangdi.me/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 23 Jan 2023 21:44:12 +0800</lastBuildDate><atom:link href="https://liangdi.me/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Rust 项目鉴赏: zellij 替代 screen, tmux 的终端工具</title>
+        <link>https://liangdi.me/p/rust-project-review-zellij/</link>
+        <pubDate>Mon, 23 Jan 2023 21:44:12 +0800</pubDate>
+        
+        <guid>https://liangdi.me/p/rust-project-review-zellij/</guid>
+        <description>&lt;img src="https://liangdi.me/p/rust-project-review-zellij/assets/rust-zellij-s.png" alt="Featured image of post Rust 项目鉴赏: zellij 替代 screen, tmux 的终端工具" /&gt;&lt;h1 id=&#34;概述&#34;&gt;概述&lt;/h1&gt;
+&lt;p&gt;zellij 是最近用于替代 tmux 的工具，使用 rust 编写 &lt;a class=&#34;link&#34; href=&#34;https://zellij.dev/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://zellij.dev/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;zellij 名称的直译大概是马赛克瓷砖的意思， 项目原先名称直接就叫：Mosaic&lt;/p&gt;
+&lt;p&gt;从名字看，它运行起来应该有点马赛克瓷砖，一块一块的样子，运行截图如下
+&lt;img src=&#34;https://liangdi.me/p/rust-project-review-zellij/assets/zellij-screen.png&#34;
+	width=&#34;1428&#34;
+	height=&#34;1037&#34;
+	srcset=&#34;https://liangdi.me/p/rust-project-review-zellij/assets/zellij-screen_hue1e8ccb5a39b3516943155402d6c58a5_294286_480x0_resize_box_3.png 480w, https://liangdi.me/p/rust-project-review-zellij/assets/zellij-screen_hue1e8ccb5a39b3516943155402d6c58a5_294286_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Zellij 截图&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;137&#34;
+		data-flex-basis=&#34;330px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h1 id=&#34;特点&#34;&gt;特点&lt;/h1&gt;
+&lt;p&gt;阐述 zellij 的特点之前，先看看官方的 roadmap 的内容，随着时间变化，可能会有不同，不过大体能了解到官方的一些理念
+&lt;img src=&#34;https://liangdi.me/p/rust-project-review-zellij/assets/zellij-roadmap.png&#34;
+	width=&#34;970&#34;
+	height=&#34;1077&#34;
+	srcset=&#34;https://liangdi.me/p/rust-project-review-zellij/assets/zellij-roadmap_huca9914412c009ebf34b70400f283d0e3_199156_480x0_resize_box_3.png 480w, https://liangdi.me/p/rust-project-review-zellij/assets/zellij-roadmap_huca9914412c009ebf34b70400f283d0e3_199156_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Zellij Raodmap&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;90&#34;
+		data-flex-basis=&#34;216px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;网址:&lt;a class=&#34;link&#34; href=&#34;https://zellij.dev/roadmap/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://zellij.dev/roadmap/&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;用户体验&#34;&gt;用户体验&lt;/h2&gt;
+&lt;p&gt;Zellij 很注重用户体验，包括终端用户，以及开发者，终端用户层面， zellij 做到了开箱即用，无需过多的学习， zellij 默认支持 tab ， 快捷键默认呈现，并且有下一步操作提示， 默认可以使用鼠标激活 pane, 支持快捷键切换 pane 和 tab ，这样的默认配置用户基本无成本上手， 相比 tmux 好太多， 记得当初使用 tmux 第一步就是去搜索如何显示快捷键，如何使用快捷键&amp;hellip;
+&lt;img src=&#34;https://liangdi.me/p/rust-project-review-zellij/assets/zellij-keymap-1.png&#34;
+	width=&#34;1159&#34;
+	height=&#34;291&#34;
+	srcset=&#34;https://liangdi.me/p/rust-project-review-zellij/assets/zellij-keymap-1_hubc1dd04ddfe0581a769b7cdbfcb674cc_17114_480x0_resize_box_3.png 480w, https://liangdi.me/p/rust-project-review-zellij/assets/zellij-keymap-1_hubc1dd04ddfe0581a769b7cdbfcb674cc_17114_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;zellij keymap&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;398&#34;
+		data-flex-basis=&#34;955px&#34;
+	
+&gt;
+&lt;img src=&#34;https://liangdi.me/p/rust-project-review-zellij/assets/zellij-keymap-2.png&#34;
+	width=&#34;1159&#34;
+	height=&#34;291&#34;
+	srcset=&#34;https://liangdi.me/p/rust-project-review-zellij/assets/zellij-keymap-2_hua66fbc1b65bc3c65333487f780e40de9_19257_480x0_resize_box_3.png 480w, https://liangdi.me/p/rust-project-review-zellij/assets/zellij-keymap-2_hua66fbc1b65bc3c65333487f780e40de9_19257_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;zellij keymap&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;398&#34;
+		data-flex-basis=&#34;955px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Zellij 的键盘操作新手无需学习即可理解， 类似的设计在很多用户友好的软件中都有体现了，下图是 Blender 的操作界面&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://liangdi.me/p/rust-project-review-zellij/assets/blender.png&#34;
+	width=&#34;1480&#34;
+	height=&#34;451&#34;
+	srcset=&#34;https://liangdi.me/p/rust-project-review-zellij/assets/blender_hu86f6ad65854ad4e5448fbcea47d5ad13_149868_480x0_resize_box_3.png 480w, https://liangdi.me/p/rust-project-review-zellij/assets/blender_hu86f6ad65854ad4e5448fbcea47d5ad13_149868_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;zellij keymap&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;328&#34;
+		data-flex-basis=&#34;787px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;layout-系统&#34;&gt;layout 系统&lt;/h2&gt;
+&lt;p&gt;Zellij 设计了一个 layout 系统， 用户可以设置不同的配置文件（kdl 格式）&lt;a class=&#34;link&#34; href=&#34;https://kdl.dev/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://kdl.dev/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;kdl 确实很适合描述复杂的配置，类似 ron &lt;a class=&#34;link&#34; href=&#34;https://github.com/ron-rs/ron&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://github.com/ron-rs/ron&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;我测试了几个 layout 配置以及运行效果如下：&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;monitor.kdl&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;layout&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;pane&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;split_direction&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;vertical&amp;#34;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;pane&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;command&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;htop&amp;#34;&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// panes can have arguments on the same line
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;        &lt;span class=&#34;n&#34;&gt;pane&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;command&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;btm&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;pane&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;command&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;nu&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://liangdi.me/p/rust-project-review-zellij/assets/zellij-monitor.png&#34;
+	width=&#34;1428&#34;
+	height=&#34;1037&#34;
+	srcset=&#34;https://liangdi.me/p/rust-project-review-zellij/assets/zellij-monitor_hud75806fab38df7e5c32add7e8209f0ae_195960_480x0_resize_box_3.png 480w, https://liangdi.me/p/rust-project-review-zellij/assets/zellij-monitor_hud75806fab38df7e5c32add7e8209f0ae_195960_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;monitor.kdl&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;137&#34;
+		data-flex-basis=&#34;330px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;cargo.kdl&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;layout&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;pane&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;split_direction&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;vertical&amp;#34;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;size&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;60%&amp;#34;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;pane&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;edit&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;src/main.rs&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;pane&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;edit&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;Cargo.toml&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;pane&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;split_direction&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;vertical&amp;#34;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;size&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;40%&amp;#34;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;pane&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;command&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;cargo&amp;#34;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;n&#34;&gt;args&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;run&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;n&#34;&gt;focus&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;pane&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;command&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;cargo&amp;#34;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;n&#34;&gt;args&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;test&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://liangdi.me/p/rust-project-review-zellij/assets/zellij-cargo.png&#34;
+	width=&#34;1188&#34;
+	height=&#34;839&#34;
+	srcset=&#34;https://liangdi.me/p/rust-project-review-zellij/assets/zellij-cargo_hu4a5d2c6f278c3d542c5a6f2737af2a6f_122148_480x0_resize_box_3.png 480w, https://liangdi.me/p/rust-project-review-zellij/assets/zellij-cargo_hu4a5d2c6f278c3d542c5a6f2737af2a6f_122148_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;cargo.kdl&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;141&#34;
+		data-flex-basis=&#34;339px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;第一个是显示一个监控的界面，第二个是跑 rust 项目， 其中 cargo run 和 cargo test 的 pane 官方的名词是 &lt;code&gt;Command Panes&lt;/code&gt; 就是这个 pane 可以通过按键 Enter 重复的执行。 确实可以方便的完成一些集成的工作。&lt;/p&gt;
+&lt;p&gt;更多 layout 文档： &lt;a class=&#34;link&#34; href=&#34;https://zellij.dev/documentation/creating-a-layout.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://zellij.dev/documentation/creating-a-layout.html&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;插件系统&#34;&gt;插件系统&lt;/h2&gt;
+&lt;p&gt;Zellij 的插件系统使用 wasm 集成， 这个方式我之前在自己的系统里面也研究过，但是最终没有选用， 那时候 rust wasm 的库还不算太丰富， 从 zellij 来看，似乎已经很不错了， 使用 wasm 对于系统设计有不少好处，如果直接用 ffi 各种语言绑定会有比较多的工作要做，使用 wasm 有不少好处，插件分发和加载处理将简单很多，因为只有 wasm 一个 taget ，不然还要处理不同系统的库的加载。 第三方语言绑定也会简单不少。&lt;/p&gt;
+&lt;p&gt;官方有 rust 和 zig 的示例：&lt;a class=&#34;link&#34; href=&#34;https://zellij.dev/documentation/plugin-writing.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://zellij.dev/documentation/plugin-writing.html&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;rust 的绑定库： &lt;a class=&#34;link&#34; href=&#34;https://github.com/zellij-org/zellij/tree/main/zellij-tile&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://github.com/zellij-org/zellij/tree/main/zellij-tile&lt;/a&gt;
+zig 的绑定库：&lt;a class=&#34;link&#34; href=&#34;https://mzte.de/git/LordMZTE/zellzig&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://mzte.de/git/LordMZTE/zellzig&lt;/a&gt;
+代码都很简单易读，很适合学习。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;注意&lt;/code&gt;：目前 zellij 的插件 api 系统还未稳定，相关接口未来可能会发生变化。&lt;/p&gt;
+&lt;h1 id=&#34;zellij-用到的-rust-库&#34;&gt;Zellij 用到的 rust 库&lt;/h1&gt;
+&lt;p&gt;最后简单罗列几个 zellij 中用到的一些库，将来大家的项目总可能也会用得到，当然 zellij 是一个终端应用，所用到的库基本也是终端应用相关的库。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;clap.rs&#34; &gt;clap&lt;/a&gt; , 大名鼎鼎的 clap ，命令行参数解析, zellij 中用的是 3.x 的版本，还未升级到 4&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/wasmerio/wasmer&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;wasmer&lt;/a&gt; , wasm 宿主， 插件系统使用它实现&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
         <title>Rust 黑客编程 - SYN Flood 敲开 DDoS 的大门</title>
         <link>https://liangdi.me/p/rust-hacking-programing-syn-flood-ddos/</link>
         <pubDate>Fri, 03 Jun 2022 16:01:32 +0800</pubDate>

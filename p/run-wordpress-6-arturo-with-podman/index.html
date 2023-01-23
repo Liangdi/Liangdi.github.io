@@ -6,7 +6,7 @@
 
 <link rel='canonical' href='https://liangdi.me/p/run-wordpress-6-arturo-with-podman/'>
 
-<link rel="stylesheet" href="/scss/style.min.450926226e724574a6b936335ea06111f8aeb253d932c86cb2cc807341cd2889.css"><meta property='og:title' content='使用 Podman 运行 WordPress 6 Arturo'>
+<link rel="stylesheet" href="/scss/style.min.070a1f1fa7cad6c7ccb4af4d49452541cddf145911de65e6dbd542983c495cd1.css"><meta property='og:title' content='使用 Podman 运行 WordPress 6 Arturo'>
 <meta property='og:description' content='前言 今天看到 WordPress 6 发布了,回想多年以前在使用 WordPress 的时候,一顿 yum 命令安装 nginx, php, mysql, php-fpm , 然后再配置 nginx, 经过一阵子配置, WordPress 就运行成功了, 如今在云原生时代, 可以用 k8s , docker , Podman 等工具来安装这些系统了, 今天就使用 Podman 安装 WordPress , 人生苦短, 我用 podman !
 认知准备  这次是安装一个业务系统(WordPress) , 所以不象一些 hello world 的文章, 更多要关注底层的一些东西 网络(network): WordPress 要和 mysql 连接, 所以需要网络支持 数据卷(volume): mysql 数据要保存, WordPress 的文章数据保存在数据库中,但是插件/主题,上传图片等都是保存在文件系统中, 文件系统的内容要保存下来, 就要使用到数据卷功能. 使用 Podman 4.1.0 版本  安装过程 网络 使用 podman network ls , 可以查看 Podman 的网络列表, 默认会有一个 Podman 的网络, 这里我们会创建一个新的网络叫做 wp-net , 使用如下命令:'>
 <meta property='og:url' content='https://liangdi.me/p/run-wordpress-6-arturo-with-podman/'>
@@ -628,7 +628,9 @@
     <section class="copyright">
         &copy; 
         
-        2022 Liangdi&#39;s Blog
+            2022 - 
+        
+        2023 Liangdi&#39;s Blog
     </section>
     
     <section class="powerby">
