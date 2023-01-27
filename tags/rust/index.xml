@@ -6,7 +6,90 @@
         <description>Recent content in rust on Liangdi&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Mon, 23 Jan 2023 21:44:12 +0800</lastBuildDate><atom:link href="https://liangdi.me/tags/rust/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sat, 28 Jan 2023 01:33:57 +0800</lastBuildDate><atom:link href="https://liangdi.me/tags/rust/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>2023 年可以关注的 Rust Web 框架(后端)</title>
+        <link>https://liangdi.me/p/2023-rust-web-frameworks/</link>
+        <pubDate>Sat, 28 Jan 2023 01:33:57 +0800</pubDate>
+        
+        <guid>https://liangdi.me/p/2023-rust-web-frameworks/</guid>
+        <description>&lt;h1 id=&#34;概述&#34;&gt;概述&lt;/h1&gt;
+&lt;p&gt;Rust 生态慢慢发展壮大，虽然有 areweyet 系列网站可以查看一些领域的情况，但是我最近关注的 web framework 领域的 &lt;a class=&#34;link&#34; href=&#34;https://www.arewewebyet.org/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://www.arewewebyet.org/&lt;/a&gt; 却不怎么更新了， 那么为就自己来收集一下最新的信息，本文只是收集一些活跃的项目， 不分排名，不做推荐，如果有机会花点时间去做点技术调研，再做推荐。&lt;/p&gt;
+&lt;p&gt;如果项目缺失，也欢迎大家补充&lt;/p&gt;
+&lt;h1 id=&#34;项目列表后端框架&#34;&gt;项目列表(后端框架)&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;actix-web &lt;a class=&#34;link&#34; href=&#34;https://actix.rs/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://actix.rs/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;axum &lt;a class=&#34;link&#34; href=&#34;https://github.com/tokio-rs/axum&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://github.com/tokio-rs/axum&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;warp &lt;a class=&#34;link&#34; href=&#34;https://github.com/seanmonstar/warp&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://github.com/seanmonstar/warp&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;viz &lt;a class=&#34;link&#34; href=&#34;https://viz.rs/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://viz.rs/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;salvo &lt;a class=&#34;link&#34; href=&#34;https://salvo.rs/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://salvo.rs/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;iron &lt;a class=&#34;link&#34; href=&#34;https://github.com/iron/iron&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://github.com/iron/iron&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;tide &lt;a class=&#34;link&#34; href=&#34;https://github.com/http-rs/tide&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://github.com/http-rs/tide&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;nickel &lt;a class=&#34;link&#34; href=&#34;https://github.com/nickel-org/nickel.rs&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://github.com/nickel-org/nickel.rs&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;gotham &lt;a class=&#34;link&#34; href=&#34;https://gotham.rs/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://gotham.rs/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;poem &lt;a class=&#34;link&#34; href=&#34;https://github.com/poem-web/poem&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://github.com/poem-web/poem&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;thruster &lt;a class=&#34;link&#34; href=&#34;https://github.com/thruster-rs/Thruster&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://github.com/thruster-rs/Thruster&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;rouille &lt;a class=&#34;link&#34; href=&#34;https://github.com/tomaka/rouille&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://github.com/tomaka/rouille&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;trillium &lt;a class=&#34;link&#34; href=&#34;https://github.com/trillium-rs/trillium&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://github.com/trillium-rs/trillium&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;rocket &lt;a class=&#34;link&#34; href=&#34;https://rocket.rs/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://rocket.rs/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;项目列表全栈类&#34;&gt;项目列表(全栈类)&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Fresh &lt;a class=&#34;link&#34; href=&#34;https://fresh.deno.dev/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://fresh.deno.dev/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;MoonZoon &lt;a class=&#34;link&#34; href=&#34;https://github.com/MoonZoon/MoonZoon&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://github.com/MoonZoon/MoonZoon&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;anansi &lt;a class=&#34;link&#34; href=&#34;https://github.com/saru-tora/anansi&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://github.com/saru-tora/anansi&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;github-star-情况选取部分&#34;&gt;github star 情况(选取部分)&lt;/h1&gt;
+&lt;h2 id=&#34;后端框架&#34;&gt;后端框架&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://liangdi.me/p/2023-rust-web-frameworks/assets/star-history-1.png&#34;
+	width=&#34;1832&#34;
+	height=&#34;1292&#34;
+	srcset=&#34;https://liangdi.me/p/2023-rust-web-frameworks/assets/star-history-1_hubd0814b03f5345858f8d9bbbd8761922_256720_480x0_resize_box_3.png 480w, https://liangdi.me/p/2023-rust-web-frameworks/assets/star-history-1_hubd0814b03f5345858f8d9bbbd8761922_256720_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;后端框架&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;141&#34;
+		data-flex-basis=&#34;340px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;全栈类&#34;&gt;全栈类&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://liangdi.me/p/2023-rust-web-frameworks/assets/star-history-2.png&#34;
+	width=&#34;1832&#34;
+	height=&#34;1292&#34;
+	srcset=&#34;https://liangdi.me/p/2023-rust-web-frameworks/assets/star-history-2_hub32f5bf7472ca4eb486b9121d05db2e9_171864_480x0_resize_box_3.png 480w, https://liangdi.me/p/2023-rust-web-frameworks/assets/star-history-2_hub32f5bf7472ca4eb486b9121d05db2e9_171864_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;全栈类&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;141&#34;
+		data-flex-basis=&#34;340px&#34;
+	
+&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>Rust 项目鉴赏: zellij 替代 screen, tmux 的终端工具</title>
         <link>https://liangdi.me/p/rust-project-review-zellij/</link>
         <pubDate>Mon, 23 Jan 2023 21:44:12 +0800</pubDate>
