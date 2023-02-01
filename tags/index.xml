@@ -6,7 +6,31 @@
         <description>Recent content in Tags on Liangdi&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Sat, 28 Jan 2023 01:33:57 +0800</lastBuildDate><atom:link href="https://liangdi.me/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 31 Jan 2023 23:36:01 +0800</lastBuildDate><atom:link href="https://liangdi.me/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>ai</title>
+        <link>https://liangdi.me/tags/ai/</link>
+        <pubDate>Tue, 31 Jan 2023 23:36:01 +0800</pubDate>
+        
+        <guid>https://liangdi.me/tags/ai/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>ai 码农</title>
+        <link>https://liangdi.me/tags/ai-%E7%A0%81%E5%86%9C/</link>
+        <pubDate>Tue, 31 Jan 2023 23:36:01 +0800</pubDate>
+        
+        <guid>https://liangdi.me/tags/ai-%E7%A0%81%E5%86%9C/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>chatgpt</title>
+        <link>https://liangdi.me/tags/chatgpt/</link>
+        <pubDate>Tue, 31 Jan 2023 23:36:01 +0800</pubDate>
+        
+        <guid>https://liangdi.me/tags/chatgpt/</guid>
+        <description></description>
+        </item>
+        <item>
         <title>rust</title>
         <link>https://liangdi.me/tags/rust/</link>
         <pubDate>Sat, 28 Jan 2023 01:33:57 +0800</pubDate>
