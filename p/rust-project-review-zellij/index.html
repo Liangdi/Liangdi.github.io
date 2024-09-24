@@ -1,390 +1,336 @@
 <!DOCTYPE html>
-<html lang="en-us" dir="ltr">
-    <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='概述 zellij 是最近用于替代 tmux 的工具，使用 rust 编写 https://zellij.dev/
+<html lang="zh"
+  x-data
+  :class="$store.darkMode.class()"
+  :data-theme="$store.darkMode.theme()">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rust 项目鉴赏: zellij 替代 screen, tmux 的终端工具 | Liangdi&#39;s Blog</title>
+
+    
+<link href="/" rel="icon" type="image/x-icon" />
+
+
+<link rel="canonical" href="http://localhost:1313/p/rust-project-review-zellij/" />
+
+
+
+<meta name="author" content="" />
+<meta name="description" content="" />
+
+
+
+<meta name="generator" content="Hugo 0.134.3">
+
+
+<meta property="og:url" content="http://localhost:1313/p/rust-project-review-zellij/">
+  <meta property="og:site_name" content="Liangdi&#39;s Blog">
+  <meta property="og:title" content="Rust 项目鉴赏: zellij 替代 screen, tmux 的终端工具">
+  <meta property="og:description" content="概述 zellij 是最近用于替代 tmux 的工具，使用 rust 编写 https://zellij.dev/
 zellij 名称的直译大概是马赛克瓷砖的意思， 项目原先名称直接就叫：Mosaic
 从名字看，它运行起来应该有点马赛克瓷砖，一块一块的样子，运行截图如下 特点 阐述 zellij 的特点之前，先看看官方的 roadmap 的内容，随着时间变化，可能会有不同，不过大体能了解到官方的一些理念 网址:https://zellij.dev/roadmap/
-用户体验 Zellij 很注重用户体验，包括终端用户，以及开发者，终端用户层面， zellij 做到了开箱即用，无需过多的学习， zellij 默认支持 tab ， 快捷键默认呈现，并且有下一步操作提示， 默认可以使用鼠标激活 pane, 支持快捷键切换 pane 和 tab ，这样的默认配置用户基本无成本上手， 相比 tmux 好太多， 记得当初使用 tmux 第一步就是去搜索如何显示快捷键，如何使用快捷键&amp;hellip; Zellij 的键盘操作新手无需学习即可理解， 类似的设计在很多用户友好的软件中都有体现了，下图是 Blender 的操作界面
+用户体验 Zellij 很注重用户体验，包括终端用户，以及开发者，终端用户层面， zellij 做到了开箱即用，无需过多的学习， zellij 默认支持 tab ， 快捷键默认呈现，并且有下一步操作提示， 默认可以使用鼠标激活 pane, 支持快捷键切换 pane 和 tab ，这样的默认配置用户基本无成本上手， 相比 tmux 好太多， 记得当初使用 tmux 第一步就是去搜索如何显示快捷键，如何使用快捷键… Zellij 的键盘操作新手无需学习即可理解， 类似的设计在很多用户友好的软件中都有体现了，下图是 Blender 的操作界面
 layout 系统 Zellij 设计了一个 layout 系统， 用户可以设置不同的配置文件（kdl 格式）https://kdl.dev/
 kdl 确实很适合描述复杂的配置，类似 ron https://github.com/ron-rs/ron
 我测试了几个 layout 配置以及运行效果如下：
 monitor.kdl
-1 2 3 4 5 6 7  layout { pane split_direction=&amp;#34;vertical&amp;#34; { pane command=&amp;#34;htop&amp;#34; // panes can have arguments on the same line  pane command=&amp;#34;btm&amp;#34; } pane command=&amp;#34;nu&amp;#34; }   cargo.'><title>Rust 项目鉴赏: zellij 替代 screen, tmux 的终端工具</title>
+1 2 3 4 5 6 7 layout { pane split_direction=&#34;vertical&#34; { pane command=&#34;htop&#34; // panes can have arguments on the same line pane command=&#34;btm&#34; } pane command=&#34;nu&#34; } ">
+  <meta property="og:locale" content="zh">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2023-01-23T21:44:12+08:00">
+    <meta property="article:modified_time" content="2023-01-23T21:44:12+08:00">
+    <meta property="article:tag" content="Rust">
+    <meta property="article:tag" content="Cli">
+    <meta property="article:tag" content="Zellij">
 
-<link rel='canonical' href='https://liangdi.me/p/rust-project-review-zellij/'>
 
-<link rel="stylesheet" href="/scss/style.min.070a1f1fa7cad6c7ccb4af4d49452541cddf145911de65e6dbd542983c495cd1.css"><meta property='og:title' content='Rust 项目鉴赏: zellij 替代 screen, tmux 的终端工具'>
-<meta property='og:description' content='概述 zellij 是最近用于替代 tmux 的工具，使用 rust 编写 https://zellij.dev/
+
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Rust 项目鉴赏: zellij 替代 screen, tmux 的终端工具">
+  <meta name="twitter:description" content="概述 zellij 是最近用于替代 tmux 的工具，使用 rust 编写 https://zellij.dev/
 zellij 名称的直译大概是马赛克瓷砖的意思， 项目原先名称直接就叫：Mosaic
 从名字看，它运行起来应该有点马赛克瓷砖，一块一块的样子，运行截图如下 特点 阐述 zellij 的特点之前，先看看官方的 roadmap 的内容，随着时间变化，可能会有不同，不过大体能了解到官方的一些理念 网址:https://zellij.dev/roadmap/
-用户体验 Zellij 很注重用户体验，包括终端用户，以及开发者，终端用户层面， zellij 做到了开箱即用，无需过多的学习， zellij 默认支持 tab ， 快捷键默认呈现，并且有下一步操作提示， 默认可以使用鼠标激活 pane, 支持快捷键切换 pane 和 tab ，这样的默认配置用户基本无成本上手， 相比 tmux 好太多， 记得当初使用 tmux 第一步就是去搜索如何显示快捷键，如何使用快捷键&amp;hellip; Zellij 的键盘操作新手无需学习即可理解， 类似的设计在很多用户友好的软件中都有体现了，下图是 Blender 的操作界面
+用户体验 Zellij 很注重用户体验，包括终端用户，以及开发者，终端用户层面， zellij 做到了开箱即用，无需过多的学习， zellij 默认支持 tab ， 快捷键默认呈现，并且有下一步操作提示， 默认可以使用鼠标激活 pane, 支持快捷键切换 pane 和 tab ，这样的默认配置用户基本无成本上手， 相比 tmux 好太多， 记得当初使用 tmux 第一步就是去搜索如何显示快捷键，如何使用快捷键… Zellij 的键盘操作新手无需学习即可理解， 类似的设计在很多用户友好的软件中都有体现了，下图是 Blender 的操作界面
 layout 系统 Zellij 设计了一个 layout 系统， 用户可以设置不同的配置文件（kdl 格式）https://kdl.dev/
 kdl 确实很适合描述复杂的配置，类似 ron https://github.com/ron-rs/ron
 我测试了几个 layout 配置以及运行效果如下：
 monitor.kdl
-1 2 3 4 5 6 7  layout { pane split_direction=&amp;#34;vertical&amp;#34; { pane command=&amp;#34;htop&amp;#34; // panes can have arguments on the same line  pane command=&amp;#34;btm&amp;#34; } pane command=&amp;#34;nu&amp;#34; }   cargo.'>
-<meta property='og:url' content='https://liangdi.me/p/rust-project-review-zellij/'>
-<meta property='og:site_name' content='Liangdi&#39;s Blog'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='rust' /><meta property='article:tag' content='cli' /><meta property='article:tag' content='zellij' /><meta property='article:published_time' content='2023-01-23T21:44:12&#43;08:00'/><meta property='article:modified_time' content='2023-01-23T21:44:12&#43;08:00'/><meta property='og:image' content='https://liangdi.me/p/rust-project-review-zellij/assets/rust-zellij-s.png' />
-<meta name="twitter:title" content="Rust 项目鉴赏: zellij 替代 screen, tmux 的终端工具">
-<meta name="twitter:description" content="概述 zellij 是最近用于替代 tmux 的工具，使用 rust 编写 https://zellij.dev/
-zellij 名称的直译大概是马赛克瓷砖的意思， 项目原先名称直接就叫：Mosaic
-从名字看，它运行起来应该有点马赛克瓷砖，一块一块的样子，运行截图如下 特点 阐述 zellij 的特点之前，先看看官方的 roadmap 的内容，随着时间变化，可能会有不同，不过大体能了解到官方的一些理念 网址:https://zellij.dev/roadmap/
-用户体验 Zellij 很注重用户体验，包括终端用户，以及开发者，终端用户层面， zellij 做到了开箱即用，无需过多的学习， zellij 默认支持 tab ， 快捷键默认呈现，并且有下一步操作提示， 默认可以使用鼠标激活 pane, 支持快捷键切换 pane 和 tab ，这样的默认配置用户基本无成本上手， 相比 tmux 好太多， 记得当初使用 tmux 第一步就是去搜索如何显示快捷键，如何使用快捷键&amp;hellip; Zellij 的键盘操作新手无需学习即可理解， 类似的设计在很多用户友好的软件中都有体现了，下图是 Blender 的操作界面
-layout 系统 Zellij 设计了一个 layout 系统， 用户可以设置不同的配置文件（kdl 格式）https://kdl.dev/
-kdl 确实很适合描述复杂的配置，类似 ron https://github.com/ron-rs/ron
-我测试了几个 layout 配置以及运行效果如下：
-monitor.kdl
-1 2 3 4 5 6 7  layout { pane split_direction=&amp;#34;vertical&amp;#34; { pane command=&amp;#34;htop&amp;#34; // panes can have arguments on the same line  pane command=&amp;#34;btm&amp;#34; } pane command=&amp;#34;nu&amp;#34; }   cargo."><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='https://liangdi.me/p/rust-project-review-zellij/assets/rust-zellij-s.png' />
-    </head>
-    <body class="
-    article-page
-    ">
-    <script>
-        (function() {
-            const colorSchemeKey = 'StackColorScheme';
-            if(!localStorage.getItem(colorSchemeKey)){
-                localStorage.setItem(colorSchemeKey, "auto");
-            }
-        })();
-    </script><script>
-    (function() {
-        const colorSchemeKey = 'StackColorScheme';
-        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
-        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
-
-        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
-            
-
-            document.documentElement.dataset.scheme = 'dark';
-        } else {
-            document.documentElement.dataset.scheme = 'light';
-        }
-    })();
-</script>
-<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
-    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
-        <span class="hamburger-box">
-            <span class="hamburger-inner"></span>
-        </span>
-    </button>
-
-    <header>
-        
-            
-            <figure class="site-avatar">
-                <a href="/">
-                
-                    
-                    
-                    
-                        
-                        <img src="/img/avatar_hu28bd9f10f249b3300884b5b9ecc99bfa_1618568_300x0_resize_box_3.png" width="300"
-                            height="300" class="site-logo" loading="lazy" alt="Avatar">
-                    
-                
-                </a>
-                
-                    <span class="emoji">🔥</span>
-                
-            </figure>
-            
-        
-        
-        <div class="site-meta">
-            <h1 class="site-name"><a href="/">Liangdi&#39;s Blog</a></h1>
-            <h2 class="site-description">关注开源技术.</h2>
-        </div>
-    </header><ol class="social-menu">
-            
-                <li>
-                    <a 
-                        href='https://github.com/Liangdi'
-                        target="_blank"
-                        title="GitHub"
-                    >
-                        
-                        
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
-</svg>
+1 2 3 4 5 6 7 layout { pane split_direction=&#34;vertical&#34; { pane command=&#34;htop&#34; // panes can have arguments on the same line pane command=&#34;btm&#34; } pane command=&#34;nu&#34; } ">
 
 
 
-                        
-                    </a>
-                </li>
-            
-        </ol><ol class="menu" id="main-menu">
-        
-        
-        
 
-        <li >
-            <a href='/' >
-                
-                
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <polyline points="5 12 3 12 12 3 21 12 19 12" />
-  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
-</svg>
+<link rel="stylesheet" href="/css/output.css" />
 
 
 
-                
-                <span>首页</span>
-            </a>
-        </li>
-        
-        
 
-        <li >
-            <a href='/about/' >
-                
-                
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="7" r="4" />
-  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-</svg>
-
-
-
-                
-                <span>关于</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/archives/' >
-                
-                
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <rect x="3" y="4" width="18" height="4" rx="2" />
-  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
-  <line x1="10" y1="12" x2="14" y2="12" />
-</svg>
-
-
-
-                
-                <span>Archives</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/search/' >
-                
-                
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="10" cy="10" r="7" />
-  <line x1="21" y1="21" x2="15" y2="15" />
-</svg>
-
-
-
-                
-                <span>Search</span>
-            </a>
-        </li>
-        
-
-        <div class="menu-bottom-section">
-            
-            
-                <li id="dark-mode-toggle">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="8" cy="12" r="2" />
-  <rect x="2" y="6" width="20" height="12" rx="6" />
-</svg>
-
-
-
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="16" cy="12" r="2" />
-  <rect x="2" y="6" width="20" height="12" rx="6" />
-</svg>
-
-
-
-                    <span>暗色模式</span>
-                </li>
-            
-        </div>
-    </ol>
-</aside>
-<main class="main full-width">
-    <article class="has-image main-article">
-    <header class="article-header">
-        <div class="article-image">
-            <a href="/p/rust-project-review-zellij/">
-                <img src="/p/rust-project-review-zellij/assets/rust-zellij-s_hu341624f79a40f1cfc3278c9b5ae37d99_57054_800x0_resize_box_3.png"
-                        srcset="/p/rust-project-review-zellij/assets/rust-zellij-s_hu341624f79a40f1cfc3278c9b5ae37d99_57054_800x0_resize_box_3.png 800w, /p/rust-project-review-zellij/assets/rust-zellij-s_hu341624f79a40f1cfc3278c9b5ae37d99_57054_1600x0_resize_box_3.png 1600w"
-                        width="800" 
-                        height="211" 
-                        loading="lazy"
-                        alt="Featured image of post Rust 项目鉴赏: zellij 替代 screen, tmux 的终端工具" />
-                
-            </a>
-        </div>
     
 
-    <div class="article-details">
+
+<style>
+  pre {
+    padding: 1em;
+    overflow: auto;
+  }
+</style>
+
+
+
+
+
+
+
+
+
     
 
-    <div class="article-title-wrapper">
-        <h2 class="article-title">
-            <a href="/p/rust-project-review-zellij/">Rust 项目鉴赏: zellij 替代 screen, tmux 的终端工具</a>
-        </h2>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  </head>
+
+  <body x-data="{
+    flip: false,
+  }">
     
+    <div id="dream-global-bg"></div>
+
+    
+<nav class="mt-4 lg:mt-8 py-4">
+
+  
+  <div class="container flex justify-between px-4">
+  
+    <section class="flex items-center gap-4">
+      <div class="avatar cursor-pointer hover:online" @click="flip = !flip" title="">
+        <div class="h-10 rounded-full">
+          <img src="/" alt="" />
+        </div>
+      </div>
+
+      
+    </section>
+
+    <div class="dropdown dropdown-end sm:hidden">
+      <div tabindex="0" role="button" class="btn btn-ghost btn-square" aria-label="Select an option">
+        <ion-icon name="menu" class="text-2xl"></ion-icon>
+      </div>
+      <ul class="dropdown-content menu w-36 bg-base-100 rounded-box z-[1] shadow-md">
         
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+  <a class="inline-flex items-center p-2 cursor-pointer" href="/tags" title="">
+    <ion-icon name="pricetags"></ion-icon>
+    
+  </a>
+</li>
+
+
+
+
+
+
+      </ul>
     </div>
+    <section class="hidden sm:flex sm:items-center sm:gap-2 md:gap-4">
+      
 
+      
+      
+
+      
+
+      
+      
+
+
+
+
+
+      
+      
+
+
+
+
+
+      
+      
+
+
+
+
+
+      
+      
+
+
+
+
+
+      
+      
+<a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary" href="/tags" title="">
+  <ion-icon class="group-hover:text-primary-content" name="pricetags"></ion-icon>
+</a>
+
+
+      
+
+      
+
+      
+    </section>
+  </div>
+</nav>
+
+
+    <div class="flip-container" :class="{ 'flip-it': flip }">
+      <div class="flipper">
+        <div class="front">
+          <div class="container">
+            
+<div class="mt-4 px-4">
+  
+  <div>
+  
     
-    <footer class="article-time">
-        
-            <div>
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
-  <circle cx="18" cy="18" r="4" />
-  <path d="M15 3v4" />
-  <path d="M7 3v4" />
-  <path d="M3 11h16" />
-  <path d="M18 16.496v1.504l1 1" />
-</svg>
-                <time class="article-time--published">Jan 23, 2023</time>
-            </div>
-        
+    <article class="mx-auto prose prose-quoteless dark:prose-invert" id="dream-single-post-main" itemscope itemtype="http://schema.org/Article">
+      
+  <meta itemprop="name" content="Rust 项目鉴赏: zellij 替代 screen, tmux 的终端工具">
+  <meta itemprop="description" content="概述 zellij 是最近用于替代 tmux 的工具，使用 rust 编写 https://zellij.dev/
+zellij 名称的直译大概是马赛克瓷砖的意思， 项目原先名称直接就叫：Mosaic
+从名字看，它运行起来应该有点马赛克瓷砖，一块一块的样子，运行截图如下 特点 阐述 zellij 的特点之前，先看看官方的 roadmap 的内容，随着时间变化，可能会有不同，不过大体能了解到官方的一些理念 网址:https://zellij.dev/roadmap/
+用户体验 Zellij 很注重用户体验，包括终端用户，以及开发者，终端用户层面， zellij 做到了开箱即用，无需过多的学习， zellij 默认支持 tab ， 快捷键默认呈现，并且有下一步操作提示， 默认可以使用鼠标激活 pane, 支持快捷键切换 pane 和 tab ，这样的默认配置用户基本无成本上手， 相比 tmux 好太多， 记得当初使用 tmux 第一步就是去搜索如何显示快捷键，如何使用快捷键… Zellij 的键盘操作新手无需学习即可理解， 类似的设计在很多用户友好的软件中都有体现了，下图是 Blender 的操作界面
+layout 系统 Zellij 设计了一个 layout 系统， 用户可以设置不同的配置文件（kdl 格式）https://kdl.dev/
+kdl 确实很适合描述复杂的配置，类似 ron https://github.com/ron-rs/ron
+我测试了几个 layout 配置以及运行效果如下：
+monitor.kdl
+1 2 3 4 5 6 7 layout { pane split_direction=&#34;vertical&#34; { pane command=&#34;htop&#34; // panes can have arguments on the same line pane command=&#34;btm&#34; } pane command=&#34;nu&#34; } ">
+  <meta itemprop="datePublished" content="2023-01-23T21:44:12+08:00">
+  <meta itemprop="dateModified" content="2023-01-23T21:44:12+08:00">
+  <meta itemprop="wordCount" content="228">
+  <meta itemprop="keywords" content="Rust,Cli,Zellij">
 
-        
-            <div>
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="12" r="9" />
-  <polyline points="12 7 12 12 15 15" />
-</svg>
+      <header>
+        <h1 itemprop="headline">Rust 项目鉴赏: zellij 替代 screen, tmux 的终端工具</h1>
+        <p class="text-sm">
+          
+            星期一, 1月 23, 2023
+          
 
+          | <span>2</span>
 
+          
+          | <span>
+            
+              星期一, 1月 23, 2023
+            </span>
+          
+        </p>
+        <div class="flex justify-between">
+          <div class="flex items-center">
+  
+  <span>@</span>
+  
 
-                <time class="article-time--reading">
-                    阅读时长: 2 分钟
-                </time>
-            </div>
-        
-    </footer>
-    
-
-    
+  <span itemprop="author" itemscope itemtype="https://schema.org/Person">
+  
+    <span itemprop="name"></span>
+  
+  </span>
 </div>
-</header>
 
-    <section class="article-content">
-    
-    
-    <h1 id="概述">概述</h1>
-<p>zellij 是最近用于替代 tmux 的工具，使用 rust 编写 <a class="link" href="https://zellij.dev/"  target="_blank" rel="noopener"
-    >https://zellij.dev/</a></p>
+
+          <div class="flex items-center gap-2">
+  
+  
+
+  
+  
+  
+  
+  
+    <a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary"
+      href="https://x.com/intent/post?text=Rust%20%e9%a1%b9%e7%9b%ae%e9%89%b4%e8%b5%8f:%20zellij%20%e6%9b%bf%e4%bb%a3%20screen,%20tmux%20%e7%9a%84%e7%bb%88%e7%ab%af%e5%b7%a5%e5%85%b7&amp;url=http://localhost:1313/p/rust-project-review-zellij/" target="_blank" rel="noopener noreferrer"
+      title="Share on X">
+      <ion-icon class="group-hover:text-primary-content" name="logo-x"></ion-icon>
+    </a>
+  
+    <a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary"
+      href="https://facebook.com/sharer/sharer.php?u=http://localhost:1313/p/rust-project-review-zellij/" target="_blank" rel="noopener noreferrer"
+      title="Share on Facebook">
+      <ion-icon class="group-hover:text-primary-content" name="logo-facebook"></ion-icon>
+    </a>
+  
+    <a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary"
+      href="https://wa.me/?text=Rust%20%e9%a1%b9%e7%9b%ae%e9%89%b4%e8%b5%8f:%20zellij%20%e6%9b%bf%e4%bb%a3%20screen,%20tmux%20%e7%9a%84%e7%bb%88%e7%ab%af%e5%b7%a5%e5%85%b7%20http://localhost:1313/p/rust-project-review-zellij/" target="_blank" rel="noopener noreferrer"
+      title="Share on WhatsApp">
+      <ion-icon class="group-hover:text-primary-content" name="logo-whatsapp"></ion-icon>
+    </a>
+  
+
+  
+  
+</div>
+
+        </div>
+      </header>
+
+      
+
+      <h1 id="概述">概述</h1>
+<p>zellij 是最近用于替代 tmux 的工具，使用 rust 编写 <a href="https://zellij.dev/">https://zellij.dev/</a></p>
 <p>zellij 名称的直译大概是马赛克瓷砖的意思， 项目原先名称直接就叫：Mosaic</p>
 <p>从名字看，它运行起来应该有点马赛克瓷砖，一块一块的样子，运行截图如下
-<img src="/p/rust-project-review-zellij/assets/zellij-screen.png"
-	width="1428"
-	height="1037"
-	srcset="/p/rust-project-review-zellij/assets/zellij-screen_hue1e8ccb5a39b3516943155402d6c58a5_294286_480x0_resize_box_3.png 480w, /p/rust-project-review-zellij/assets/zellij-screen_hue1e8ccb5a39b3516943155402d6c58a5_294286_1024x0_resize_box_3.png 1024w"
-	loading="lazy"
-	
-		alt="Zellij 截图"
-	
-	
-		class="gallery-image" 
-		data-flex-grow="137"
-		data-flex-basis="330px"
-	
-></p>
+<img src="assets/zellij-screen.png" alt="Zellij 截图"></p>
 <h1 id="特点">特点</h1>
 <p>阐述 zellij 的特点之前，先看看官方的 roadmap 的内容，随着时间变化，可能会有不同，不过大体能了解到官方的一些理念
-<img src="/p/rust-project-review-zellij/assets/zellij-roadmap.png"
-	width="970"
-	height="1077"
-	srcset="/p/rust-project-review-zellij/assets/zellij-roadmap_huca9914412c009ebf34b70400f283d0e3_199156_480x0_resize_box_3.png 480w, /p/rust-project-review-zellij/assets/zellij-roadmap_huca9914412c009ebf34b70400f283d0e3_199156_1024x0_resize_box_3.png 1024w"
-	loading="lazy"
-	
-		alt="Zellij Raodmap"
-	
-	
-		class="gallery-image" 
-		data-flex-grow="90"
-		data-flex-basis="216px"
-	
-></p>
-<p>网址:<a class="link" href="https://zellij.dev/roadmap/"  target="_blank" rel="noopener"
-    >https://zellij.dev/roadmap/</a></p>
+<img src="assets/zellij-roadmap.png" alt="Zellij Raodmap"></p>
+<p>网址:<a href="https://zellij.dev/roadmap/">https://zellij.dev/roadmap/</a></p>
 <h2 id="用户体验">用户体验</h2>
 <p>Zellij 很注重用户体验，包括终端用户，以及开发者，终端用户层面， zellij 做到了开箱即用，无需过多的学习， zellij 默认支持 tab ， 快捷键默认呈现，并且有下一步操作提示， 默认可以使用鼠标激活 pane, 支持快捷键切换 pane 和 tab ，这样的默认配置用户基本无成本上手， 相比 tmux 好太多， 记得当初使用 tmux 第一步就是去搜索如何显示快捷键，如何使用快捷键&hellip;
-<img src="/p/rust-project-review-zellij/assets/zellij-keymap-1.png"
-	width="1159"
-	height="291"
-	srcset="/p/rust-project-review-zellij/assets/zellij-keymap-1_hubc1dd04ddfe0581a769b7cdbfcb674cc_17114_480x0_resize_box_3.png 480w, /p/rust-project-review-zellij/assets/zellij-keymap-1_hubc1dd04ddfe0581a769b7cdbfcb674cc_17114_1024x0_resize_box_3.png 1024w"
-	loading="lazy"
-	
-		alt="zellij keymap"
-	
-	
-		class="gallery-image" 
-		data-flex-grow="398"
-		data-flex-basis="955px"
-	
->
-<img src="/p/rust-project-review-zellij/assets/zellij-keymap-2.png"
-	width="1159"
-	height="291"
-	srcset="/p/rust-project-review-zellij/assets/zellij-keymap-2_hua66fbc1b65bc3c65333487f780e40de9_19257_480x0_resize_box_3.png 480w, /p/rust-project-review-zellij/assets/zellij-keymap-2_hua66fbc1b65bc3c65333487f780e40de9_19257_1024x0_resize_box_3.png 1024w"
-	loading="lazy"
-	
-		alt="zellij keymap"
-	
-	
-		class="gallery-image" 
-		data-flex-grow="398"
-		data-flex-basis="955px"
-	
-></p>
+<img src="assets/zellij-keymap-1.png" alt="zellij keymap">
+<img src="assets/zellij-keymap-2.png" alt="zellij keymap"></p>
 <p>Zellij 的键盘操作新手无需学习即可理解， 类似的设计在很多用户友好的软件中都有体现了，下图是 Blender 的操作界面</p>
-<p><img src="/p/rust-project-review-zellij/assets/blender.png"
-	width="1480"
-	height="451"
-	srcset="/p/rust-project-review-zellij/assets/blender_hu86f6ad65854ad4e5448fbcea47d5ad13_149868_480x0_resize_box_3.png 480w, /p/rust-project-review-zellij/assets/blender_hu86f6ad65854ad4e5448fbcea47d5ad13_149868_1024x0_resize_box_3.png 1024w"
-	loading="lazy"
-	
-		alt="zellij keymap"
-	
-	
-		class="gallery-image" 
-		data-flex-grow="328"
-		data-flex-basis="787px"
-	
-></p>
+<p><img src="assets/blender.png" alt="zellij keymap"></p>
 <h2 id="layout-系统">layout 系统</h2>
-<p>Zellij 设计了一个 layout 系统， 用户可以设置不同的配置文件（kdl 格式）<a class="link" href="https://kdl.dev/"  target="_blank" rel="noopener"
-    >https://kdl.dev/</a></p>
-<p>kdl 确实很适合描述复杂的配置，类似 ron <a class="link" href="https://github.com/ron-rs/ron"  target="_blank" rel="noopener"
-    >https://github.com/ron-rs/ron</a></p>
+<p>Zellij 设计了一个 layout 系统， 用户可以设置不同的配置文件（kdl 格式）<a href="https://kdl.dev/">https://kdl.dev/</a></p>
+<p>kdl 确实很适合描述复杂的配置，类似 ron <a href="https://github.com/ron-rs/ron">https://github.com/ron-rs/ron</a></p>
 <p>我测试了几个 layout 配置以及运行效果如下：</p>
 <p><code>monitor.kdl</code></p>
 <div class="highlight"><div class="chroma">
@@ -398,29 +344,16 @@ monitor.kdl
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">layout</span> <span class="o">{</span>
-</span></span><span class="line"><span class="cl">    <span class="n">pane</span> <span class="n">split_direction</span><span class="o">=</span><span class="s">&#34;vertical&#34;</span> <span class="o">{</span>
-</span></span><span class="line"><span class="cl">        <span class="n">pane</span> <span class="n">command</span><span class="o">=</span><span class="s">&#34;htop&#34;</span> <span class="c1">// panes can have arguments on the same line
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">pane</span> <span class="n">command</span><span class="o">=</span><span class="s">&#34;btm&#34;</span>
-</span></span><span class="line"><span class="cl">    <span class="o">}</span>
-</span></span><span class="line"><span class="cl">    <span class="n">pane</span> <span class="n">command</span><span class="o">=</span><span class="s">&#34;nu&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="o">}</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">layout</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">pane</span><span class="w"> </span><span class="n">split_direction</span><span class="o">=</span><span class="s">&#34;vertical&#34;</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">pane</span><span class="w"> </span><span class="n">command</span><span class="o">=</span><span class="s">&#34;htop&#34;</span><span class="w"> </span><span class="c1">// panes can have arguments on the same line</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">pane</span><span class="w"> </span><span class="n">command</span><span class="o">=</span><span class="s">&#34;btm&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">pane</span><span class="w"> </span><span class="n">command</span><span class="o">=</span><span class="s">&#34;nu&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
-</div><p><img src="/p/rust-project-review-zellij/assets/zellij-monitor.png"
-	width="1428"
-	height="1037"
-	srcset="/p/rust-project-review-zellij/assets/zellij-monitor_hud75806fab38df7e5c32add7e8209f0ae_195960_480x0_resize_box_3.png 480w, /p/rust-project-review-zellij/assets/zellij-monitor_hud75806fab38df7e5c32add7e8209f0ae_195960_1024x0_resize_box_3.png 1024w"
-	loading="lazy"
-	
-		alt="monitor.kdl"
-	
-	
-		class="gallery-image" 
-		data-flex-grow="137"
-		data-flex-basis="330px"
-	
-></p>
+</div><p><img src="assets/zellij-monitor.png" alt="monitor.kdl"></p>
 <p><code>cargo.kdl</code></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -441,261 +374,152 @@ monitor.kdl
 </span><span class="lnt">15
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">layout</span> <span class="o">{</span>
-</span></span><span class="line"><span class="cl">    <span class="n">pane</span> <span class="n">split_direction</span><span class="o">=</span><span class="s">&#34;vertical&#34;</span> <span class="n">size</span><span class="o">=</span><span class="s">&#34;60%&#34;</span> <span class="o">{</span>
-</span></span><span class="line"><span class="cl">        <span class="n">pane</span> <span class="n">edit</span><span class="o">=</span><span class="s">&#34;src/main.rs&#34;</span>
-</span></span><span class="line"><span class="cl">        <span class="n">pane</span> <span class="n">edit</span><span class="o">=</span><span class="s">&#34;Cargo.toml&#34;</span>
-</span></span><span class="line"><span class="cl">    <span class="o">}</span>
-</span></span><span class="line"><span class="cl">    <span class="n">pane</span> <span class="n">split_direction</span><span class="o">=</span><span class="s">&#34;vertical&#34;</span> <span class="n">size</span><span class="o">=</span><span class="s">&#34;40%&#34;</span> <span class="o">{</span>
-</span></span><span class="line"><span class="cl">        <span class="n">pane</span> <span class="n">command</span><span class="o">=</span><span class="s">&#34;cargo&#34;</span> <span class="o">{</span>
-</span></span><span class="line"><span class="cl">            <span class="n">args</span> <span class="s">&#34;run&#34;</span>
-</span></span><span class="line"><span class="cl">            <span class="n">focus</span> <span class="kc">true</span>
-</span></span><span class="line"><span class="cl">        <span class="o">}</span>
-</span></span><span class="line"><span class="cl">        <span class="n">pane</span> <span class="n">command</span><span class="o">=</span><span class="s">&#34;cargo&#34;</span> <span class="o">{</span>
-</span></span><span class="line"><span class="cl">            <span class="n">args</span> <span class="s">&#34;test&#34;</span>
-</span></span><span class="line"><span class="cl">        <span class="o">}</span>
-</span></span><span class="line"><span class="cl">    <span class="o">}</span>
-</span></span><span class="line"><span class="cl"><span class="o">}</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">layout</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">pane</span><span class="w"> </span><span class="n">split_direction</span><span class="o">=</span><span class="s">&#34;vertical&#34;</span><span class="w"> </span><span class="n">size</span><span class="o">=</span><span class="s">&#34;60%&#34;</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">pane</span><span class="w"> </span><span class="n">edit</span><span class="o">=</span><span class="s">&#34;src/main.rs&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">pane</span><span class="w"> </span><span class="n">edit</span><span class="o">=</span><span class="s">&#34;Cargo.toml&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">pane</span><span class="w"> </span><span class="n">split_direction</span><span class="o">=</span><span class="s">&#34;vertical&#34;</span><span class="w"> </span><span class="n">size</span><span class="o">=</span><span class="s">&#34;40%&#34;</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">pane</span><span class="w"> </span><span class="n">command</span><span class="o">=</span><span class="s">&#34;cargo&#34;</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">args</span><span class="w"> </span><span class="s">&#34;run&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">focus</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">pane</span><span class="w"> </span><span class="n">command</span><span class="o">=</span><span class="s">&#34;cargo&#34;</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">args</span><span class="w"> </span><span class="s">&#34;test&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
-</div><p><img src="/p/rust-project-review-zellij/assets/zellij-cargo.png"
-	width="1188"
-	height="839"
-	srcset="/p/rust-project-review-zellij/assets/zellij-cargo_hu4a5d2c6f278c3d542c5a6f2737af2a6f_122148_480x0_resize_box_3.png 480w, /p/rust-project-review-zellij/assets/zellij-cargo_hu4a5d2c6f278c3d542c5a6f2737af2a6f_122148_1024x0_resize_box_3.png 1024w"
-	loading="lazy"
-	
-		alt="cargo.kdl"
-	
-	
-		class="gallery-image" 
-		data-flex-grow="141"
-		data-flex-basis="339px"
-	
-></p>
+</div><p><img src="assets/zellij-cargo.png" alt="cargo.kdl"></p>
 <p>第一个是显示一个监控的界面，第二个是跑 rust 项目， 其中 cargo run 和 cargo test 的 pane 官方的名词是 <code>Command Panes</code> 就是这个 pane 可以通过按键 Enter 重复的执行。 确实可以方便的完成一些集成的工作。</p>
-<p>更多 layout 文档： <a class="link" href="https://zellij.dev/documentation/creating-a-layout.html"  target="_blank" rel="noopener"
-    >https://zellij.dev/documentation/creating-a-layout.html</a></p>
+<p>更多 layout 文档： <a href="https://zellij.dev/documentation/creating-a-layout.html">https://zellij.dev/documentation/creating-a-layout.html</a></p>
 <h2 id="插件系统">插件系统</h2>
 <p>Zellij 的插件系统使用 wasm 集成， 这个方式我之前在自己的系统里面也研究过，但是最终没有选用， 那时候 rust wasm 的库还不算太丰富， 从 zellij 来看，似乎已经很不错了， 使用 wasm 对于系统设计有不少好处，如果直接用 ffi 各种语言绑定会有比较多的工作要做，使用 wasm 有不少好处，插件分发和加载处理将简单很多，因为只有 wasm 一个 taget ，不然还要处理不同系统的库的加载。 第三方语言绑定也会简单不少。</p>
-<p>官方有 rust 和 zig 的示例：<a class="link" href="https://zellij.dev/documentation/plugin-writing.html"  target="_blank" rel="noopener"
-    >https://zellij.dev/documentation/plugin-writing.html</a></p>
-<p>rust 的绑定库： <a class="link" href="https://github.com/zellij-org/zellij/tree/main/zellij-tile"  target="_blank" rel="noopener"
-    >https://github.com/zellij-org/zellij/tree/main/zellij-tile</a>
-zig 的绑定库：<a class="link" href="https://mzte.de/git/LordMZTE/zellzig"  target="_blank" rel="noopener"
-    >https://mzte.de/git/LordMZTE/zellzig</a>
+<p>官方有 rust 和 zig 的示例：<a href="https://zellij.dev/documentation/plugin-writing.html">https://zellij.dev/documentation/plugin-writing.html</a></p>
+<p>rust 的绑定库： <a href="https://github.com/zellij-org/zellij/tree/main/zellij-tile">https://github.com/zellij-org/zellij/tree/main/zellij-tile</a>
+zig 的绑定库：<a href="https://mzte.de/git/LordMZTE/zellzig">https://mzte.de/git/LordMZTE/zellzig</a>
 代码都很简单易读，很适合学习。</p>
 <p><code>注意</code>：目前 zellij 的插件 api 系统还未稳定，相关接口未来可能会发生变化。</p>
 <h1 id="zellij-用到的-rust-库">Zellij 用到的 rust 库</h1>
 <p>最后简单罗列几个 zellij 中用到的一些库，将来大家的项目总可能也会用得到，当然 zellij 是一个终端应用，所用到的库基本也是终端应用相关的库。</p>
 <ul>
 <li>
-<p><a class="link" href="clap.rs" >clap</a> , 大名鼎鼎的 clap ，命令行参数解析, zellij 中用的是 3.x 的版本，还未升级到 4</p>
+<p><a href="clap.rs">clap</a> , 大名鼎鼎的 clap ，命令行参数解析, zellij 中用的是 3.x 的版本，还未升级到 4</p>
 </li>
 <li>
-<p><a class="link" href="https://github.com/wasmerio/wasmer"  target="_blank" rel="noopener"
-    >wasmer</a> , wasm 宿主， 插件系统使用它实现</p>
+<p><a href="https://github.com/wasmerio/wasmer">wasmer</a> , wasm 宿主， 插件系统使用它实现</p>
 </li>
 </ul>
 
-</section>
+
+      
+    </article>
+  </div>
+
+  
+</div>
 
 
-    <footer class="article-footer">
-    
-    <section class="article-tags">
-        
-            <a href="/tags/rust/">rust</a>
-        
-            <a href="/tags/cli/">cli</a>
-        
-            <a href="/tags/zellij/">zellij</a>
-        
-    </section>
+            
+            <footer class="flex justify-between items-center gap-2 px-4 py-12">
+            
+              <div>
+  
+  <p>© 2024 Liangdi&#39;s Blog</p>
+  
 
+  
+  <p class="text-sm">
+    🌱
+    <span class="text-base-content/60">
+      Powered by <a class="hover:underline" href="https://gohugo.io/" target="_blank">Hugo</a> with theme
+      <a class="hover:underline" href="https://github.com/g1eny0ung/hugo-theme-dream" target="_blank">Dream</a>.</span
+    >
+  </p>
+  
+</div>
 
-    
-    <section class="article-copyright">
-        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="12" r="9" />
-  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
-</svg>
+              <div
+  x-data="{ icons: [
+    { name: 'moon', status: 'y' },
+    { name: 'sunny', status: 'n' },
+    { name: 'desktop', status: 'auto' }
+  ] }"
+  class="flex items-center h-[32px] px-2 gap-2 border border-base-content/30 rounded-full"
+>
+  <template x-for="icon in icons">
+    <div
+      role="button"
+      tabindex="0"
+      :aria-label="'Select ' + icon.name + ' mode'"
+      class="group inline-flex justify-center items-center p-1 rounded-full cursor-pointer hover:bg-primary"
+      :class="$store.darkMode.icon() === icon.name && 'bg-primary'"
+      @click="$store.darkMode.toggle(icon.status)"
+    >
+      <ion-icon
+        :name="`${icon.name}-outline`"
+        class="group-hover:text-primary-content"
+        :class="$store.darkMode.icon() === icon.name && 'text-primary-content'"
+      >
+      </ion-icon>
+    </div>
+  </template>
+</div>
 
-
-
-        <span>Licensed under CC BY-NC-SA 4.0</span>
-    </section>
-    </footer>
-
-
-    
-</article>
-
-    
-
-    
-
-     
-    
-        
-    
-
-    <footer class="site-footer">
-    <section class="copyright">
-        &copy; 
-        
-            2022 - 
-        
-        2023 Liangdi&#39;s Blog
-    </section>
-    
-    <section class="powerby">
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.11.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
-    </section>
-</footer>
-<script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?f334264cb8da1148de7654289682087c";
-      var s = document.getElementsByTagName("script")[0]; 
-      s.parentNode.insertBefore(hm, s);
-    })();
-    </script>
-    
-
-    
-<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
-
-    
-    <div class="pswp__bg"></div>
-
-    
-    <div class="pswp__scroll-wrap">
-
-        
-        <div class="pswp__container">
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
+            </footer>
+          </div>
         </div>
+        <div class="back">
+          <div class="container">
+            
+            <div class="dream-grid">
+  
 
-        
-        <div class="pswp__ui pswp__ui--hidden">
+  
 
-            <div class="pswp__top-bar">
+  
+</div>
 
-                
-
-                <div class="pswp__counter"></div>
-
-                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-
-                <button class="pswp__button pswp__button--share" title="Share"></button>
-
-                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-
-                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
-
-                
-                
-                <div class="pswp__preloader">
-                    <div class="pswp__preloader__icn">
-                        <div class="pswp__preloader__cut">
-                            <div class="pswp__preloader__donut"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-                <div class="pswp__share-tooltip"></div>
-            </div>
-
-            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
-            </button>
-
-            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
-            </button>
-
-            <div class="pswp__caption">
-                <div class="pswp__caption__center"></div>
-            </div>
-
+            
+          </div>
         </div>
-
+      </div>
     </div>
 
-</div><script 
-                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
-                defer
-                >
-            </script><script 
-                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
-                defer
-                >
-            </script><link 
-                rel="stylesheet" 
-                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
-            ><link 
-                rel="stylesheet" 
-                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
-            >
-
-            </main>
-    <aside class="sidebar right-sidebar sticky">
-        
-            
-                
-    <section class="widget archives">
-        <div class="widget-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <line x1="5" y1="9" x2="19" y2="9" />
-  <line x1="5" y1="15" x2="19" y2="15" />
-  <line x1="11" y1="4" x2="7" y2="20" />
-  <line x1="17" y1="4" x2="13" y2="20" />
-</svg>
-
-
-
-        </div>
-        <h2 class="widget-title section-title">目录</h2>
-        
-        <div class="widget--toc">
-            <nav id="TableOfContents">
-  <ol>
-    <li><a href="#用户体验">用户体验</a></li>
-    <li><a href="#layout-系统">layout 系统</a></li>
-    <li><a href="#插件系统">插件系统</a></li>
-  </ol>
-</nav>
-        </div>
-    </section>
-
-            
-        
-    </aside>
-
-
-        </div>
-        <script 
-                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
-                
-                >
-            </script><script type="text/javascript" src="/ts/main.js" defer></script>
-<script>
-    (function () {
-        const customFont = document.createElement('link');
-        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
-
-        customFont.type = "text/css";
-        customFont.rel = "stylesheet";
-
-        document.head.appendChild(customFont);
-    }());
+    <script>
+  window.lightTheme =  null 
+  window.darkTheme =  null 
 </script>
 
-    </body>
+
+  <script src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script>
+
+  
+  
+  <script src="/js/grid.js"></script>
+
+
+
+
+<script src="/js/main.js"></script>
+
+    
+
+
+
+
+
+
+
+    
+
+    
+
+    
+
+    <script type="module" src="https://unpkg.com/ionicons@7.4.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.4.0/dist/ionicons/ionicons.js"></script>
+  </body>
 </html>

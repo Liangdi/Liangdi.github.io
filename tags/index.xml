@@ -1,187 +1,145 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-    <channel>
-        <title>Tags on Liangdi&#39;s Blog</title>
-        <link>https://liangdi.me/tags/</link>
-        <description>Recent content in Tags on Liangdi&#39;s Blog</description>
-        <generator>Hugo -- gohugo.io</generator>
-        <language>en-us</language>
-        <lastBuildDate>Tue, 31 Jan 2023 23:36:01 +0800</lastBuildDate><atom:link href="https://liangdi.me/tags/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title>ai</title>
-        <link>https://liangdi.me/tags/ai/</link>
-        <pubDate>Tue, 31 Jan 2023 23:36:01 +0800</pubDate>
-        
-        <guid>https://liangdi.me/tags/ai/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>ai 码农</title>
-        <link>https://liangdi.me/tags/ai-%E7%A0%81%E5%86%9C/</link>
-        <pubDate>Tue, 31 Jan 2023 23:36:01 +0800</pubDate>
-        
-        <guid>https://liangdi.me/tags/ai-%E7%A0%81%E5%86%9C/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>chatgpt</title>
-        <link>https://liangdi.me/tags/chatgpt/</link>
-        <pubDate>Tue, 31 Jan 2023 23:36:01 +0800</pubDate>
-        
-        <guid>https://liangdi.me/tags/chatgpt/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>rust</title>
-        <link>https://liangdi.me/tags/rust/</link>
-        <pubDate>Sat, 28 Jan 2023 01:33:57 +0800</pubDate>
-        
-        <guid>https://liangdi.me/tags/rust/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>web</title>
-        <link>https://liangdi.me/tags/web/</link>
-        <pubDate>Sat, 28 Jan 2023 01:33:57 +0800</pubDate>
-        
-        <guid>https://liangdi.me/tags/web/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>cli</title>
-        <link>https://liangdi.me/tags/cli/</link>
-        <pubDate>Mon, 23 Jan 2023 21:44:12 +0800</pubDate>
-        
-        <guid>https://liangdi.me/tags/cli/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>zellij</title>
-        <link>https://liangdi.me/tags/zellij/</link>
-        <pubDate>Mon, 23 Jan 2023 21:44:12 +0800</pubDate>
-        
-        <guid>https://liangdi.me/tags/zellij/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>ddos</title>
-        <link>https://liangdi.me/tags/ddos/</link>
-        <pubDate>Fri, 03 Jun 2022 16:01:32 +0800</pubDate>
-        
-        <guid>https://liangdi.me/tags/ddos/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>hacking programing</title>
-        <link>https://liangdi.me/tags/hacking-programing/</link>
-        <pubDate>Fri, 03 Jun 2022 16:01:32 +0800</pubDate>
-        
-        <guid>https://liangdi.me/tags/hacking-programing/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>syn flood</title>
-        <link>https://liangdi.me/tags/syn-flood/</link>
-        <pubDate>Fri, 03 Jun 2022 16:01:32 +0800</pubDate>
-        
-        <guid>https://liangdi.me/tags/syn-flood/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>icmp</title>
-        <link>https://liangdi.me/tags/icmp/</link>
-        <pubDate>Thu, 02 Jun 2022 19:30:20 +0800</pubDate>
-        
-        <guid>https://liangdi.me/tags/icmp/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>podman</title>
-        <link>https://liangdi.me/tags/podman/</link>
-        <pubDate>Thu, 02 Jun 2022 12:37:58 +0800</pubDate>
-        
-        <guid>https://liangdi.me/tags/podman/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>wordpress</title>
-        <link>https://liangdi.me/tags/wordpress/</link>
-        <pubDate>Thu, 02 Jun 2022 12:37:58 +0800</pubDate>
-        
-        <guid>https://liangdi.me/tags/wordpress/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>WebDriver</title>
-        <link>https://liangdi.me/tags/webdriver/</link>
-        <pubDate>Fri, 06 May 2022 00:38:25 +0800</pubDate>
-        
-        <guid>https://liangdi.me/tags/webdriver/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>爬虫</title>
-        <link>https://liangdi.me/tags/%E7%88%AC%E8%99%AB/</link>
-        <pubDate>Fri, 06 May 2022 00:38:25 +0800</pubDate>
-        
-        <guid>https://liangdi.me/tags/%E7%88%AC%E8%99%AB/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>docker</title>
-        <link>https://liangdi.me/tags/docker/</link>
-        <pubDate>Wed, 27 Apr 2022 16:30:35 +0800</pubDate>
-        
-        <guid>https://liangdi.me/tags/docker/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>k8s</title>
-        <link>https://liangdi.me/tags/k8s/</link>
-        <pubDate>Wed, 27 Apr 2022 16:30:35 +0800</pubDate>
-        
-        <guid>https://liangdi.me/tags/k8s/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>kubernetes</title>
-        <link>https://liangdi.me/tags/kubernetes/</link>
-        <pubDate>Wed, 27 Apr 2022 16:30:35 +0800</pubDate>
-        
-        <guid>https://liangdi.me/tags/kubernetes/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>java</title>
-        <link>https://liangdi.me/tags/java/</link>
-        <pubDate>Tue, 26 Apr 2022 11:06:35 +0800</pubDate>
-        
-        <guid>https://liangdi.me/tags/java/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>容器化</title>
-        <link>https://liangdi.me/tags/%E5%AE%B9%E5%99%A8%E5%8C%96/</link>
-        <pubDate>Tue, 26 Apr 2022 11:06:35 +0800</pubDate>
-        
-        <guid>https://liangdi.me/tags/%E5%AE%B9%E5%99%A8%E5%8C%96/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>容器技术</title>
-        <link>https://liangdi.me/tags/%E5%AE%B9%E5%99%A8%E6%8A%80%E6%9C%AF/</link>
-        <pubDate>Sat, 23 Apr 2022 16:59:14 +0800</pubDate>
-        
-        <guid>https://liangdi.me/tags/%E5%AE%B9%E5%99%A8%E6%8A%80%E6%9C%AF/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>云原生</title>
-        <link>https://liangdi.me/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/</link>
-        <pubDate>Sat, 23 Apr 2022 16:59:14 +0800</pubDate>
-        
-        <guid>https://liangdi.me/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/</guid>
-        <description></description>
-        </item>
-        
-    </channel>
+  <channel>
+    <title>Tags on Liangdi&#39;s个人博客</title>
+    <link>https://liangdi.me/tags/</link>
+    <description>Recent content in Tags on Liangdi&#39;s个人博客</description>
+    <generator>Hugo</generator>
+    <language>zh</language>
+    <lastBuildDate>Sat, 28 Jan 2023 01:33:57 +0800</lastBuildDate>
+    <atom:link href="https://liangdi.me/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Rust</title>
+      <link>https://liangdi.me/tags/rust/</link>
+      <pubDate>Sat, 28 Jan 2023 01:33:57 +0800</pubDate>
+      <guid>https://liangdi.me/tags/rust/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Web</title>
+      <link>https://liangdi.me/tags/web/</link>
+      <pubDate>Sat, 28 Jan 2023 01:33:57 +0800</pubDate>
+      <guid>https://liangdi.me/tags/web/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Cli</title>
+      <link>https://liangdi.me/tags/cli/</link>
+      <pubDate>Mon, 23 Jan 2023 21:44:12 +0800</pubDate>
+      <guid>https://liangdi.me/tags/cli/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Zellij</title>
+      <link>https://liangdi.me/tags/zellij/</link>
+      <pubDate>Mon, 23 Jan 2023 21:44:12 +0800</pubDate>
+      <guid>https://liangdi.me/tags/zellij/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Ddos</title>
+      <link>https://liangdi.me/tags/ddos/</link>
+      <pubDate>Fri, 03 Jun 2022 16:01:32 +0800</pubDate>
+      <guid>https://liangdi.me/tags/ddos/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Hacking Programing</title>
+      <link>https://liangdi.me/tags/hacking-programing/</link>
+      <pubDate>Fri, 03 Jun 2022 16:01:32 +0800</pubDate>
+      <guid>https://liangdi.me/tags/hacking-programing/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Syn Flood</title>
+      <link>https://liangdi.me/tags/syn-flood/</link>
+      <pubDate>Fri, 03 Jun 2022 16:01:32 +0800</pubDate>
+      <guid>https://liangdi.me/tags/syn-flood/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Icmp</title>
+      <link>https://liangdi.me/tags/icmp/</link>
+      <pubDate>Thu, 02 Jun 2022 19:30:20 +0800</pubDate>
+      <guid>https://liangdi.me/tags/icmp/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Podman</title>
+      <link>https://liangdi.me/tags/podman/</link>
+      <pubDate>Thu, 02 Jun 2022 12:37:58 +0800</pubDate>
+      <guid>https://liangdi.me/tags/podman/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Wordpress</title>
+      <link>https://liangdi.me/tags/wordpress/</link>
+      <pubDate>Thu, 02 Jun 2022 12:37:58 +0800</pubDate>
+      <guid>https://liangdi.me/tags/wordpress/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>WebDriver</title>
+      <link>https://liangdi.me/tags/webdriver/</link>
+      <pubDate>Fri, 06 May 2022 00:38:25 +0800</pubDate>
+      <guid>https://liangdi.me/tags/webdriver/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>爬虫</title>
+      <link>https://liangdi.me/tags/%E7%88%AC%E8%99%AB/</link>
+      <pubDate>Fri, 06 May 2022 00:38:25 +0800</pubDate>
+      <guid>https://liangdi.me/tags/%E7%88%AC%E8%99%AB/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Docker</title>
+      <link>https://liangdi.me/tags/docker/</link>
+      <pubDate>Wed, 27 Apr 2022 16:30:35 +0800</pubDate>
+      <guid>https://liangdi.me/tags/docker/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>K8s</title>
+      <link>https://liangdi.me/tags/k8s/</link>
+      <pubDate>Wed, 27 Apr 2022 16:30:35 +0800</pubDate>
+      <guid>https://liangdi.me/tags/k8s/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Kubernetes</title>
+      <link>https://liangdi.me/tags/kubernetes/</link>
+      <pubDate>Wed, 27 Apr 2022 16:30:35 +0800</pubDate>
+      <guid>https://liangdi.me/tags/kubernetes/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Java</title>
+      <link>https://liangdi.me/tags/java/</link>
+      <pubDate>Tue, 26 Apr 2022 11:06:35 +0800</pubDate>
+      <guid>https://liangdi.me/tags/java/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>容器化</title>
+      <link>https://liangdi.me/tags/%E5%AE%B9%E5%99%A8%E5%8C%96/</link>
+      <pubDate>Tue, 26 Apr 2022 11:06:35 +0800</pubDate>
+      <guid>https://liangdi.me/tags/%E5%AE%B9%E5%99%A8%E5%8C%96/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>容器技术</title>
+      <link>https://liangdi.me/tags/%E5%AE%B9%E5%99%A8%E6%8A%80%E6%9C%AF/</link>
+      <pubDate>Sat, 23 Apr 2022 16:59:14 +0800</pubDate>
+      <guid>https://liangdi.me/tags/%E5%AE%B9%E5%99%A8%E6%8A%80%E6%9C%AF/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>云原生</title>
+      <link>https://liangdi.me/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/</link>
+      <pubDate>Sat, 23 Apr 2022 16:59:14 +0800</pubDate>
+      <guid>https://liangdi.me/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/</guid>
+      <description></description>
+    </item>
+  </channel>
 </rss>

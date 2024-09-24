@@ -1,349 +1,364 @@
 <!DOCTYPE html>
-<html lang="en-us" dir="ltr">
-    <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='概述 使用 rust 也挺长时间了,但是一直是内部小打小闹,没有往客户那边推, 这次和客户商量好,拿一个很小的 java spring boot 项目开刀.
+<html lang="zh"
+  x-data
+  :class="$store.darkMode.class()"
+  :data-theme="$store.darkMode.theme()">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>记录一次 java 小项目的 rust 迁移过程 | Liangdi&#39;s Blog</title>
+
+    
+<link href="/" rel="icon" type="image/x-icon" />
+
+
+<link rel="canonical" href="http://localhost:1313/p/a-tiny-app-migrate-from-java-to-rust/" />
+
+
+
+<meta name="author" content="" />
+<meta name="description" content="" />
+
+
+
+<meta name="generator" content="Hugo 0.134.3">
+
+
+<meta property="og:url" content="http://localhost:1313/p/a-tiny-app-migrate-from-java-to-rust/">
+  <meta property="og:site_name" content="Liangdi&#39;s Blog">
+  <meta property="og:title" content="记录一次 java 小项目的 rust 迁移过程">
+  <meta property="og:description" content="概述 使用 rust 也挺长时间了,但是一直是内部小打小闹,没有往客户那边推, 这次和客户商量好,拿一个很小的 java spring boot 项目开刀.
 这个项目小到 tiny 级别, 主要功能是: 请求一个服务, 对数据进行业务逻辑处理后, 使用 freemarker 渲染呈现给终端用户, rest api 也就 10 多个.
 迁移准备 首先,业务逻辑使用 rust 实现,肯定是没有大问题, 关键在于一些中间件和第三方库是否有替代,这样可以让运维或者交付更加平滑一点, 由于项目比较简单,第三方库也很通用,基本在 rust 这边也有对等的选择,所以本次迁移也将会简单很多.
-迁移说明 库和中间件迁移    库/中间件 Rust 版本 Java 版本 备注     Web Framework actix-web 4 Spring Boot 2.6.x    http cleint reqwest jdk 11 HttpClient    json serde_json gson    template tera freemarker    logging log4rs spring boot logging    assets embedded rust-embed spring boot static    配置 dotenv spring boot 项目小, 配置需求不高, dotenv 够用    有没有坑?'><title>记录一次 java 小项目的 rust 迁移过程</title>
+迁移说明 库和中间件迁移 库/中间件 Rust 版本 Java 版本 备注 Web Framework actix-web 4 Spring Boot 2.6.x http cleint reqwest jdk 11 HttpClient json serde_json gson template tera freemarker logging log4rs spring boot logging assets embedded rust-embed spring boot static 配置 dotenv spring boot 项目小, 配置需求不高, dotenv 够用 有没有坑? 由于项目实在不复杂, 过程中也没有遇到特别的问题, rust 的库也能正常工作, 从代码的角度很多时候比 java 简洁, 当然集成没有 spring boot 那么简单, 比如配置的自动读取赋值, 模板需要手动集成等等. spring boot 的 rest request 配置, 对应在 actix-web 中也是很简单,使用 #[get], #[post] 等宏实现, 请求内容的解构也一样完善, 迁移过程中没有遇到什么问题. 模板方面, tera 是 Jinja2/Django like 的所以,使用起来也没有什么障碍. 战胜 rust 编译器后,程序运行,完成测试没有遇到什么 bug ! 迁移后的变化 程序尺寸 spring boot jar 大小 20MB, 即使是 spring-native 打包也要 60 多 mb, 并且 spring-native 打包的程序没法正常运行,因为 spring-native 还没有 GA ,所以也没有去深究. rust 的程序使用 x86_64-unknown-linux-musl target release 静态编译打包(默认配置,无其他优化), 程序 strip 后是 9.3MB , 相比 jar 也小了一半, 还没考虑 jdk. 容器化, 这点 rust 的优势就体现出来了, 使用 FROM scratch 打包出来的镜像大小是 9.75MB , 相比 spring boot 项目, 基本的 openjdk:17-alpine 就有 320 多 MB 加上项目程序,也要 340 多 MB 了. 性能 肉眼可见的启动块了, 模板渲染也快了 程序瓶颈在于远程的服务,所以当前程序性能测试并不一定可靠,所以并没有去做特别的测试 后续迁移更多项目后,再进行一次性能测试比较 思考 如果项目不复杂, java 迁移到 rust 还是不算复杂的. 容器化的收益是不小的,不管是启动速度还是镜像大小. 后面考虑将微服务化的 java 项目选择合适的项目再进行 rust 迁移. ">
+  <meta property="og:locale" content="zh">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2022-04-26T11:06:35+08:00">
+    <meta property="article:modified_time" content="2022-04-26T11:06:35+08:00">
+    <meta property="article:tag" content="Rust">
+    <meta property="article:tag" content="Java">
+    <meta property="article:tag" content="容器化">
 
-<link rel='canonical' href='https://liangdi.me/p/a-tiny-app-migrate-from-java-to-rust/'>
 
-<link rel="stylesheet" href="/scss/style.min.070a1f1fa7cad6c7ccb4af4d49452541cddf145911de65e6dbd542983c495cd1.css"><meta property='og:title' content='记录一次 java 小项目的 rust 迁移过程'>
-<meta property='og:description' content='概述 使用 rust 也挺长时间了,但是一直是内部小打小闹,没有往客户那边推, 这次和客户商量好,拿一个很小的 java spring boot 项目开刀.
+
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="记录一次 java 小项目的 rust 迁移过程">
+  <meta name="twitter:description" content="概述 使用 rust 也挺长时间了,但是一直是内部小打小闹,没有往客户那边推, 这次和客户商量好,拿一个很小的 java spring boot 项目开刀.
 这个项目小到 tiny 级别, 主要功能是: 请求一个服务, 对数据进行业务逻辑处理后, 使用 freemarker 渲染呈现给终端用户, rest api 也就 10 多个.
 迁移准备 首先,业务逻辑使用 rust 实现,肯定是没有大问题, 关键在于一些中间件和第三方库是否有替代,这样可以让运维或者交付更加平滑一点, 由于项目比较简单,第三方库也很通用,基本在 rust 这边也有对等的选择,所以本次迁移也将会简单很多.
-迁移说明 库和中间件迁移    库/中间件 Rust 版本 Java 版本 备注     Web Framework actix-web 4 Spring Boot 2.6.x    http cleint reqwest jdk 11 HttpClient    json serde_json gson    template tera freemarker    logging log4rs spring boot logging    assets embedded rust-embed spring boot static    配置 dotenv spring boot 项目小, 配置需求不高, dotenv 够用    有没有坑?'>
-<meta property='og:url' content='https://liangdi.me/p/a-tiny-app-migrate-from-java-to-rust/'>
-<meta property='og:site_name' content='Liangdi&#39;s Blog'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='rust' /><meta property='article:tag' content='java' /><meta property='article:tag' content='容器化' /><meta property='article:published_time' content='2022-04-26T11:06:35&#43;08:00'/><meta property='article:modified_time' content='2022-04-26T11:06:35&#43;08:00'/><meta property='og:image' content='https://liangdi.me/p/a-tiny-app-migrate-from-java-to-rust/assets/java-rust.png' />
-<meta name="twitter:title" content="记录一次 java 小项目的 rust 迁移过程">
-<meta name="twitter:description" content="概述 使用 rust 也挺长时间了,但是一直是内部小打小闹,没有往客户那边推, 这次和客户商量好,拿一个很小的 java spring boot 项目开刀.
-这个项目小到 tiny 级别, 主要功能是: 请求一个服务, 对数据进行业务逻辑处理后, 使用 freemarker 渲染呈现给终端用户, rest api 也就 10 多个.
-迁移准备 首先,业务逻辑使用 rust 实现,肯定是没有大问题, 关键在于一些中间件和第三方库是否有替代,这样可以让运维或者交付更加平滑一点, 由于项目比较简单,第三方库也很通用,基本在 rust 这边也有对等的选择,所以本次迁移也将会简单很多.
-迁移说明 库和中间件迁移    库/中间件 Rust 版本 Java 版本 备注     Web Framework actix-web 4 Spring Boot 2.6.x    http cleint reqwest jdk 11 HttpClient    json serde_json gson    template tera freemarker    logging log4rs spring boot logging    assets embedded rust-embed spring boot static    配置 dotenv spring boot 项目小, 配置需求不高, dotenv 够用    有没有坑?"><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='https://liangdi.me/p/a-tiny-app-migrate-from-java-to-rust/assets/java-rust.png' />
-    </head>
-    <body class="
-    article-page
-    ">
-    <script>
-        (function() {
-            const colorSchemeKey = 'StackColorScheme';
-            if(!localStorage.getItem(colorSchemeKey)){
-                localStorage.setItem(colorSchemeKey, "auto");
-            }
-        })();
-    </script><script>
-    (function() {
-        const colorSchemeKey = 'StackColorScheme';
-        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
-        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
-
-        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
-            
-
-            document.documentElement.dataset.scheme = 'dark';
-        } else {
-            document.documentElement.dataset.scheme = 'light';
-        }
-    })();
-</script>
-<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
-    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
-        <span class="hamburger-box">
-            <span class="hamburger-inner"></span>
-        </span>
-    </button>
-
-    <header>
-        
-            
-            <figure class="site-avatar">
-                <a href="/">
-                
-                    
-                    
-                    
-                        
-                        <img src="/img/avatar_hu28bd9f10f249b3300884b5b9ecc99bfa_1618568_300x0_resize_box_3.png" width="300"
-                            height="300" class="site-logo" loading="lazy" alt="Avatar">
-                    
-                
-                </a>
-                
-                    <span class="emoji">🔥</span>
-                
-            </figure>
-            
-        
-        
-        <div class="site-meta">
-            <h1 class="site-name"><a href="/">Liangdi&#39;s Blog</a></h1>
-            <h2 class="site-description">关注开源技术.</h2>
-        </div>
-    </header><ol class="social-menu">
-            
-                <li>
-                    <a 
-                        href='https://github.com/Liangdi'
-                        target="_blank"
-                        title="GitHub"
-                    >
-                        
-                        
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
-</svg>
+迁移说明 库和中间件迁移 库/中间件 Rust 版本 Java 版本 备注 Web Framework actix-web 4 Spring Boot 2.6.x http cleint reqwest jdk 11 HttpClient json serde_json gson template tera freemarker logging log4rs spring boot logging assets embedded rust-embed spring boot static 配置 dotenv spring boot 项目小, 配置需求不高, dotenv 够用 有没有坑? 由于项目实在不复杂, 过程中也没有遇到特别的问题, rust 的库也能正常工作, 从代码的角度很多时候比 java 简洁, 当然集成没有 spring boot 那么简单, 比如配置的自动读取赋值, 模板需要手动集成等等. spring boot 的 rest request 配置, 对应在 actix-web 中也是很简单,使用 #[get], #[post] 等宏实现, 请求内容的解构也一样完善, 迁移过程中没有遇到什么问题. 模板方面, tera 是 Jinja2/Django like 的所以,使用起来也没有什么障碍. 战胜 rust 编译器后,程序运行,完成测试没有遇到什么 bug ! 迁移后的变化 程序尺寸 spring boot jar 大小 20MB, 即使是 spring-native 打包也要 60 多 mb, 并且 spring-native 打包的程序没法正常运行,因为 spring-native 还没有 GA ,所以也没有去深究. rust 的程序使用 x86_64-unknown-linux-musl target release 静态编译打包(默认配置,无其他优化), 程序 strip 后是 9.3MB , 相比 jar 也小了一半, 还没考虑 jdk. 容器化, 这点 rust 的优势就体现出来了, 使用 FROM scratch 打包出来的镜像大小是 9.75MB , 相比 spring boot 项目, 基本的 openjdk:17-alpine 就有 320 多 MB 加上项目程序,也要 340 多 MB 了. 性能 肉眼可见的启动块了, 模板渲染也快了 程序瓶颈在于远程的服务,所以当前程序性能测试并不一定可靠,所以并没有去做特别的测试 后续迁移更多项目后,再进行一次性能测试比较 思考 如果项目不复杂, java 迁移到 rust 还是不算复杂的. 容器化的收益是不小的,不管是启动速度还是镜像大小. 后面考虑将微服务化的 java 项目选择合适的项目再进行 rust 迁移. ">
 
 
 
-                        
-                    </a>
-                </li>
-            
-        </ol><ol class="menu" id="main-menu">
-        
-        
-        
 
-        <li >
-            <a href='/' >
-                
-                
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <polyline points="5 12 3 12 12 3 21 12 19 12" />
-  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
-</svg>
+<link rel="stylesheet" href="/css/output.css" />
 
 
 
-                
-                <span>首页</span>
-            </a>
-        </li>
-        
-        
 
-        <li >
-            <a href='/about/' >
-                
-                
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="7" r="4" />
-  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-</svg>
-
-
-
-                
-                <span>关于</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/archives/' >
-                
-                
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <rect x="3" y="4" width="18" height="4" rx="2" />
-  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
-  <line x1="10" y1="12" x2="14" y2="12" />
-</svg>
-
-
-
-                
-                <span>Archives</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/search/' >
-                
-                
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="10" cy="10" r="7" />
-  <line x1="21" y1="21" x2="15" y2="15" />
-</svg>
-
-
-
-                
-                <span>Search</span>
-            </a>
-        </li>
-        
-
-        <div class="menu-bottom-section">
-            
-            
-                <li id="dark-mode-toggle">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="8" cy="12" r="2" />
-  <rect x="2" y="6" width="20" height="12" rx="6" />
-</svg>
-
-
-
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="16" cy="12" r="2" />
-  <rect x="2" y="6" width="20" height="12" rx="6" />
-</svg>
-
-
-
-                    <span>暗色模式</span>
-                </li>
-            
-        </div>
-    </ol>
-</aside>
-<main class="main full-width">
-    <article class="has-image main-article">
-    <header class="article-header">
-        <div class="article-image">
-            <a href="/p/a-tiny-app-migrate-from-java-to-rust/">
-                <img src="/p/a-tiny-app-migrate-from-java-to-rust/assets/java-rust_hu1a0eedb3cb55262de642044ece3234a1_193060_800x0_resize_box_3.png"
-                        srcset="/p/a-tiny-app-migrate-from-java-to-rust/assets/java-rust_hu1a0eedb3cb55262de642044ece3234a1_193060_800x0_resize_box_3.png 800w, /p/a-tiny-app-migrate-from-java-to-rust/assets/java-rust_hu1a0eedb3cb55262de642044ece3234a1_193060_1600x0_resize_box_3.png 1600w"
-                        width="800" 
-                        height="292" 
-                        loading="lazy"
-                        alt="Featured image of post 记录一次 java 小项目的 rust 迁移过程" />
-                
-            </a>
-        </div>
     
 
-    <div class="article-details">
+
+<style>
+  pre {
+    padding: 1em;
+    overflow: auto;
+  }
+</style>
+
+
+
+
+
+
+
+
+
     
 
-    <div class="article-title-wrapper">
-        <h2 class="article-title">
-            <a href="/p/a-tiny-app-migrate-from-java-to-rust/">记录一次 java 小项目的 rust 迁移过程</a>
-        </h2>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  </head>
+
+  <body x-data="{
+    flip: false,
+  }">
     
+    <div id="dream-global-bg"></div>
+
+    
+<nav class="mt-4 lg:mt-8 py-4">
+
+  
+  <div class="container flex justify-between px-4">
+  
+    <section class="flex items-center gap-4">
+      <div class="avatar cursor-pointer hover:online" @click="flip = !flip" title="">
+        <div class="h-10 rounded-full">
+          <img src="/" alt="" />
+        </div>
+      </div>
+
+      
+    </section>
+
+    <div class="dropdown dropdown-end sm:hidden">
+      <div tabindex="0" role="button" class="btn btn-ghost btn-square" aria-label="Select an option">
+        <ion-icon name="menu" class="text-2xl"></ion-icon>
+      </div>
+      <ul class="dropdown-content menu w-36 bg-base-100 rounded-box z-[1] shadow-md">
         
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+  <a class="inline-flex items-center p-2 cursor-pointer" href="/tags" title="">
+    <ion-icon name="pricetags"></ion-icon>
+    
+  </a>
+</li>
+
+
+
+
+
+
+      </ul>
     </div>
+    <section class="hidden sm:flex sm:items-center sm:gap-2 md:gap-4">
+      
 
+      
+      
+
+      
+
+      
+      
+
+
+
+
+
+      
+      
+
+
+
+
+
+      
+      
+
+
+
+
+
+      
+      
+
+
+
+
+
+      
+      
+<a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary" href="/tags" title="">
+  <ion-icon class="group-hover:text-primary-content" name="pricetags"></ion-icon>
+</a>
+
+
+      
+
+      
+
+      
+    </section>
+  </div>
+</nav>
+
+
+    <div class="flip-container" :class="{ 'flip-it': flip }">
+      <div class="flipper">
+        <div class="front">
+          <div class="container">
+            
+<div class="mt-4 px-4">
+  
+  <div>
+  
     
-    <footer class="article-time">
-        
-            <div>
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
-  <circle cx="18" cy="18" r="4" />
-  <path d="M15 3v4" />
-  <path d="M7 3v4" />
-  <path d="M3 11h16" />
-  <path d="M18 16.496v1.504l1 1" />
-</svg>
-                <time class="article-time--published">Apr 26, 2022</time>
-            </div>
-        
+    <article class="mx-auto prose prose-quoteless dark:prose-invert" id="dream-single-post-main" itemscope itemtype="http://schema.org/Article">
+      
+  <meta itemprop="name" content="记录一次 java 小项目的 rust 迁移过程">
+  <meta itemprop="description" content="概述 使用 rust 也挺长时间了,但是一直是内部小打小闹,没有往客户那边推, 这次和客户商量好,拿一个很小的 java spring boot 项目开刀.
+这个项目小到 tiny 级别, 主要功能是: 请求一个服务, 对数据进行业务逻辑处理后, 使用 freemarker 渲染呈现给终端用户, rest api 也就 10 多个.
+迁移准备 首先,业务逻辑使用 rust 实现,肯定是没有大问题, 关键在于一些中间件和第三方库是否有替代,这样可以让运维或者交付更加平滑一点, 由于项目比较简单,第三方库也很通用,基本在 rust 这边也有对等的选择,所以本次迁移也将会简单很多.
+迁移说明 库和中间件迁移 库/中间件 Rust 版本 Java 版本 备注 Web Framework actix-web 4 Spring Boot 2.6.x http cleint reqwest jdk 11 HttpClient json serde_json gson template tera freemarker logging log4rs spring boot logging assets embedded rust-embed spring boot static 配置 dotenv spring boot 项目小, 配置需求不高, dotenv 够用 有没有坑? 由于项目实在不复杂, 过程中也没有遇到特别的问题, rust 的库也能正常工作, 从代码的角度很多时候比 java 简洁, 当然集成没有 spring boot 那么简单, 比如配置的自动读取赋值, 模板需要手动集成等等. spring boot 的 rest request 配置, 对应在 actix-web 中也是很简单,使用 #[get], #[post] 等宏实现, 请求内容的解构也一样完善, 迁移过程中没有遇到什么问题. 模板方面, tera 是 Jinja2/Django like 的所以,使用起来也没有什么障碍. 战胜 rust 编译器后,程序运行,完成测试没有遇到什么 bug ! 迁移后的变化 程序尺寸 spring boot jar 大小 20MB, 即使是 spring-native 打包也要 60 多 mb, 并且 spring-native 打包的程序没法正常运行,因为 spring-native 还没有 GA ,所以也没有去深究. rust 的程序使用 x86_64-unknown-linux-musl target release 静态编译打包(默认配置,无其他优化), 程序 strip 后是 9.3MB , 相比 jar 也小了一半, 还没考虑 jdk. 容器化, 这点 rust 的优势就体现出来了, 使用 FROM scratch 打包出来的镜像大小是 9.75MB , 相比 spring boot 项目, 基本的 openjdk:17-alpine 就有 320 多 MB 加上项目程序,也要 340 多 MB 了. 性能 肉眼可见的启动块了, 模板渲染也快了 程序瓶颈在于远程的服务,所以当前程序性能测试并不一定可靠,所以并没有去做特别的测试 后续迁移更多项目后,再进行一次性能测试比较 思考 如果项目不复杂, java 迁移到 rust 还是不算复杂的. 容器化的收益是不小的,不管是启动速度还是镜像大小. 后面考虑将微服务化的 java 项目选择合适的项目再进行 rust 迁移. ">
+  <meta itemprop="datePublished" content="2022-04-26T11:06:35+08:00">
+  <meta itemprop="dateModified" content="2022-04-26T11:06:35+08:00">
+  <meta itemprop="wordCount" content="194">
+  <meta itemprop="keywords" content="Rust,Java,容器化">
 
-        
-            <div>
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="12" r="9" />
-  <polyline points="12 7 12 12 15 15" />
-</svg>
+      <header>
+        <h1 itemprop="headline">记录一次 java 小项目的 rust 迁移过程</h1>
+        <p class="text-sm">
+          
+            星期二, 4月 26, 2022
+          
 
+          | <span>1</span>
 
+          
+          | <span>
+            
+              星期二, 4月 26, 2022
+            </span>
+          
+        </p>
+        <div class="flex justify-between">
+          <div class="flex items-center">
+  
+  <span>@</span>
+  
 
-                <time class="article-time--reading">
-                    阅读时长: 1 分钟
-                </time>
-            </div>
-        
-    </footer>
-    
-
-    
+  <span itemprop="author" itemscope itemtype="https://schema.org/Person">
+  
+    <span itemprop="name"></span>
+  
+  </span>
 </div>
-</header>
 
-    <section class="article-content">
-    
-    
-    <h2 id="概述">概述</h2>
+
+          <div class="flex items-center gap-2">
+  
+  
+
+  
+  
+  
+  
+  
+    <a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary"
+      href="https://x.com/intent/post?text=%e8%ae%b0%e5%bd%95%e4%b8%80%e6%ac%a1%20java%20%e5%b0%8f%e9%a1%b9%e7%9b%ae%e7%9a%84%20rust%20%e8%bf%81%e7%a7%bb%e8%bf%87%e7%a8%8b&amp;url=http://localhost:1313/p/a-tiny-app-migrate-from-java-to-rust/" target="_blank" rel="noopener noreferrer"
+      title="Share on X">
+      <ion-icon class="group-hover:text-primary-content" name="logo-x"></ion-icon>
+    </a>
+  
+    <a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary"
+      href="https://facebook.com/sharer/sharer.php?u=http://localhost:1313/p/a-tiny-app-migrate-from-java-to-rust/" target="_blank" rel="noopener noreferrer"
+      title="Share on Facebook">
+      <ion-icon class="group-hover:text-primary-content" name="logo-facebook"></ion-icon>
+    </a>
+  
+    <a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary"
+      href="https://wa.me/?text=%e8%ae%b0%e5%bd%95%e4%b8%80%e6%ac%a1%20java%20%e5%b0%8f%e9%a1%b9%e7%9b%ae%e7%9a%84%20rust%20%e8%bf%81%e7%a7%bb%e8%bf%87%e7%a8%8b%20http://localhost:1313/p/a-tiny-app-migrate-from-java-to-rust/" target="_blank" rel="noopener noreferrer"
+      title="Share on WhatsApp">
+      <ion-icon class="group-hover:text-primary-content" name="logo-whatsapp"></ion-icon>
+    </a>
+  
+
+  
+  
+</div>
+
+        </div>
+      </header>
+
+      
+
+      <h2 id="概述">概述</h2>
 <p>使用 rust 也挺长时间了,但是一直是内部小打小闹,没有往客户那边推, 这次和客户商量好,拿一个很小的 java spring boot 项目开刀.</p>
 <p>这个项目小到 tiny 级别, 主要功能是: 请求一个服务, 对数据进行业务逻辑处理后, 使用 freemarker 渲染呈现给终端用户, rest api 也就 10 多个.</p>
 <h2 id="迁移准备">迁移准备</h2>
 <p>首先,业务逻辑使用 rust 实现,肯定是没有大问题, 关键在于一些中间件和第三方库是否有替代,这样可以让运维或者交付更加平滑一点, 由于项目比较简单,第三方库也很通用,基本在 rust 这边也有对等的选择,所以本次迁移也将会简单很多.</p>
 <h2 id="迁移说明">迁移说明</h2>
 <h3 id="库和中间件迁移">库和中间件迁移</h3>
-<div class="table-wrapper"><table>
-<thead>
-<tr>
-<th>库/中间件</th>
-<th>Rust 版本</th>
-<th>Java 版本</th>
-<th>备注</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Web Framework</td>
-<td>actix-web 4</td>
-<td>Spring Boot 2.6.x</td>
-<td></td>
-</tr>
-<tr>
-<td>http cleint</td>
-<td>reqwest</td>
-<td>jdk 11 HttpClient</td>
-<td></td>
-</tr>
-<tr>
-<td>json</td>
-<td>serde_json</td>
-<td>gson</td>
-<td></td>
-</tr>
-<tr>
-<td>template</td>
-<td>tera</td>
-<td>freemarker</td>
-<td></td>
-</tr>
-<tr>
-<td>logging</td>
-<td>log4rs</td>
-<td>spring boot logging</td>
-<td></td>
-</tr>
-<tr>
-<td>assets embedded</td>
-<td>rust-embed</td>
-<td>spring boot static</td>
-<td></td>
-</tr>
-<tr>
-<td>配置</td>
-<td>dotenv</td>
-<td>spring boot</td>
-<td>项目小, 配置需求不高, dotenv 够用</td>
-</tr>
-</tbody>
-</table></div>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">库/中间件</th>
+          <th style="text-align: left">Rust 版本</th>
+          <th style="text-align: left">Java 版本</th>
+          <th style="text-align: left">备注</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">Web Framework</td>
+          <td style="text-align: left">actix-web 4</td>
+          <td style="text-align: left">Spring Boot 2.6.x</td>
+          <td style="text-align: left"></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">http cleint</td>
+          <td style="text-align: left">reqwest</td>
+          <td style="text-align: left">jdk 11 HttpClient</td>
+          <td style="text-align: left"></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">json</td>
+          <td style="text-align: left">serde_json</td>
+          <td style="text-align: left">gson</td>
+          <td style="text-align: left"></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">template</td>
+          <td style="text-align: left">tera</td>
+          <td style="text-align: left">freemarker</td>
+          <td style="text-align: left"></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">logging</td>
+          <td style="text-align: left">log4rs</td>
+          <td style="text-align: left">spring boot logging</td>
+          <td style="text-align: left"></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">assets embedded</td>
+          <td style="text-align: left">rust-embed</td>
+          <td style="text-align: left">spring boot static</td>
+          <td style="text-align: left"></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">配置</td>
+          <td style="text-align: left">dotenv</td>
+          <td style="text-align: left">spring boot</td>
+          <td style="text-align: left">项目小, 配置需求不高, dotenv 够用</td>
+      </tr>
+  </tbody>
+</table>
 <h3 id="有没有坑">有没有坑?</h3>
 <ul>
 <li>由于项目实在不复杂, 过程中也没有遇到特别的问题, rust 的库也能正常工作, 从代码的角度很多时候比 java 简洁, 当然集成没有 spring boot 那么简单, 比如配置的自动读取赋值, 模板需要手动集成等等.</li>
@@ -371,217 +386,114 @@
 <li>后面考虑将微服务化的 java 项目选择合适的项目再进行 rust 迁移.</li>
 </ul>
 
-</section>
+
+      
+    </article>
+  </div>
+
+  
+</div>
 
 
-    <footer class="article-footer">
-    
-    <section class="article-tags">
-        
-            <a href="/tags/rust/">rust</a>
-        
-            <a href="/tags/java/">java</a>
-        
-            <a href="/tags/%E5%AE%B9%E5%99%A8%E5%8C%96/">容器化</a>
-        
-    </section>
+            
+            <footer class="flex justify-between items-center gap-2 px-4 py-12">
+            
+              <div>
+  
+  <p>© 2024 Liangdi&#39;s Blog</p>
+  
 
+  
+  <p class="text-sm">
+    🌱
+    <span class="text-base-content/60">
+      Powered by <a class="hover:underline" href="https://gohugo.io/" target="_blank">Hugo</a> with theme
+      <a class="hover:underline" href="https://github.com/g1eny0ung/hugo-theme-dream" target="_blank">Dream</a>.</span
+    >
+  </p>
+  
+</div>
 
-    
-    <section class="article-copyright">
-        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="12" r="9" />
-  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
-</svg>
+              <div
+  x-data="{ icons: [
+    { name: 'moon', status: 'y' },
+    { name: 'sunny', status: 'n' },
+    { name: 'desktop', status: 'auto' }
+  ] }"
+  class="flex items-center h-[32px] px-2 gap-2 border border-base-content/30 rounded-full"
+>
+  <template x-for="icon in icons">
+    <div
+      role="button"
+      tabindex="0"
+      :aria-label="'Select ' + icon.name + ' mode'"
+      class="group inline-flex justify-center items-center p-1 rounded-full cursor-pointer hover:bg-primary"
+      :class="$store.darkMode.icon() === icon.name && 'bg-primary'"
+      @click="$store.darkMode.toggle(icon.status)"
+    >
+      <ion-icon
+        :name="`${icon.name}-outline`"
+        class="group-hover:text-primary-content"
+        :class="$store.darkMode.icon() === icon.name && 'text-primary-content'"
+      >
+      </ion-icon>
+    </div>
+  </template>
+</div>
 
-
-
-        <span>Licensed under CC BY-NC-SA 4.0</span>
-    </section>
-    </footer>
-
-
-    
-</article>
-
-    
-
-    
-
-     
-    
-        
-    
-
-    <footer class="site-footer">
-    <section class="copyright">
-        &copy; 
-        
-            2022 - 
-        
-        2023 Liangdi&#39;s Blog
-    </section>
-    
-    <section class="powerby">
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.11.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
-    </section>
-</footer>
-<script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?f334264cb8da1148de7654289682087c";
-      var s = document.getElementsByTagName("script")[0]; 
-      s.parentNode.insertBefore(hm, s);
-    })();
-    </script>
-    
-
-    
-<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
-
-    
-    <div class="pswp__bg"></div>
-
-    
-    <div class="pswp__scroll-wrap">
-
-        
-        <div class="pswp__container">
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
+            </footer>
+          </div>
         </div>
+        <div class="back">
+          <div class="container">
+            
+            <div class="dream-grid">
+  
 
-        
-        <div class="pswp__ui pswp__ui--hidden">
+  
 
-            <div class="pswp__top-bar">
+  
+</div>
 
-                
-
-                <div class="pswp__counter"></div>
-
-                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-
-                <button class="pswp__button pswp__button--share" title="Share"></button>
-
-                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-
-                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
-
-                
-                
-                <div class="pswp__preloader">
-                    <div class="pswp__preloader__icn">
-                        <div class="pswp__preloader__cut">
-                            <div class="pswp__preloader__donut"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-                <div class="pswp__share-tooltip"></div>
-            </div>
-
-            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
-            </button>
-
-            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
-            </button>
-
-            <div class="pswp__caption">
-                <div class="pswp__caption__center"></div>
-            </div>
-
+            
+          </div>
         </div>
-
+      </div>
     </div>
 
-</div><script 
-                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
-                defer
-                >
-            </script><script 
-                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
-                defer
-                >
-            </script><link 
-                rel="stylesheet" 
-                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
-            ><link 
-                rel="stylesheet" 
-                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
-            >
-
-            </main>
-    <aside class="sidebar right-sidebar sticky">
-        
-            
-                
-    <section class="widget archives">
-        <div class="widget-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <line x1="5" y1="9" x2="19" y2="9" />
-  <line x1="5" y1="15" x2="19" y2="15" />
-  <line x1="11" y1="4" x2="7" y2="20" />
-  <line x1="17" y1="4" x2="13" y2="20" />
-</svg>
-
-
-
-        </div>
-        <h2 class="widget-title section-title">目录</h2>
-        
-        <div class="widget--toc">
-            <nav id="TableOfContents">
-  <ol>
-    <li><a href="#概述">概述</a></li>
-    <li><a href="#迁移准备">迁移准备</a></li>
-    <li><a href="#迁移说明">迁移说明</a>
-      <ol>
-        <li><a href="#库和中间件迁移">库和中间件迁移</a></li>
-        <li><a href="#有没有坑">有没有坑?</a></li>
-      </ol>
-    </li>
-    <li><a href="#迁移后的变化">迁移后的变化</a>
-      <ol>
-        <li><a href="#程序尺寸">程序尺寸</a></li>
-        <li><a href="#性能">性能</a></li>
-      </ol>
-    </li>
-    <li><a href="#思考">思考</a></li>
-  </ol>
-</nav>
-        </div>
-    </section>
-
-            
-        
-    </aside>
-
-
-        </div>
-        <script 
-                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
-                
-                >
-            </script><script type="text/javascript" src="/ts/main.js" defer></script>
-<script>
-    (function () {
-        const customFont = document.createElement('link');
-        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
-
-        customFont.type = "text/css";
-        customFont.rel = "stylesheet";
-
-        document.head.appendChild(customFont);
-    }());
+    <script>
+  window.lightTheme =  null 
+  window.darkTheme =  null 
 </script>
 
-    </body>
+
+  <script src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script>
+
+  
+  
+  <script src="/js/grid.js"></script>
+
+
+
+
+<script src="/js/main.js"></script>
+
+    
+
+
+
+
+
+
+
+    
+
+    
+
+    
+
+    <script type="module" src="https://unpkg.com/ionicons@7.4.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.4.0/dist/ionicons/ionicons.js"></script>
+  </body>
 </html>

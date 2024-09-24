@@ -1,304 +1,318 @@
 <!DOCTYPE html>
-<html lang="en-us" dir="ltr">
-    <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='前言 大家好,我是 Liangdi, podman 4.x 版本已经发布了, 我也从 docker 开始向 podman 迁移, 所以是合适的时候写点 podman 的文章了.
+<html lang="zh"
+  x-data
+  :class="$store.darkMode.class()"
+  :data-theme="$store.darkMode.theme()">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>选择 podman 的理由, 以及它和 Kubernetes , Docker 的区别 | Liangdi&#39;s Blog</title>
+
+    
+<link href="/" rel="icon" type="image/x-icon" />
+
+
+<link rel="canonical" href="http://localhost:1313/p/what-is-podman-and-different-from-kubernetes-and-docker/" />
+
+
+
+<meta name="author" content="" />
+<meta name="description" content="" />
+
+
+
+<meta name="generator" content="Hugo 0.134.3">
+
+
+<meta property="og:url" content="http://localhost:1313/p/what-is-podman-and-different-from-kubernetes-and-docker/">
+  <meta property="og:site_name" content="Liangdi&#39;s Blog">
+  <meta property="og:title" content="选择 podman 的理由, 以及它和 Kubernetes , Docker 的区别">
+  <meta property="og:description" content="前言 大家好,我是 Liangdi, podman 4.x 版本已经发布了, 我也从 docker 开始向 podman 迁移, 所以是合适的时候写点 podman 的文章了.
 podman 是什么 官方网站: podman.io
 官方自己的介绍: https://podman.io/whatis.html
 名称 podman ,官方说明是 Pod Manager , 所以它不仅可以管理 OCI 容器,还可以管理 pod , 这也是和 docker 的最大差别吧.
-和 kubernetes 的区别 kubernetes(k8s) 是目前最流行的容器编排工具, 集群管理工具, 生态很完善, 也很&amp;quot;重&amp;quot;, pod 的概念就来自 k8s , 虽然 podman 也是管理 pod, 但是远远不及 k8s 的编排功能, 同时 podman 也没有集群管理功能,如果需要管理集群, 需要第三方工具完成.
+和 kubernetes 的区别 kubernetes(k8s) 是目前最流行的容器编排工具, 集群管理工具, 生态很完善, 也很&#34;重&#34;, pod 的概念就来自 k8s , 虽然 podman 也是管理 pod, 但是远远不及 k8s 的编排功能, 同时 podman 也没有集群管理功能,如果需要管理集群, 需要第三方工具完成.
 所以 podman 定位也不是编排和集群管理工具, 紧紧是一个 pod 和容器的管理工具. 所以不是一个级别的东西, 这里不做太多的比较.
-和 docker 的区别 如果仅仅从 docker 和 podman 两个命令提供的功能来讲,它们功能交集很大, podman 官方甚至推荐 alias docker=podman 来过渡.'><title>选择 podman 的理由, 以及它和 Kubernetes , Docker 的区别</title>
+和 docker 的区别 如果仅仅从 docker 和 podman 两个命令提供的功能来讲,它们功能交集很大, podman 官方甚至推荐 alias docker=podman 来过渡.">
+  <meta property="og:locale" content="zh">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2022-04-27T16:30:35+08:00">
+    <meta property="article:modified_time" content="2022-04-27T16:30:35+08:00">
+    <meta property="article:tag" content="Podman">
+    <meta property="article:tag" content="Docker">
+    <meta property="article:tag" content="K8s">
+    <meta property="article:tag" content="Kubernetes">
 
-<link rel='canonical' href='https://liangdi.me/p/what-is-podman-and-different-from-kubernetes-and-docker/'>
 
-<link rel="stylesheet" href="/scss/style.min.070a1f1fa7cad6c7ccb4af4d49452541cddf145911de65e6dbd542983c495cd1.css"><meta property='og:title' content='选择 podman 的理由, 以及它和 Kubernetes , Docker 的区别'>
-<meta property='og:description' content='前言 大家好,我是 Liangdi, podman 4.x 版本已经发布了, 我也从 docker 开始向 podman 迁移, 所以是合适的时候写点 podman 的文章了.
+
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="选择 podman 的理由, 以及它和 Kubernetes , Docker 的区别">
+  <meta name="twitter:description" content="前言 大家好,我是 Liangdi, podman 4.x 版本已经发布了, 我也从 docker 开始向 podman 迁移, 所以是合适的时候写点 podman 的文章了.
 podman 是什么 官方网站: podman.io
 官方自己的介绍: https://podman.io/whatis.html
 名称 podman ,官方说明是 Pod Manager , 所以它不仅可以管理 OCI 容器,还可以管理 pod , 这也是和 docker 的最大差别吧.
-和 kubernetes 的区别 kubernetes(k8s) 是目前最流行的容器编排工具, 集群管理工具, 生态很完善, 也很&amp;quot;重&amp;quot;, pod 的概念就来自 k8s , 虽然 podman 也是管理 pod, 但是远远不及 k8s 的编排功能, 同时 podman 也没有集群管理功能,如果需要管理集群, 需要第三方工具完成.
+和 kubernetes 的区别 kubernetes(k8s) 是目前最流行的容器编排工具, 集群管理工具, 生态很完善, 也很&#34;重&#34;, pod 的概念就来自 k8s , 虽然 podman 也是管理 pod, 但是远远不及 k8s 的编排功能, 同时 podman 也没有集群管理功能,如果需要管理集群, 需要第三方工具完成.
 所以 podman 定位也不是编排和集群管理工具, 紧紧是一个 pod 和容器的管理工具. 所以不是一个级别的东西, 这里不做太多的比较.
-和 docker 的区别 如果仅仅从 docker 和 podman 两个命令提供的功能来讲,它们功能交集很大, podman 官方甚至推荐 alias docker=podman 来过渡.'>
-<meta property='og:url' content='https://liangdi.me/p/what-is-podman-and-different-from-kubernetes-and-docker/'>
-<meta property='og:site_name' content='Liangdi&#39;s Blog'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='podman' /><meta property='article:tag' content='docker' /><meta property='article:tag' content='k8s' /><meta property='article:tag' content='kubernetes' /><meta property='article:published_time' content='2022-04-27T16:30:35&#43;08:00'/><meta property='article:modified_time' content='2022-04-27T16:30:35&#43;08:00'/><meta property='og:image' content='https://liangdi.me/p/what-is-podman-and-different-from-kubernetes-and-docker/assets/podman-vs-docker.jpg' />
-<meta name="twitter:title" content="选择 podman 的理由, 以及它和 Kubernetes , Docker 的区别">
-<meta name="twitter:description" content="前言 大家好,我是 Liangdi, podman 4.x 版本已经发布了, 我也从 docker 开始向 podman 迁移, 所以是合适的时候写点 podman 的文章了.
-podman 是什么 官方网站: podman.io
-官方自己的介绍: https://podman.io/whatis.html
-名称 podman ,官方说明是 Pod Manager , 所以它不仅可以管理 OCI 容器,还可以管理 pod , 这也是和 docker 的最大差别吧.
-和 kubernetes 的区别 kubernetes(k8s) 是目前最流行的容器编排工具, 集群管理工具, 生态很完善, 也很&amp;quot;重&amp;quot;, pod 的概念就来自 k8s , 虽然 podman 也是管理 pod, 但是远远不及 k8s 的编排功能, 同时 podman 也没有集群管理功能,如果需要管理集群, 需要第三方工具完成.
-所以 podman 定位也不是编排和集群管理工具, 紧紧是一个 pod 和容器的管理工具. 所以不是一个级别的东西, 这里不做太多的比较.
-和 docker 的区别 如果仅仅从 docker 和 podman 两个命令提供的功能来讲,它们功能交集很大, podman 官方甚至推荐 alias docker=podman 来过渡."><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='https://liangdi.me/p/what-is-podman-and-different-from-kubernetes-and-docker/assets/podman-vs-docker.jpg' />
-    </head>
-    <body class="
-    article-page
-    ">
-    <script>
-        (function() {
-            const colorSchemeKey = 'StackColorScheme';
-            if(!localStorage.getItem(colorSchemeKey)){
-                localStorage.setItem(colorSchemeKey, "auto");
-            }
-        })();
-    </script><script>
-    (function() {
-        const colorSchemeKey = 'StackColorScheme';
-        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
-        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
-
-        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
-            
-
-            document.documentElement.dataset.scheme = 'dark';
-        } else {
-            document.documentElement.dataset.scheme = 'light';
-        }
-    })();
-</script>
-<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
-    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
-        <span class="hamburger-box">
-            <span class="hamburger-inner"></span>
-        </span>
-    </button>
-
-    <header>
-        
-            
-            <figure class="site-avatar">
-                <a href="/">
-                
-                    
-                    
-                    
-                        
-                        <img src="/img/avatar_hu28bd9f10f249b3300884b5b9ecc99bfa_1618568_300x0_resize_box_3.png" width="300"
-                            height="300" class="site-logo" loading="lazy" alt="Avatar">
-                    
-                
-                </a>
-                
-                    <span class="emoji">🔥</span>
-                
-            </figure>
-            
-        
-        
-        <div class="site-meta">
-            <h1 class="site-name"><a href="/">Liangdi&#39;s Blog</a></h1>
-            <h2 class="site-description">关注开源技术.</h2>
-        </div>
-    </header><ol class="social-menu">
-            
-                <li>
-                    <a 
-                        href='https://github.com/Liangdi'
-                        target="_blank"
-                        title="GitHub"
-                    >
-                        
-                        
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
-</svg>
+和 docker 的区别 如果仅仅从 docker 和 podman 两个命令提供的功能来讲,它们功能交集很大, podman 官方甚至推荐 alias docker=podman 来过渡.">
 
 
 
-                        
-                    </a>
-                </li>
-            
-        </ol><ol class="menu" id="main-menu">
-        
-        
-        
 
-        <li >
-            <a href='/' >
-                
-                
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <polyline points="5 12 3 12 12 3 21 12 19 12" />
-  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
-</svg>
+<link rel="stylesheet" href="/css/output.css" />
 
 
 
-                
-                <span>首页</span>
-            </a>
-        </li>
-        
-        
 
-        <li >
-            <a href='/about/' >
-                
-                
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="7" r="4" />
-  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-</svg>
-
-
-
-                
-                <span>关于</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/archives/' >
-                
-                
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <rect x="3" y="4" width="18" height="4" rx="2" />
-  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
-  <line x1="10" y1="12" x2="14" y2="12" />
-</svg>
-
-
-
-                
-                <span>Archives</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/search/' >
-                
-                
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="10" cy="10" r="7" />
-  <line x1="21" y1="21" x2="15" y2="15" />
-</svg>
-
-
-
-                
-                <span>Search</span>
-            </a>
-        </li>
-        
-
-        <div class="menu-bottom-section">
-            
-            
-                <li id="dark-mode-toggle">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="8" cy="12" r="2" />
-  <rect x="2" y="6" width="20" height="12" rx="6" />
-</svg>
-
-
-
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="16" cy="12" r="2" />
-  <rect x="2" y="6" width="20" height="12" rx="6" />
-</svg>
-
-
-
-                    <span>暗色模式</span>
-                </li>
-            
-        </div>
-    </ol>
-</aside>
-<main class="main full-width">
-    <article class="has-image main-article">
-    <header class="article-header">
-        <div class="article-image">
-            <a href="/p/what-is-podman-and-different-from-kubernetes-and-docker/">
-                <img src="/p/what-is-podman-and-different-from-kubernetes-and-docker/assets/podman-vs-docker_hub3205ed3c893c1f053112545244d1e4e_65326_800x0_resize_q75_box.jpg"
-                        srcset="/p/what-is-podman-and-different-from-kubernetes-and-docker/assets/podman-vs-docker_hub3205ed3c893c1f053112545244d1e4e_65326_800x0_resize_q75_box.jpg 800w, /p/what-is-podman-and-different-from-kubernetes-and-docker/assets/podman-vs-docker_hub3205ed3c893c1f053112545244d1e4e_65326_1600x0_resize_q75_box.jpg 1600w"
-                        width="800" 
-                        height="450" 
-                        loading="lazy"
-                        alt="Featured image of post 选择 podman 的理由, 以及它和 Kubernetes , Docker 的区别" />
-                
-            </a>
-        </div>
     
 
-    <div class="article-details">
+
+<style>
+  pre {
+    padding: 1em;
+    overflow: auto;
+  }
+</style>
+
+
+
+
+
+
+
+
+
     
 
-    <div class="article-title-wrapper">
-        <h2 class="article-title">
-            <a href="/p/what-is-podman-and-different-from-kubernetes-and-docker/">选择 podman 的理由, 以及它和 Kubernetes , Docker 的区别</a>
-        </h2>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  </head>
+
+  <body x-data="{
+    flip: false,
+  }">
     
+    <div id="dream-global-bg"></div>
+
+    
+<nav class="mt-4 lg:mt-8 py-4">
+
+  
+  <div class="container flex justify-between px-4">
+  
+    <section class="flex items-center gap-4">
+      <div class="avatar cursor-pointer hover:online" @click="flip = !flip" title="">
+        <div class="h-10 rounded-full">
+          <img src="/" alt="" />
+        </div>
+      </div>
+
+      
+    </section>
+
+    <div class="dropdown dropdown-end sm:hidden">
+      <div tabindex="0" role="button" class="btn btn-ghost btn-square" aria-label="Select an option">
+        <ion-icon name="menu" class="text-2xl"></ion-icon>
+      </div>
+      <ul class="dropdown-content menu w-36 bg-base-100 rounded-box z-[1] shadow-md">
         
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+  <a class="inline-flex items-center p-2 cursor-pointer" href="/tags" title="">
+    <ion-icon name="pricetags"></ion-icon>
+    
+  </a>
+</li>
+
+
+
+
+
+
+      </ul>
     </div>
+    <section class="hidden sm:flex sm:items-center sm:gap-2 md:gap-4">
+      
 
+      
+      
+
+      
+
+      
+      
+
+
+
+
+
+      
+      
+
+
+
+
+
+      
+      
+
+
+
+
+
+      
+      
+
+
+
+
+
+      
+      
+<a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary" href="/tags" title="">
+  <ion-icon class="group-hover:text-primary-content" name="pricetags"></ion-icon>
+</a>
+
+
+      
+
+      
+
+      
+    </section>
+  </div>
+</nav>
+
+
+    <div class="flip-container" :class="{ 'flip-it': flip }">
+      <div class="flipper">
+        <div class="front">
+          <div class="container">
+            
+<div class="mt-4 px-4">
+  
+  <div>
+  
     
-    <footer class="article-time">
-        
-            <div>
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
-  <circle cx="18" cy="18" r="4" />
-  <path d="M15 3v4" />
-  <path d="M7 3v4" />
-  <path d="M3 11h16" />
-  <path d="M18 16.496v1.504l1 1" />
-</svg>
-                <time class="article-time--published">Apr 27, 2022</time>
-            </div>
-        
+    <article class="mx-auto prose prose-quoteless dark:prose-invert" id="dream-single-post-main" itemscope itemtype="http://schema.org/Article">
+      
+  <meta itemprop="name" content="选择 podman 的理由, 以及它和 Kubernetes , Docker 的区别">
+  <meta itemprop="description" content="前言 大家好,我是 Liangdi, podman 4.x 版本已经发布了, 我也从 docker 开始向 podman 迁移, 所以是合适的时候写点 podman 的文章了.
+podman 是什么 官方网站: podman.io
+官方自己的介绍: https://podman.io/whatis.html
+名称 podman ,官方说明是 Pod Manager , 所以它不仅可以管理 OCI 容器,还可以管理 pod , 这也是和 docker 的最大差别吧.
+和 kubernetes 的区别 kubernetes(k8s) 是目前最流行的容器编排工具, 集群管理工具, 生态很完善, 也很&#34;重&#34;, pod 的概念就来自 k8s , 虽然 podman 也是管理 pod, 但是远远不及 k8s 的编排功能, 同时 podman 也没有集群管理功能,如果需要管理集群, 需要第三方工具完成.
+所以 podman 定位也不是编排和集群管理工具, 紧紧是一个 pod 和容器的管理工具. 所以不是一个级别的东西, 这里不做太多的比较.
+和 docker 的区别 如果仅仅从 docker 和 podman 两个命令提供的功能来讲,它们功能交集很大, podman 官方甚至推荐 alias docker=podman 来过渡.">
+  <meta itemprop="datePublished" content="2022-04-27T16:30:35+08:00">
+  <meta itemprop="dateModified" content="2022-04-27T16:30:35+08:00">
+  <meta itemprop="wordCount" content="377">
+  <meta itemprop="keywords" content="Podman,Docker,K8s,Kubernetes">
 
-        
-            <div>
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="12" r="9" />
-  <polyline points="12 7 12 12 15 15" />
-</svg>
+      <header>
+        <h1 itemprop="headline">选择 podman 的理由, 以及它和 Kubernetes , Docker 的区别</h1>
+        <p class="text-sm">
+          
+            星期三, 4月 27, 2022
+          
 
+          | <span>2</span>
 
+          
+          | <span>
+            
+              星期三, 4月 27, 2022
+            </span>
+          
+        </p>
+        <div class="flex justify-between">
+          <div class="flex items-center">
+  
+  <span>@</span>
+  
 
-                <time class="article-time--reading">
-                    阅读时长: 2 分钟
-                </time>
-            </div>
-        
-    </footer>
-    
-
-    
+  <span itemprop="author" itemscope itemtype="https://schema.org/Person">
+  
+    <span itemprop="name"></span>
+  
+  </span>
 </div>
-</header>
 
-    <section class="article-content">
-    
-    
-    <h2 id="前言">前言</h2>
+
+          <div class="flex items-center gap-2">
+  
+  
+
+  
+  
+  
+  
+  
+    <a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary"
+      href="https://x.com/intent/post?text=%e9%80%89%e6%8b%a9%20podman%20%e7%9a%84%e7%90%86%e7%94%b1,%20%e4%bb%a5%e5%8f%8a%e5%ae%83%e5%92%8c%20Kubernetes%20,%20Docker%20%e7%9a%84%e5%8c%ba%e5%88%ab&amp;url=http://localhost:1313/p/what-is-podman-and-different-from-kubernetes-and-docker/" target="_blank" rel="noopener noreferrer"
+      title="Share on X">
+      <ion-icon class="group-hover:text-primary-content" name="logo-x"></ion-icon>
+    </a>
+  
+    <a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary"
+      href="https://facebook.com/sharer/sharer.php?u=http://localhost:1313/p/what-is-podman-and-different-from-kubernetes-and-docker/" target="_blank" rel="noopener noreferrer"
+      title="Share on Facebook">
+      <ion-icon class="group-hover:text-primary-content" name="logo-facebook"></ion-icon>
+    </a>
+  
+    <a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary"
+      href="https://wa.me/?text=%e9%80%89%e6%8b%a9%20podman%20%e7%9a%84%e7%90%86%e7%94%b1,%20%e4%bb%a5%e5%8f%8a%e5%ae%83%e5%92%8c%20Kubernetes%20,%20Docker%20%e7%9a%84%e5%8c%ba%e5%88%ab%20http://localhost:1313/p/what-is-podman-and-different-from-kubernetes-and-docker/" target="_blank" rel="noopener noreferrer"
+      title="Share on WhatsApp">
+      <ion-icon class="group-hover:text-primary-content" name="logo-whatsapp"></ion-icon>
+    </a>
+  
+
+  
+  
+</div>
+
+        </div>
+      </header>
+
+      
+
+      <h2 id="前言">前言</h2>
 <p>大家好,我是 Liangdi, podman 4.x 版本已经发布了, 我也从 docker 开始向 podman 迁移, 所以是合适的时候写点 podman 的文章了.</p>
 <h2 id="podman-是什么">podman 是什么</h2>
-<p>官方网站: <a class="link" href="https://podman.io"  target="_blank" rel="noopener"
-    >podman.io</a></p>
-<p>官方自己的介绍: <a class="link" href="https://podman.io/whatis.html"  target="_blank" rel="noopener"
-    >https://podman.io/whatis.html</a></p>
+<p>官方网站: <a href="https://podman.io">podman.io</a></p>
+<p>官方自己的介绍: <a href="https://podman.io/whatis.html">https://podman.io/whatis.html</a></p>
 <p>名称 <code>podman</code> ,官方说明是 <code>Pod Manager</code> , 所以它不仅可以管理 OCI 容器,还可以管理 pod , 这也是和 docker 的最大差别吧.</p>
 <h2 id="和-kubernetes-的区别">和 kubernetes 的区别</h2>
 <p>kubernetes(k8s) 是目前最流行的容器编排工具, 集群管理工具, 生态很完善, 也很<code>&quot;重&quot;</code>, pod 的概念就来自 k8s , 虽然 podman 也是管理 pod, 但是远远不及 k8s 的编排功能, 同时 podman 也没有集群管理功能,如果需要管理集群, 需要第三方工具完成.</p>
@@ -341,213 +355,116 @@ podman 是什么 官方网站: podman.io
 <p>runc 是一个有名的 low-level OCI rumtime, 他们就开发了一个 crun . podman 早期版本使用 runc, 最新的版本已经使用 crun 了.</p>
 <p>众所周知, golang 是容器生态的主要语言, podman 也是 go 写的,但是在 podman 4 的版本中, podman 增加了非 CNI 的网络栈支持, 这几个工具是 netavark 和 aardvark-dns, 这两个工具是 rust 写的, 而且还有 youki 这个 rust 写的 low-level OCI runtime, 不知道将来某一天 podman 会不会默认使用 youki , 还有好几个 rust 写的容器技术相关的应用和库, 这是要与 golang 分天下的节奏.</p>
 <p>如果你也对 podman 以及其生态感兴趣, 关注我吧, 我会给你带来 podman 最新的动态以及实践方案.</p>
-<p>我的技术 Blog:<a class="link" href="https://liangdi.me"  target="_blank" rel="noopener"
-    >https://liangdi.me</a></p>
-
-</section>
+<p>我的技术 Blog:<a href="https://liangdi.me">https://liangdi.me</a></p>
 
 
-    <footer class="article-footer">
-    
-    <section class="article-tags">
-        
-            <a href="/tags/podman/">podman</a>
-        
-            <a href="/tags/docker/">docker</a>
-        
-            <a href="/tags/k8s/">k8s</a>
-        
-            <a href="/tags/kubernetes/">kubernetes</a>
-        
-    </section>
+      
+    </article>
+  </div>
+
+  
+</div>
 
 
-    
-    <section class="article-copyright">
-        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="12" r="9" />
-  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
-</svg>
+            
+            <footer class="flex justify-between items-center gap-2 px-4 py-12">
+            
+              <div>
+  
+  <p>© 2024 Liangdi&#39;s Blog</p>
+  
 
+  
+  <p class="text-sm">
+    🌱
+    <span class="text-base-content/60">
+      Powered by <a class="hover:underline" href="https://gohugo.io/" target="_blank">Hugo</a> with theme
+      <a class="hover:underline" href="https://github.com/g1eny0ung/hugo-theme-dream" target="_blank">Dream</a>.</span
+    >
+  </p>
+  
+</div>
 
+              <div
+  x-data="{ icons: [
+    { name: 'moon', status: 'y' },
+    { name: 'sunny', status: 'n' },
+    { name: 'desktop', status: 'auto' }
+  ] }"
+  class="flex items-center h-[32px] px-2 gap-2 border border-base-content/30 rounded-full"
+>
+  <template x-for="icon in icons">
+    <div
+      role="button"
+      tabindex="0"
+      :aria-label="'Select ' + icon.name + ' mode'"
+      class="group inline-flex justify-center items-center p-1 rounded-full cursor-pointer hover:bg-primary"
+      :class="$store.darkMode.icon() === icon.name && 'bg-primary'"
+      @click="$store.darkMode.toggle(icon.status)"
+    >
+      <ion-icon
+        :name="`${icon.name}-outline`"
+        class="group-hover:text-primary-content"
+        :class="$store.darkMode.icon() === icon.name && 'text-primary-content'"
+      >
+      </ion-icon>
+    </div>
+  </template>
+</div>
 
-        <span>Licensed under CC BY-NC-SA 4.0</span>
-    </section>
-    </footer>
-
-
-    
-</article>
-
-    
-
-    
-
-     
-    
-        
-    
-
-    <footer class="site-footer">
-    <section class="copyright">
-        &copy; 
-        
-            2022 - 
-        
-        2023 Liangdi&#39;s Blog
-    </section>
-    
-    <section class="powerby">
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.11.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
-    </section>
-</footer>
-<script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?f334264cb8da1148de7654289682087c";
-      var s = document.getElementsByTagName("script")[0]; 
-      s.parentNode.insertBefore(hm, s);
-    })();
-    </script>
-    
-
-    
-<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
-
-    
-    <div class="pswp__bg"></div>
-
-    
-    <div class="pswp__scroll-wrap">
-
-        
-        <div class="pswp__container">
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
+            </footer>
+          </div>
         </div>
+        <div class="back">
+          <div class="container">
+            
+            <div class="dream-grid">
+  
 
-        
-        <div class="pswp__ui pswp__ui--hidden">
+  
 
-            <div class="pswp__top-bar">
+  
+</div>
 
-                
-
-                <div class="pswp__counter"></div>
-
-                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-
-                <button class="pswp__button pswp__button--share" title="Share"></button>
-
-                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-
-                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
-
-                
-                
-                <div class="pswp__preloader">
-                    <div class="pswp__preloader__icn">
-                        <div class="pswp__preloader__cut">
-                            <div class="pswp__preloader__donut"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-                <div class="pswp__share-tooltip"></div>
-            </div>
-
-            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
-            </button>
-
-            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
-            </button>
-
-            <div class="pswp__caption">
-                <div class="pswp__caption__center"></div>
-            </div>
-
+            
+          </div>
         </div>
-
+      </div>
     </div>
 
-</div><script 
-                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
-                defer
-                >
-            </script><script 
-                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
-                defer
-                >
-            </script><link 
-                rel="stylesheet" 
-                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
-            ><link 
-                rel="stylesheet" 
-                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
-            >
-
-            </main>
-    <aside class="sidebar right-sidebar sticky">
-        
-            
-                
-    <section class="widget archives">
-        <div class="widget-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <line x1="5" y1="9" x2="19" y2="9" />
-  <line x1="5" y1="15" x2="19" y2="15" />
-  <line x1="11" y1="4" x2="7" y2="20" />
-  <line x1="17" y1="4" x2="13" y2="20" />
-</svg>
-
-
-
-        </div>
-        <h2 class="widget-title section-title">目录</h2>
-        
-        <div class="widget--toc">
-            <nav id="TableOfContents">
-  <ol>
-    <li><a href="#前言">前言</a></li>
-    <li><a href="#podman-是什么">podman 是什么</a></li>
-    <li><a href="#和-kubernetes-的区别">和 kubernetes 的区别</a></li>
-    <li><a href="#和-docker-的区别">和 docker 的区别</a></li>
-    <li><a href="#为什么选-podman">为什么选 podman</a></li>
-    <li><a href="#最后聊聊-podman-所在的-httpsgithubcomcontainers-组织">最后聊聊 podman 所在的 <code>https://github.com/containers</code> 组织</a></li>
-  </ol>
-</nav>
-        </div>
-    </section>
-
-            
-        
-    </aside>
-
-
-        </div>
-        <script 
-                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
-                
-                >
-            </script><script type="text/javascript" src="/ts/main.js" defer></script>
-<script>
-    (function () {
-        const customFont = document.createElement('link');
-        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
-
-        customFont.type = "text/css";
-        customFont.rel = "stylesheet";
-
-        document.head.appendChild(customFont);
-    }());
+    <script>
+  window.lightTheme =  null 
+  window.darkTheme =  null 
 </script>
 
-    </body>
+
+  <script src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script>
+
+  
+  
+  <script src="/js/grid.js"></script>
+
+
+
+
+<script src="/js/main.js"></script>
+
+    
+
+
+
+
+
+
+
+    
+
+    
+
+    
+
+    <script type="module" src="https://unpkg.com/ionicons@7.4.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.4.0/dist/ionicons/ionicons.js"></script>
+  </body>
 </html>

@@ -1,302 +1,319 @@
 <!DOCTYPE html>
-<html lang="en-us" dir="ltr">
-    <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='前言 看到标题,是不是觉得我疯了,爬虫,这个时间点应该还轮不到 rust 吧!
+<html lang="zh"
+  x-data
+  :class="$store.darkMode.class()"
+  :data-theme="$store.darkMode.theme()">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>一次简单的 rust 爬虫开发技术调研 | Liangdi&#39;s Blog</title>
+
+    
+<link href="/" rel="icon" type="image/x-icon" />
+
+
+<link rel="canonical" href="http://localhost:1313/p/simple-rust-crawler-technology-research/" />
+
+
+
+<meta name="author" content="" />
+<meta name="description" content="" />
+
+
+
+<meta name="generator" content="Hugo 0.134.3">
+
+
+<meta property="og:url" content="http://localhost:1313/p/simple-rust-crawler-technology-research/">
+  <meta property="og:site_name" content="Liangdi&#39;s Blog">
+  <meta property="og:title" content="一次简单的 rust 爬虫开发技术调研">
+  <meta property="og:description" content="前言 看到标题,是不是觉得我疯了,爬虫,这个时间点应该还轮不到 rust 吧!
 确实,现在成熟的爬虫技术基本使用 python, java 等,那么这篇文章的用意是什么呢? 我先来交代一下背景, 2017 年,我挖了一个坑: https://zhuanlan.zhihu.com/p/24900305
 这个项目后来商用了,所以就不方便继续更新, 到了现在 2022 年了, 各种技术已经迭代了好多次, 那么,我也要重新思考一下一套新的爬虫架构了,这套架构基于云原生,容器化,结合不同语言取长补短,相互配合,简单概括如下:
- 爬虫节点容器运行,语言无关,所以会支持 python ,java 等各语言开发的爬虫 统一的 DAG 任务分发调度节点 统一的数据集接口  其中一点是爬虫语言无关,所以会设计统一的输入输出接口,让各语言编写的程序都能在容器中执行, python, java, golang 的爬虫生态都很不错了,文章也很多, rust 这方面比较少,所以这里就写一篇 rust 的文章.
-爬虫底层关注的技术点  http 库 html 解析 json 解析 WebDriver 集成  http 库 作为爬虫的 http 库, 只要支持 http 协议基本就 ok, 主要是设置 header, 设置 cookies, 设置代理等等.
+爬虫节点容器运行,语言无关,所以会支持 python ,java 等各语言开发的爬虫 统一的 DAG 任务分发调度节点 统一的数据集接口 其中一点是爬虫语言无关,所以会设计统一的输入输出接口,让各语言编写的程序都能在容器中执行, python, java, golang 的爬虫生态都很不错了,文章也很多, rust 这方面比较少,所以这里就写一篇 rust 的文章.
+爬虫底层关注的技术点 http 库 html 解析 json 解析 WebDriver 集成 http 库 作为爬虫的 http 库, 只要支持 http 协议基本就 ok, 主要是设置 header, 设置 cookies, 设置代理等等.
 rust 的 http 库列表 https://lib.rs/web-programming/http-client
-这里使用 reqwest 做个简单的示例'><title>一次简单的 rust 爬虫开发技术调研</title>
+这里使用 reqwest 做个简单的示例
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 use reqwest; use http::{HeaderMap, HeaderValue, header::{COOKIE,USER_AGENT}}; #[tokio::main] async fn main() -&gt; Result&lt;(),reqwest::Error&gt; { // HTML let url = &#34;https://ssr1.scrape.center/&#34;; let resp = reqwest::get(url).await?; println!(&#34;Response: {:?} {}&#34;, resp.version(), resp.status()); println!(&#34;Headers: {:#?}\n&#34;, resp.headers()); //println!(&#34;Body:{:#?}&#34;,resp.text().await?); // JSON let url = &#34;https://spa1.scrape.center/api/movie/?limit=10&amp;offset=0&#34;; let resp = reqwest::get(url).await?; let json_body:serde_json::Value = resp.json().await?; println!(&#34;Json:{:#?}&#34;,json_body); // POST let _resp = reqwest::Client::new() .post(url) .form(&amp;[(&#34;name&#34;, &#34;value&#34;)]) .send() .await; // Header let _resp = reqwest::Client::new() .post(url) .header(&#34;Auth&#34;,&#34;xxx&#34;) .send() .await; // UserAgent Cookies let client = reqwest::Client::builder() .cookie_store(true).build().unwrap(); let mut headers = HeaderMap::new(); headers.insert(COOKIE, HeaderValue::from_str(&#34;key=value&#34;).unwrap()); headers.insert(USER_AGENT,HeaderValue::from_str(&#34;my user-agent&#34;).unwrap()); let _reps = client.get(url) .headers(headers) .send() .await?; Ok(()) } Cargo.toml">
+  <meta property="og:locale" content="zh">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2022-05-06T00:38:25+08:00">
+    <meta property="article:modified_time" content="2022-05-06T00:38:25+08:00">
+    <meta property="article:tag" content="Rust">
+    <meta property="article:tag" content="爬虫">
+    <meta property="article:tag" content="WebDriver">
 
-<link rel='canonical' href='https://liangdi.me/p/simple-rust-crawler-technology-research/'>
 
-<link rel="stylesheet" href="/scss/style.min.070a1f1fa7cad6c7ccb4af4d49452541cddf145911de65e6dbd542983c495cd1.css"><meta property='og:title' content='一次简单的 rust 爬虫开发技术调研'>
-<meta property='og:description' content='前言 看到标题,是不是觉得我疯了,爬虫,这个时间点应该还轮不到 rust 吧!
+
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="一次简单的 rust 爬虫开发技术调研">
+  <meta name="twitter:description" content="前言 看到标题,是不是觉得我疯了,爬虫,这个时间点应该还轮不到 rust 吧!
 确实,现在成熟的爬虫技术基本使用 python, java 等,那么这篇文章的用意是什么呢? 我先来交代一下背景, 2017 年,我挖了一个坑: https://zhuanlan.zhihu.com/p/24900305
 这个项目后来商用了,所以就不方便继续更新, 到了现在 2022 年了, 各种技术已经迭代了好多次, 那么,我也要重新思考一下一套新的爬虫架构了,这套架构基于云原生,容器化,结合不同语言取长补短,相互配合,简单概括如下:
- 爬虫节点容器运行,语言无关,所以会支持 python ,java 等各语言开发的爬虫 统一的 DAG 任务分发调度节点 统一的数据集接口  其中一点是爬虫语言无关,所以会设计统一的输入输出接口,让各语言编写的程序都能在容器中执行, python, java, golang 的爬虫生态都很不错了,文章也很多, rust 这方面比较少,所以这里就写一篇 rust 的文章.
-爬虫底层关注的技术点  http 库 html 解析 json 解析 WebDriver 集成  http 库 作为爬虫的 http 库, 只要支持 http 协议基本就 ok, 主要是设置 header, 设置 cookies, 设置代理等等.
+爬虫节点容器运行,语言无关,所以会支持 python ,java 等各语言开发的爬虫 统一的 DAG 任务分发调度节点 统一的数据集接口 其中一点是爬虫语言无关,所以会设计统一的输入输出接口,让各语言编写的程序都能在容器中执行, python, java, golang 的爬虫生态都很不错了,文章也很多, rust 这方面比较少,所以这里就写一篇 rust 的文章.
+爬虫底层关注的技术点 http 库 html 解析 json 解析 WebDriver 集成 http 库 作为爬虫的 http 库, 只要支持 http 协议基本就 ok, 主要是设置 header, 设置 cookies, 设置代理等等.
 rust 的 http 库列表 https://lib.rs/web-programming/http-client
-这里使用 reqwest 做个简单的示例'>
-<meta property='og:url' content='https://liangdi.me/p/simple-rust-crawler-technology-research/'>
-<meta property='og:site_name' content='Liangdi&#39;s Blog'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='rust' /><meta property='article:tag' content='爬虫' /><meta property='article:tag' content='WebDriver' /><meta property='article:published_time' content='2022-05-06T00:38:25&#43;08:00'/><meta property='article:modified_time' content='2022-05-06T00:38:25&#43;08:00'/><meta property='og:image' content='https://liangdi.me/p/simple-rust-crawler-technology-research/assets/rust-crawler.png' />
-<meta name="twitter:title" content="一次简单的 rust 爬虫开发技术调研">
-<meta name="twitter:description" content="前言 看到标题,是不是觉得我疯了,爬虫,这个时间点应该还轮不到 rust 吧!
-确实,现在成熟的爬虫技术基本使用 python, java 等,那么这篇文章的用意是什么呢? 我先来交代一下背景, 2017 年,我挖了一个坑: https://zhuanlan.zhihu.com/p/24900305
-这个项目后来商用了,所以就不方便继续更新, 到了现在 2022 年了, 各种技术已经迭代了好多次, 那么,我也要重新思考一下一套新的爬虫架构了,这套架构基于云原生,容器化,结合不同语言取长补短,相互配合,简单概括如下:
- 爬虫节点容器运行,语言无关,所以会支持 python ,java 等各语言开发的爬虫 统一的 DAG 任务分发调度节点 统一的数据集接口  其中一点是爬虫语言无关,所以会设计统一的输入输出接口,让各语言编写的程序都能在容器中执行, python, java, golang 的爬虫生态都很不错了,文章也很多, rust 这方面比较少,所以这里就写一篇 rust 的文章.
-爬虫底层关注的技术点  http 库 html 解析 json 解析 WebDriver 集成  http 库 作为爬虫的 http 库, 只要支持 http 协议基本就 ok, 主要是设置 header, 设置 cookies, 设置代理等等.
-rust 的 http 库列表 https://lib.rs/web-programming/http-client
-这里使用 reqwest 做个简单的示例"><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='https://liangdi.me/p/simple-rust-crawler-technology-research/assets/rust-crawler.png' />
-    </head>
-    <body class="
-    article-page
-    ">
-    <script>
-        (function() {
-            const colorSchemeKey = 'StackColorScheme';
-            if(!localStorage.getItem(colorSchemeKey)){
-                localStorage.setItem(colorSchemeKey, "auto");
-            }
-        })();
-    </script><script>
-    (function() {
-        const colorSchemeKey = 'StackColorScheme';
-        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
-        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
-
-        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
-            
-
-            document.documentElement.dataset.scheme = 'dark';
-        } else {
-            document.documentElement.dataset.scheme = 'light';
-        }
-    })();
-</script>
-<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
-    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
-        <span class="hamburger-box">
-            <span class="hamburger-inner"></span>
-        </span>
-    </button>
-
-    <header>
-        
-            
-            <figure class="site-avatar">
-                <a href="/">
-                
-                    
-                    
-                    
-                        
-                        <img src="/img/avatar_hu28bd9f10f249b3300884b5b9ecc99bfa_1618568_300x0_resize_box_3.png" width="300"
-                            height="300" class="site-logo" loading="lazy" alt="Avatar">
-                    
-                
-                </a>
-                
-                    <span class="emoji">🔥</span>
-                
-            </figure>
-            
-        
-        
-        <div class="site-meta">
-            <h1 class="site-name"><a href="/">Liangdi&#39;s Blog</a></h1>
-            <h2 class="site-description">关注开源技术.</h2>
-        </div>
-    </header><ol class="social-menu">
-            
-                <li>
-                    <a 
-                        href='https://github.com/Liangdi'
-                        target="_blank"
-                        title="GitHub"
-                    >
-                        
-                        
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
-</svg>
+这里使用 reqwest 做个简单的示例
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 use reqwest; use http::{HeaderMap, HeaderValue, header::{COOKIE,USER_AGENT}}; #[tokio::main] async fn main() -&gt; Result&lt;(),reqwest::Error&gt; { // HTML let url = &#34;https://ssr1.scrape.center/&#34;; let resp = reqwest::get(url).await?; println!(&#34;Response: {:?} {}&#34;, resp.version(), resp.status()); println!(&#34;Headers: {:#?}\n&#34;, resp.headers()); //println!(&#34;Body:{:#?}&#34;,resp.text().await?); // JSON let url = &#34;https://spa1.scrape.center/api/movie/?limit=10&amp;offset=0&#34;; let resp = reqwest::get(url).await?; let json_body:serde_json::Value = resp.json().await?; println!(&#34;Json:{:#?}&#34;,json_body); // POST let _resp = reqwest::Client::new() .post(url) .form(&amp;[(&#34;name&#34;, &#34;value&#34;)]) .send() .await; // Header let _resp = reqwest::Client::new() .post(url) .header(&#34;Auth&#34;,&#34;xxx&#34;) .send() .await; // UserAgent Cookies let client = reqwest::Client::builder() .cookie_store(true).build().unwrap(); let mut headers = HeaderMap::new(); headers.insert(COOKIE, HeaderValue::from_str(&#34;key=value&#34;).unwrap()); headers.insert(USER_AGENT,HeaderValue::from_str(&#34;my user-agent&#34;).unwrap()); let _reps = client.get(url) .headers(headers) .send() .await?; Ok(()) } Cargo.toml">
 
 
 
-                        
-                    </a>
-                </li>
-            
-        </ol><ol class="menu" id="main-menu">
-        
-        
-        
 
-        <li >
-            <a href='/' >
-                
-                
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <polyline points="5 12 3 12 12 3 21 12 19 12" />
-  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
-</svg>
+<link rel="stylesheet" href="/css/output.css" />
 
 
 
-                
-                <span>首页</span>
-            </a>
-        </li>
-        
-        
 
-        <li >
-            <a href='/about/' >
-                
-                
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="7" r="4" />
-  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-</svg>
-
-
-
-                
-                <span>关于</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/archives/' >
-                
-                
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <rect x="3" y="4" width="18" height="4" rx="2" />
-  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
-  <line x1="10" y1="12" x2="14" y2="12" />
-</svg>
-
-
-
-                
-                <span>Archives</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/search/' >
-                
-                
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="10" cy="10" r="7" />
-  <line x1="21" y1="21" x2="15" y2="15" />
-</svg>
-
-
-
-                
-                <span>Search</span>
-            </a>
-        </li>
-        
-
-        <div class="menu-bottom-section">
-            
-            
-                <li id="dark-mode-toggle">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="8" cy="12" r="2" />
-  <rect x="2" y="6" width="20" height="12" rx="6" />
-</svg>
-
-
-
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="16" cy="12" r="2" />
-  <rect x="2" y="6" width="20" height="12" rx="6" />
-</svg>
-
-
-
-                    <span>暗色模式</span>
-                </li>
-            
-        </div>
-    </ol>
-</aside>
-<main class="main full-width">
-    <article class="has-image main-article">
-    <header class="article-header">
-        <div class="article-image">
-            <a href="/p/simple-rust-crawler-technology-research/">
-                <img src="/p/simple-rust-crawler-technology-research/assets/rust-crawler_hu9902f331a47214e88fbddd7e7a10ce30_25175_800x0_resize_box_3.png"
-                        srcset="/p/simple-rust-crawler-technology-research/assets/rust-crawler_hu9902f331a47214e88fbddd7e7a10ce30_25175_800x0_resize_box_3.png 800w, /p/simple-rust-crawler-technology-research/assets/rust-crawler_hu9902f331a47214e88fbddd7e7a10ce30_25175_1600x0_resize_box_3.png 1600w"
-                        width="800" 
-                        height="203" 
-                        loading="lazy"
-                        alt="Featured image of post 一次简单的 rust 爬虫开发技术调研" />
-                
-            </a>
-        </div>
     
 
-    <div class="article-details">
+
+<style>
+  pre {
+    padding: 1em;
+    overflow: auto;
+  }
+</style>
+
+
+
+
+
+
+
+
+
     
 
-    <div class="article-title-wrapper">
-        <h2 class="article-title">
-            <a href="/p/simple-rust-crawler-technology-research/">一次简单的 rust 爬虫开发技术调研</a>
-        </h2>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  </head>
+
+  <body x-data="{
+    flip: false,
+  }">
     
+    <div id="dream-global-bg"></div>
+
+    
+<nav class="mt-4 lg:mt-8 py-4">
+
+  
+  <div class="container flex justify-between px-4">
+  
+    <section class="flex items-center gap-4">
+      <div class="avatar cursor-pointer hover:online" @click="flip = !flip" title="">
+        <div class="h-10 rounded-full">
+          <img src="/" alt="" />
+        </div>
+      </div>
+
+      
+    </section>
+
+    <div class="dropdown dropdown-end sm:hidden">
+      <div tabindex="0" role="button" class="btn btn-ghost btn-square" aria-label="Select an option">
+        <ion-icon name="menu" class="text-2xl"></ion-icon>
+      </div>
+      <ul class="dropdown-content menu w-36 bg-base-100 rounded-box z-[1] shadow-md">
         
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+  <a class="inline-flex items-center p-2 cursor-pointer" href="/tags" title="">
+    <ion-icon name="pricetags"></ion-icon>
+    
+  </a>
+</li>
+
+
+
+
+
+
+      </ul>
     </div>
+    <section class="hidden sm:flex sm:items-center sm:gap-2 md:gap-4">
+      
 
+      
+      
+
+      
+
+      
+      
+
+
+
+
+
+      
+      
+
+
+
+
+
+      
+      
+
+
+
+
+
+      
+      
+
+
+
+
+
+      
+      
+<a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary" href="/tags" title="">
+  <ion-icon class="group-hover:text-primary-content" name="pricetags"></ion-icon>
+</a>
+
+
+      
+
+      
+
+      
+    </section>
+  </div>
+</nav>
+
+
+    <div class="flip-container" :class="{ 'flip-it': flip }">
+      <div class="flipper">
+        <div class="front">
+          <div class="container">
+            
+<div class="mt-4 px-4">
+  
+  <div>
+  
     
-    <footer class="article-time">
-        
-            <div>
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
-  <circle cx="18" cy="18" r="4" />
-  <path d="M15 3v4" />
-  <path d="M7 3v4" />
-  <path d="M3 11h16" />
-  <path d="M18 16.496v1.504l1 1" />
-</svg>
-                <time class="article-time--published">May 06, 2022</time>
-            </div>
-        
+    <article class="mx-auto prose prose-quoteless dark:prose-invert" id="dream-single-post-main" itemscope itemtype="http://schema.org/Article">
+      
+  <meta itemprop="name" content="一次简单的 rust 爬虫开发技术调研">
+  <meta itemprop="description" content="前言 看到标题,是不是觉得我疯了,爬虫,这个时间点应该还轮不到 rust 吧!
+确实,现在成熟的爬虫技术基本使用 python, java 等,那么这篇文章的用意是什么呢? 我先来交代一下背景, 2017 年,我挖了一个坑: https://zhuanlan.zhihu.com/p/24900305
+这个项目后来商用了,所以就不方便继续更新, 到了现在 2022 年了, 各种技术已经迭代了好多次, 那么,我也要重新思考一下一套新的爬虫架构了,这套架构基于云原生,容器化,结合不同语言取长补短,相互配合,简单概括如下:
+爬虫节点容器运行,语言无关,所以会支持 python ,java 等各语言开发的爬虫 统一的 DAG 任务分发调度节点 统一的数据集接口 其中一点是爬虫语言无关,所以会设计统一的输入输出接口,让各语言编写的程序都能在容器中执行, python, java, golang 的爬虫生态都很不错了,文章也很多, rust 这方面比较少,所以这里就写一篇 rust 的文章.
+爬虫底层关注的技术点 http 库 html 解析 json 解析 WebDriver 集成 http 库 作为爬虫的 http 库, 只要支持 http 协议基本就 ok, 主要是设置 header, 设置 cookies, 设置代理等等.
+rust 的 http 库列表 https://lib.rs/web-programming/http-client
+这里使用 reqwest 做个简单的示例
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 use reqwest; use http::{HeaderMap, HeaderValue, header::{COOKIE,USER_AGENT}}; #[tokio::main] async fn main() -&gt; Result&lt;(),reqwest::Error&gt; { // HTML let url = &#34;https://ssr1.scrape.center/&#34;; let resp = reqwest::get(url).await?; println!(&#34;Response: {:?} {}&#34;, resp.version(), resp.status()); println!(&#34;Headers: {:#?}\n&#34;, resp.headers()); //println!(&#34;Body:{:#?}&#34;,resp.text().await?); // JSON let url = &#34;https://spa1.scrape.center/api/movie/?limit=10&amp;offset=0&#34;; let resp = reqwest::get(url).await?; let json_body:serde_json::Value = resp.json().await?; println!(&#34;Json:{:#?}&#34;,json_body); // POST let _resp = reqwest::Client::new() .post(url) .form(&amp;[(&#34;name&#34;, &#34;value&#34;)]) .send() .await; // Header let _resp = reqwest::Client::new() .post(url) .header(&#34;Auth&#34;,&#34;xxx&#34;) .send() .await; // UserAgent Cookies let client = reqwest::Client::builder() .cookie_store(true).build().unwrap(); let mut headers = HeaderMap::new(); headers.insert(COOKIE, HeaderValue::from_str(&#34;key=value&#34;).unwrap()); headers.insert(USER_AGENT,HeaderValue::from_str(&#34;my user-agent&#34;).unwrap()); let _reps = client.get(url) .headers(headers) .send() .await?; Ok(()) } Cargo.toml">
+  <meta itemprop="datePublished" content="2022-05-06T00:38:25+08:00">
+  <meta itemprop="dateModified" content="2022-05-06T00:38:25+08:00">
+  <meta itemprop="wordCount" content="607">
+  <meta itemprop="keywords" content="Rust,爬虫,WebDriver">
 
-        
-            <div>
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="12" r="9" />
-  <polyline points="12 7 12 12 15 15" />
-</svg>
+      <header>
+        <h1 itemprop="headline">一次简单的 rust 爬虫开发技术调研</h1>
+        <p class="text-sm">
+          
+            星期五, 5月 6, 2022
+          
 
+          | <span>3</span>
 
+          
+          | <span>
+            
+              星期五, 5月 6, 2022
+            </span>
+          
+        </p>
+        <div class="flex justify-between">
+          <div class="flex items-center">
+  
+  <span>@</span>
+  
 
-                <time class="article-time--reading">
-                    阅读时长: 3 分钟
-                </time>
-            </div>
-        
-    </footer>
-    
-
-    
+  <span itemprop="author" itemscope itemtype="https://schema.org/Person">
+  
+    <span itemprop="name"></span>
+  
+  </span>
 </div>
-</header>
 
-    <section class="article-content">
-    
-    
-    <h2 id="前言">前言</h2>
+
+          <div class="flex items-center gap-2">
+  
+  
+
+  
+  
+  
+  
+  
+    <a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary"
+      href="https://x.com/intent/post?text=%e4%b8%80%e6%ac%a1%e7%ae%80%e5%8d%95%e7%9a%84%20rust%20%e7%88%ac%e8%99%ab%e5%bc%80%e5%8f%91%e6%8a%80%e6%9c%af%e8%b0%83%e7%a0%94&amp;url=http://localhost:1313/p/simple-rust-crawler-technology-research/" target="_blank" rel="noopener noreferrer"
+      title="Share on X">
+      <ion-icon class="group-hover:text-primary-content" name="logo-x"></ion-icon>
+    </a>
+  
+    <a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary"
+      href="https://facebook.com/sharer/sharer.php?u=http://localhost:1313/p/simple-rust-crawler-technology-research/" target="_blank" rel="noopener noreferrer"
+      title="Share on Facebook">
+      <ion-icon class="group-hover:text-primary-content" name="logo-facebook"></ion-icon>
+    </a>
+  
+    <a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary"
+      href="https://wa.me/?text=%e4%b8%80%e6%ac%a1%e7%ae%80%e5%8d%95%e7%9a%84%20rust%20%e7%88%ac%e8%99%ab%e5%bc%80%e5%8f%91%e6%8a%80%e6%9c%af%e8%b0%83%e7%a0%94%20http://localhost:1313/p/simple-rust-crawler-technology-research/" target="_blank" rel="noopener noreferrer"
+      title="Share on WhatsApp">
+      <ion-icon class="group-hover:text-primary-content" name="logo-whatsapp"></ion-icon>
+    </a>
+  
+
+  
+  
+</div>
+
+        </div>
+      </header>
+
+      
+
+      <h2 id="前言">前言</h2>
 <p>看到标题,是不是觉得我疯了,爬虫,这个时间点应该还轮不到 rust 吧!</p>
 <p>确实,现在成熟的爬虫技术基本使用 python, java 等,那么这篇文章的用意是什么呢? 我先来交代一下背景, 2017 年,我挖了一个坑:
-<a class="link" href="https://zhuanlan.zhihu.com/p/24900305"  target="_blank" rel="noopener"
-    >https://zhuanlan.zhihu.com/p/24900305</a></p>
+<a href="https://zhuanlan.zhihu.com/p/24900305">https://zhuanlan.zhihu.com/p/24900305</a></p>
 <p>这个项目后来商用了,所以就不方便继续更新, 到了现在 2022 年了, 各种技术已经迭代了好多次, 那么,我也要重新思考一下一套新的爬虫架构了,这套架构基于云原生,容器化,结合不同语言取长补短,相互配合,简单概括如下:</p>
 <ul>
 <li>爬虫节点容器运行,语言无关,所以会支持 python ,java 等各语言开发的爬虫</li>
@@ -313,8 +330,7 @@ rust 的 http 库列表 https://lib.rs/web-programming/http-client
 </ul>
 <h2 id="http-库">http 库</h2>
 <p>作为爬虫的 http 库, 只要支持 http 协议基本就 ok, 主要是设置 header, 设置 cookies, 设置代理等等.</p>
-<p>rust 的 http 库列表 <a class="link" href="https://lib.rs/web-programming/http-client"  target="_blank" rel="noopener"
-    >https://lib.rs/web-programming/http-client</a></p>
+<p>rust 的 http 库列表 <a href="https://lib.rs/web-programming/http-client">https://lib.rs/web-programming/http-client</a></p>
 <p>这里使用 reqwest 做个简单的示例</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -365,22 +381,22 @@ rust 的 http 库列表 https://lib.rs/web-programming/http-client
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="k">use</span><span class="w"> </span><span class="n">reqwest</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">use</span><span class="w"> </span><span class="n">http</span>::<span class="p">{</span><span class="n">HeaderMap</span><span class="p">,</span><span class="w"> </span><span class="n">HeaderValue</span><span class="p">,</span><span class="w"> </span><span class="n">header</span>::<span class="p">{</span><span class="n">COOKIE</span><span class="p">,</span><span class="n">USER_AGENT</span><span class="p">}};</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">use</span><span class="w"> </span><span class="n">http</span>::<span class="p">{</span><span class="n">HeaderMap</span><span class="p">,</span><span class="w"> </span><span class="n">HeaderValue</span><span class="p">,</span><span class="w"> </span><span class="n">header</span>::<span class="p">{</span><span class="no">COOKIE</span><span class="p">,</span><span class="no">USER_AGENT</span><span class="p">}};</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="cp">#[tokio::main]</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">async</span><span class="w"> </span><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w">  </span>-&gt; <span class="nb">Result</span><span class="o">&lt;</span><span class="p">(),</span><span class="n">reqwest</span>::<span class="n">Error</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// HTML
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;https://ssr1.scrape.center/&#34;</span><span class="p">;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">resp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reqwest</span>::<span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">).</span><span class="k">await</span><span class="o">?</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&#34;Response: {:?} {}&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">resp</span><span class="p">.</span><span class="n">version</span><span class="p">(),</span><span class="w"> </span><span class="n">resp</span><span class="p">.</span><span class="n">status</span><span class="p">());</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&#34;Headers: {:#?}\n&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">resp</span><span class="p">.</span><span class="n">headers</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&#34;Response: </span><span class="si">{:?}</span><span class="s"> </span><span class="si">{}</span><span class="s">&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">resp</span><span class="p">.</span><span class="n">version</span><span class="p">(),</span><span class="w"> </span><span class="n">resp</span><span class="p">.</span><span class="n">status</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&#34;Headers: </span><span class="si">{:#?}</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">resp</span><span class="p">.</span><span class="n">headers</span><span class="p">());</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//println!(&#34;Body:{:#?}&#34;,resp.text().await?);
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// JSON
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;https://spa1.scrape.center/api/movie/?limit=10&amp;offset=0&#34;</span><span class="p">;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">resp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reqwest</span>::<span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">).</span><span class="k">await</span><span class="o">?</span><span class="p">;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">json_body</span>:<span class="nc">serde_json</span>::<span class="n">Value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">resp</span><span class="p">.</span><span class="n">json</span><span class="p">().</span><span class="k">await</span><span class="o">?</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&#34;Json:{:#?}&#34;</span><span class="p">,</span><span class="n">json_body</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&#34;Json:</span><span class="si">{:#?}</span><span class="s">&#34;</span><span class="p">,</span><span class="n">json_body</span><span class="p">);</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// POST
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">_resp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reqwest</span>::<span class="n">Client</span>::<span class="n">new</span><span class="p">()</span><span class="w">
@@ -400,8 +416,8 @@ rust 的 http 库列表 https://lib.rs/web-programming/http-client
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">client</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reqwest</span>::<span class="n">Client</span>::<span class="n">builder</span><span class="p">()</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">.</span><span class="n">cookie_store</span><span class="p">(</span><span class="kc">true</span><span class="p">).</span><span class="n">build</span><span class="p">().</span><span class="n">unwrap</span><span class="p">();</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">headers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HeaderMap</span>::<span class="n">new</span><span class="p">();</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">headers</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">COOKIE</span><span class="p">,</span><span class="w"> </span><span class="n">HeaderValue</span>::<span class="n">from_str</span><span class="p">(</span><span class="s">&#34;key=value&#34;</span><span class="p">).</span><span class="n">unwrap</span><span class="p">());</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">headers</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">USER_AGENT</span><span class="p">,</span><span class="n">HeaderValue</span>::<span class="n">from_str</span><span class="p">(</span><span class="s">&#34;my user-agent&#34;</span><span class="p">).</span><span class="n">unwrap</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">headers</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="no">COOKIE</span><span class="p">,</span><span class="w"> </span><span class="n">HeaderValue</span>::<span class="n">from_str</span><span class="p">(</span><span class="s">&#34;key=value&#34;</span><span class="p">).</span><span class="n">unwrap</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">headers</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="no">USER_AGENT</span><span class="p">,</span><span class="n">HeaderValue</span>::<span class="n">from_str</span><span class="p">(</span><span class="s">&#34;my user-agent&#34;</span><span class="p">).</span><span class="n">unwrap</span><span class="p">());</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">_reps</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">client</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">.</span><span class="n">headers</span><span class="p">(</span><span class="n">headers</span><span class="p">)</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">.</span><span class="n">send</span><span class="p">()</span><span class="w">
@@ -484,7 +500,7 @@ rust 的 http 库列表 https://lib.rs/web-programming/http-client
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">doc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Html</span>::<span class="n">parse_fragment</span><span class="p">(</span><span class="o">&amp;</span><span class="n">body</span><span class="p">);</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">selector</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Selector</span>::<span class="n">parse</span><span class="p">(</span><span class="s">&#34;.m-b-sm&#34;</span><span class="p">).</span><span class="n">unwrap</span><span class="p">();</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">el</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">doc</span><span class="p">.</span><span class="n">select</span><span class="p">(</span><span class="o">&amp;</span><span class="n">selector</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">&#34;title:{}&#34;</span><span class="p">,</span><span class="n">el</span><span class="p">.</span><span class="n">inner_html</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">&#34;title:</span><span class="si">{}</span><span class="s">&#34;</span><span class="p">,</span><span class="n">el</span><span class="p">.</span><span class="n">inner_html</span><span class="p">());</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// JSON
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;https://spa1.scrape.center/api/movie/?limit=10&amp;offset=0&#34;</span><span class="p">;</span><span class="w">
@@ -493,7 +509,7 @@ rust 的 http 库列表 https://lib.rs/web-programming/http-client
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//println!(&#34;Json:{:#?}&#34;,json_body);
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">json_sel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jsonpath</span>::<span class="n">Selector</span>::<span class="n">new</span><span class="p">(</span><span class="s">&#34;$.results.*.name&#34;</span><span class="p">).</span><span class="n">unwrap</span><span class="p">();</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">json_el</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">json_sel</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="o">&amp;</span><span class="n">json_body</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">&#34;json title:{}&#34;</span><span class="p">,</span><span class="n">json_el</span><span class="p">.</span><span class="n">as_str</span><span class="p">().</span><span class="n">unwrap</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">&#34;json title:</span><span class="si">{}</span><span class="s">&#34;</span><span class="p">,</span><span class="n">json_el</span><span class="p">.</span><span class="n">as_str</span><span class="p">().</span><span class="n">unwrap</span><span class="p">());</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nb">Ok</span><span class="p">(())</span><span class="w">
@@ -603,7 +619,7 @@ rust 的 http 库列表 https://lib.rs/web-programming/http-client
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">check</span><span class="p">.</span><span class="n">wait_until</span><span class="p">().</span><span class="n">displayed</span><span class="p">().</span><span class="k">await</span><span class="o">?</span><span class="p">;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">els</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">driver</span><span class="p">.</span><span class="n">find_elements</span><span class="p">(</span><span class="n">By</span>::<span class="n">Css</span><span class="p">(</span><span class="s">&#34;.m-b-sm&#34;</span><span class="p">)).</span><span class="k">await</span><span class="o">?</span><span class="p">;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">el</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">els</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">&#34;el:{}&#34;</span><span class="p">,</span><span class="n">el</span><span class="p">.</span><span class="n">inner_html</span><span class="p">().</span><span class="k">await</span><span class="o">?</span><span class="p">.</span><span class="n">as_str</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">&#34;el:</span><span class="si">{}</span><span class="s">&#34;</span><span class="p">,</span><span class="n">el</span><span class="p">.</span><span class="n">inner_html</span><span class="p">().</span><span class="k">await</span><span class="o">?</span><span class="p">.</span><span class="n">as_str</span><span class="p">());</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">driver</span><span class="p">.</span><span class="n">quit</span><span class="p">().</span><span class="k">await</span><span class="o">?</span><span class="p">;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nb">Ok</span><span class="p">(())</span><span class="w">
@@ -644,208 +660,114 @@ rust 的 http 库列表 https://lib.rs/web-programming/http-client
 <li>这次验证下来,还是可以满足我新系统设计的需求的,可以使用 rust 开发爬虫节点</li>
 </ul>
 
-</section>
+
+      
+    </article>
+  </div>
+
+  
+</div>
 
 
-    <footer class="article-footer">
-    
-    <section class="article-tags">
-        
-            <a href="/tags/rust/">rust</a>
-        
-            <a href="/tags/%E7%88%AC%E8%99%AB/">爬虫</a>
-        
-            <a href="/tags/webdriver/">WebDriver</a>
-        
-    </section>
+            
+            <footer class="flex justify-between items-center gap-2 px-4 py-12">
+            
+              <div>
+  
+  <p>© 2024 Liangdi&#39;s Blog</p>
+  
 
+  
+  <p class="text-sm">
+    🌱
+    <span class="text-base-content/60">
+      Powered by <a class="hover:underline" href="https://gohugo.io/" target="_blank">Hugo</a> with theme
+      <a class="hover:underline" href="https://github.com/g1eny0ung/hugo-theme-dream" target="_blank">Dream</a>.</span
+    >
+  </p>
+  
+</div>
 
-    
-    <section class="article-copyright">
-        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="12" r="9" />
-  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
-</svg>
+              <div
+  x-data="{ icons: [
+    { name: 'moon', status: 'y' },
+    { name: 'sunny', status: 'n' },
+    { name: 'desktop', status: 'auto' }
+  ] }"
+  class="flex items-center h-[32px] px-2 gap-2 border border-base-content/30 rounded-full"
+>
+  <template x-for="icon in icons">
+    <div
+      role="button"
+      tabindex="0"
+      :aria-label="'Select ' + icon.name + ' mode'"
+      class="group inline-flex justify-center items-center p-1 rounded-full cursor-pointer hover:bg-primary"
+      :class="$store.darkMode.icon() === icon.name && 'bg-primary'"
+      @click="$store.darkMode.toggle(icon.status)"
+    >
+      <ion-icon
+        :name="`${icon.name}-outline`"
+        class="group-hover:text-primary-content"
+        :class="$store.darkMode.icon() === icon.name && 'text-primary-content'"
+      >
+      </ion-icon>
+    </div>
+  </template>
+</div>
 
-
-
-        <span>Licensed under CC BY-NC-SA 4.0</span>
-    </section>
-    </footer>
-
-
-    
-</article>
-
-    
-
-    
-
-     
-    
-        
-    
-
-    <footer class="site-footer">
-    <section class="copyright">
-        &copy; 
-        
-            2022 - 
-        
-        2023 Liangdi&#39;s Blog
-    </section>
-    
-    <section class="powerby">
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.11.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
-    </section>
-</footer>
-<script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?f334264cb8da1148de7654289682087c";
-      var s = document.getElementsByTagName("script")[0]; 
-      s.parentNode.insertBefore(hm, s);
-    })();
-    </script>
-    
-
-    
-<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
-
-    
-    <div class="pswp__bg"></div>
-
-    
-    <div class="pswp__scroll-wrap">
-
-        
-        <div class="pswp__container">
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
+            </footer>
+          </div>
         </div>
+        <div class="back">
+          <div class="container">
+            
+            <div class="dream-grid">
+  
 
-        
-        <div class="pswp__ui pswp__ui--hidden">
+  
 
-            <div class="pswp__top-bar">
+  
+</div>
 
-                
-
-                <div class="pswp__counter"></div>
-
-                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-
-                <button class="pswp__button pswp__button--share" title="Share"></button>
-
-                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-
-                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
-
-                
-                
-                <div class="pswp__preloader">
-                    <div class="pswp__preloader__icn">
-                        <div class="pswp__preloader__cut">
-                            <div class="pswp__preloader__donut"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-                <div class="pswp__share-tooltip"></div>
-            </div>
-
-            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
-            </button>
-
-            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
-            </button>
-
-            <div class="pswp__caption">
-                <div class="pswp__caption__center"></div>
-            </div>
-
+            
+          </div>
         </div>
-
+      </div>
     </div>
 
-</div><script 
-                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
-                defer
-                >
-            </script><script 
-                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
-                defer
-                >
-            </script><link 
-                rel="stylesheet" 
-                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
-            ><link 
-                rel="stylesheet" 
-                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
-            >
-
-            </main>
-    <aside class="sidebar right-sidebar sticky">
-        
-            
-                
-    <section class="widget archives">
-        <div class="widget-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <line x1="5" y1="9" x2="19" y2="9" />
-  <line x1="5" y1="15" x2="19" y2="15" />
-  <line x1="11" y1="4" x2="7" y2="20" />
-  <line x1="17" y1="4" x2="13" y2="20" />
-</svg>
-
-
-
-        </div>
-        <h2 class="widget-title section-title">目录</h2>
-        
-        <div class="widget--toc">
-            <nav id="TableOfContents">
-  <ol>
-    <li><a href="#前言">前言</a></li>
-    <li><a href="#爬虫底层关注的技术点">爬虫底层关注的技术点</a></li>
-    <li><a href="#http-库">http 库</a></li>
-    <li><a href="#htmljson-解析">html/json 解析</a></li>
-    <li><a href="#webdriver-集成">WebDriver 集成</a></li>
-    <li><a href="#简单总结">简单总结</a></li>
-  </ol>
-</nav>
-        </div>
-    </section>
-
-            
-        
-    </aside>
-
-
-        </div>
-        <script 
-                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
-                
-                >
-            </script><script type="text/javascript" src="/ts/main.js" defer></script>
-<script>
-    (function () {
-        const customFont = document.createElement('link');
-        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
-
-        customFont.type = "text/css";
-        customFont.rel = "stylesheet";
-
-        document.head.appendChild(customFont);
-    }());
+    <script>
+  window.lightTheme =  null 
+  window.darkTheme =  null 
 </script>
 
-    </body>
+
+  <script src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script>
+
+  
+  
+  <script src="/js/grid.js"></script>
+
+
+
+
+<script src="/js/main.js"></script>
+
+    
+
+
+
+
+
+
+
+    
+
+    
+
+    
+
+    <script type="module" src="https://unpkg.com/ionicons@7.4.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.4.0/dist/ionicons/ionicons.js"></script>
+  </body>
 </html>

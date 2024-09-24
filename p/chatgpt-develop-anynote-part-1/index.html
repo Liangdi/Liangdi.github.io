@@ -1,325 +1,340 @@
 <!DOCTYPE html>
-<html lang="en-us" dir="ltr">
-    <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='引言 注意看，这个 AI 叫 ChatGPT，今天开始它将做为一个初级码农协助我完成一套笔记系统的开发，这套系统叫 anynote。
+<html lang="zh"
+  x-data
+  :class="$store.darkMode.class()"
+  :data-theme="$store.darkMode.theme()">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[AI 码农养成计划] 调教 ChatGPT 编写笔记系统(一) | Liangdi&#39;s Blog</title>
+
+    
+<link href="/" rel="icon" type="image/x-icon" />
+
+
+<link rel="canonical" href="http://localhost:1313/p/chatgpt-develop-anynote-part-1/" />
+
+
+
+<meta name="author" content="" />
+<meta name="description" content="" />
+
+
+
+<meta name="generator" content="Hugo 0.134.3">
+
+
+<meta property="og:url" content="http://localhost:1313/p/chatgpt-develop-anynote-part-1/">
+  <meta property="og:site_name" content="Liangdi&#39;s Blog">
+  <meta property="og:title" content="[AI 码农养成计划] 调教 ChatGPT 编写笔记系统(一)">
+  <meta property="og:description" content="引言 注意看，这个 AI 叫 ChatGPT，今天开始它将做为一个初级码农协助我完成一套笔记系统的开发，这套系统叫 anynote。
 尽管这个这个码农技术还很初级，作为一个10年经验的老码农，有信心将它调教好，完成项目的开发，希望不要打脸吧！
 今天第一次和它交流，如下：
- 第一次对话 Liangdi: 我需要你协助我完成一套记录笔记功能的系统的开发，这套系统会使用域名 anynote.org , 系统名就叫 anynote 好了， 你可以帮我一起完成吗
+第一次对话 Liangdi: 我需要你协助我完成一套记录笔记功能的系统的开发，这套系统会使用域名 anynote.org , 系统名就叫 anynote 好了， 你可以帮我一起完成吗
 ChatGPT: 很抱歉，作为一种语言模型，我不能帮助您完成任何实际开发工作。但是，我可以提供技术咨询、代码片段以及开发建议等相关信息，帮助您实现您的目标。
 Liangdi: 你最擅长什么编程语言
 ChatGPT: 作为一种语言模型，我被训练过多种编程语言，包括但不限于：
-- Python - Java - C&#43;&#43; - JavaScript - Go    PHP
- Ruby Swift Kotlin  所以我可以提供有关这些语言的技术支持。
-  Liangdi: 用什么语言编写 anynote 的后端比较合适,java 可以吗，可以用什么框架?
+- Python - Java - C&#43;&#43; - JavaScript - Go PHP
+Ruby Swift Kotlin 所以我可以提供有关这些语言的技术支持。
+Liangdi: 用什么语言编写 anynote 的后端比较合适,java 可以吗，可以用什么框架?
 ChatGPT: Java是一种适合开发后端系统的语言，您可以考虑使用它开发Anynote。
 至于框架，您可以考虑使用以下几个流行的Java框架之一：
- Spring Play Struts Hibernate  这些框架都提供了丰富的功能，帮助您快速构建后端系统。您可以根据自己的需求和喜好选择适合的框架。
+Spring Play Struts Hibernate 这些框架都提供了丰富的功能，帮助您快速构建后端系统。您可以根据自己的需求和喜好选择适合的框架。
 Liangdi: 我想把 anynote 系统开源，代码组织在 https://github.com/anynote-org，选择什么开源许可证比较好？
 ChatGPT: 选择开源许可证取决于您的具体需求和愿景。常用的开源许可证包括：
- Apache License 2.'><title>[AI 码农养成计划] 调教 ChatGPT 编写笔记系统(一)</title>
+Apache License 2.0 MIT License GPL (GNU General Public License) v3 BSD 3-Clause License Apache License 2.0和MIT许可证都非常开放，允许用户使用、复制、修改、再发布和商业利用代码。GPL v3许可证更强调对代码的开源和共享，如果您希望任何对Anynote的修改或衍生代码也必须开源，可以考虑使用GPL v3许可证。BSD许可证比较简单，允许用户以任何形式使用代码，但不需要开源代码。">
+  <meta property="og:locale" content="zh">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2023-01-31T23:36:01+08:00">
+    <meta property="article:modified_time" content="2023-01-31T23:36:01+08:00">
+    <meta property="article:tag" content="Ai">
+    <meta property="article:tag" content="Chatgpt">
+    <meta property="article:tag" content="Ai 码农">
 
-<link rel='canonical' href='https://liangdi.me/p/chatgpt-develop-anynote-part-1/'>
 
-<link rel="stylesheet" href="/scss/style.min.070a1f1fa7cad6c7ccb4af4d49452541cddf145911de65e6dbd542983c495cd1.css"><meta property='og:title' content='[AI 码农养成计划] 调教 ChatGPT 编写笔记系统(一)'>
-<meta property='og:description' content='引言 注意看，这个 AI 叫 ChatGPT，今天开始它将做为一个初级码农协助我完成一套笔记系统的开发，这套系统叫 anynote。
+
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="[AI 码农养成计划] 调教 ChatGPT 编写笔记系统(一)">
+  <meta name="twitter:description" content="引言 注意看，这个 AI 叫 ChatGPT，今天开始它将做为一个初级码农协助我完成一套笔记系统的开发，这套系统叫 anynote。
 尽管这个这个码农技术还很初级，作为一个10年经验的老码农，有信心将它调教好，完成项目的开发，希望不要打脸吧！
 今天第一次和它交流，如下：
- 第一次对话 Liangdi: 我需要你协助我完成一套记录笔记功能的系统的开发，这套系统会使用域名 anynote.org , 系统名就叫 anynote 好了， 你可以帮我一起完成吗
+第一次对话 Liangdi: 我需要你协助我完成一套记录笔记功能的系统的开发，这套系统会使用域名 anynote.org , 系统名就叫 anynote 好了， 你可以帮我一起完成吗
 ChatGPT: 很抱歉，作为一种语言模型，我不能帮助您完成任何实际开发工作。但是，我可以提供技术咨询、代码片段以及开发建议等相关信息，帮助您实现您的目标。
 Liangdi: 你最擅长什么编程语言
 ChatGPT: 作为一种语言模型，我被训练过多种编程语言，包括但不限于：
-- Python - Java - C&#43;&#43; - JavaScript - Go    PHP
- Ruby Swift Kotlin  所以我可以提供有关这些语言的技术支持。
-  Liangdi: 用什么语言编写 anynote 的后端比较合适,java 可以吗，可以用什么框架?
+- Python - Java - C&#43;&#43; - JavaScript - Go PHP
+Ruby Swift Kotlin 所以我可以提供有关这些语言的技术支持。
+Liangdi: 用什么语言编写 anynote 的后端比较合适,java 可以吗，可以用什么框架?
 ChatGPT: Java是一种适合开发后端系统的语言，您可以考虑使用它开发Anynote。
 至于框架，您可以考虑使用以下几个流行的Java框架之一：
- Spring Play Struts Hibernate  这些框架都提供了丰富的功能，帮助您快速构建后端系统。您可以根据自己的需求和喜好选择适合的框架。
+Spring Play Struts Hibernate 这些框架都提供了丰富的功能，帮助您快速构建后端系统。您可以根据自己的需求和喜好选择适合的框架。
 Liangdi: 我想把 anynote 系统开源，代码组织在 https://github.com/anynote-org，选择什么开源许可证比较好？
 ChatGPT: 选择开源许可证取决于您的具体需求和愿景。常用的开源许可证包括：
- Apache License 2.'>
-<meta property='og:url' content='https://liangdi.me/p/chatgpt-develop-anynote-part-1/'>
-<meta property='og:site_name' content='Liangdi&#39;s Blog'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='ai' /><meta property='article:tag' content='chatgpt' /><meta property='article:tag' content='ai 码农' /><meta property='article:published_time' content='2023-01-31T23:36:01&#43;08:00'/><meta property='article:modified_time' content='2023-01-31T23:36:01&#43;08:00'/><meta property='og:image' content='https://liangdi.me/p/chatgpt-develop-anynote-part-1/assets/banner.png' />
-<meta name="twitter:title" content="[AI 码农养成计划] 调教 ChatGPT 编写笔记系统(一)">
-<meta name="twitter:description" content="引言 注意看，这个 AI 叫 ChatGPT，今天开始它将做为一个初级码农协助我完成一套笔记系统的开发，这套系统叫 anynote。
-尽管这个这个码农技术还很初级，作为一个10年经验的老码农，有信心将它调教好，完成项目的开发，希望不要打脸吧！
-今天第一次和它交流，如下：
- 第一次对话 Liangdi: 我需要你协助我完成一套记录笔记功能的系统的开发，这套系统会使用域名 anynote.org , 系统名就叫 anynote 好了， 你可以帮我一起完成吗
-ChatGPT: 很抱歉，作为一种语言模型，我不能帮助您完成任何实际开发工作。但是，我可以提供技术咨询、代码片段以及开发建议等相关信息，帮助您实现您的目标。
-Liangdi: 你最擅长什么编程语言
-ChatGPT: 作为一种语言模型，我被训练过多种编程语言，包括但不限于：
-- Python - Java - C&#43;&#43; - JavaScript - Go    PHP
- Ruby Swift Kotlin  所以我可以提供有关这些语言的技术支持。
-  Liangdi: 用什么语言编写 anynote 的后端比较合适,java 可以吗，可以用什么框架?
-ChatGPT: Java是一种适合开发后端系统的语言，您可以考虑使用它开发Anynote。
-至于框架，您可以考虑使用以下几个流行的Java框架之一：
- Spring Play Struts Hibernate  这些框架都提供了丰富的功能，帮助您快速构建后端系统。您可以根据自己的需求和喜好选择适合的框架。
-Liangdi: 我想把 anynote 系统开源，代码组织在 https://github.com/anynote-org，选择什么开源许可证比较好？
-ChatGPT: 选择开源许可证取决于您的具体需求和愿景。常用的开源许可证包括：
- Apache License 2."><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='https://liangdi.me/p/chatgpt-develop-anynote-part-1/assets/banner.png' />
-    </head>
-    <body class="
-    article-page
-    ">
-    <script>
-        (function() {
-            const colorSchemeKey = 'StackColorScheme';
-            if(!localStorage.getItem(colorSchemeKey)){
-                localStorage.setItem(colorSchemeKey, "auto");
-            }
-        })();
-    </script><script>
-    (function() {
-        const colorSchemeKey = 'StackColorScheme';
-        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
-        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
-
-        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
-            
-
-            document.documentElement.dataset.scheme = 'dark';
-        } else {
-            document.documentElement.dataset.scheme = 'light';
-        }
-    })();
-</script>
-<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
-    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
-        <span class="hamburger-box">
-            <span class="hamburger-inner"></span>
-        </span>
-    </button>
-
-    <header>
-        
-            
-            <figure class="site-avatar">
-                <a href="/">
-                
-                    
-                    
-                    
-                        
-                        <img src="/img/avatar_hu28bd9f10f249b3300884b5b9ecc99bfa_1618568_300x0_resize_box_3.png" width="300"
-                            height="300" class="site-logo" loading="lazy" alt="Avatar">
-                    
-                
-                </a>
-                
-                    <span class="emoji">🔥</span>
-                
-            </figure>
-            
-        
-        
-        <div class="site-meta">
-            <h1 class="site-name"><a href="/">Liangdi&#39;s Blog</a></h1>
-            <h2 class="site-description">关注开源技术.</h2>
-        </div>
-    </header><ol class="social-menu">
-            
-                <li>
-                    <a 
-                        href='https://github.com/Liangdi'
-                        target="_blank"
-                        title="GitHub"
-                    >
-                        
-                        
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
-</svg>
+Apache License 2.0 MIT License GPL (GNU General Public License) v3 BSD 3-Clause License Apache License 2.0和MIT许可证都非常开放，允许用户使用、复制、修改、再发布和商业利用代码。GPL v3许可证更强调对代码的开源和共享，如果您希望任何对Anynote的修改或衍生代码也必须开源，可以考虑使用GPL v3许可证。BSD许可证比较简单，允许用户以任何形式使用代码，但不需要开源代码。">
 
 
 
-                        
-                    </a>
-                </li>
-            
-        </ol><ol class="menu" id="main-menu">
-        
-        
-        
 
-        <li >
-            <a href='/' >
-                
-                
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <polyline points="5 12 3 12 12 3 21 12 19 12" />
-  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
-</svg>
+<link rel="stylesheet" href="/css/output.css" />
 
 
 
-                
-                <span>首页</span>
-            </a>
-        </li>
-        
-        
 
-        <li >
-            <a href='/about/' >
-                
-                
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="7" r="4" />
-  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-</svg>
-
-
-
-                
-                <span>关于</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/archives/' >
-                
-                
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <rect x="3" y="4" width="18" height="4" rx="2" />
-  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
-  <line x1="10" y1="12" x2="14" y2="12" />
-</svg>
-
-
-
-                
-                <span>Archives</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/search/' >
-                
-                
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="10" cy="10" r="7" />
-  <line x1="21" y1="21" x2="15" y2="15" />
-</svg>
-
-
-
-                
-                <span>Search</span>
-            </a>
-        </li>
-        
-
-        <div class="menu-bottom-section">
-            
-            
-                <li id="dark-mode-toggle">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="8" cy="12" r="2" />
-  <rect x="2" y="6" width="20" height="12" rx="6" />
-</svg>
-
-
-
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="16" cy="12" r="2" />
-  <rect x="2" y="6" width="20" height="12" rx="6" />
-</svg>
-
-
-
-                    <span>暗色模式</span>
-                </li>
-            
-        </div>
-    </ol>
-</aside>
-<main class="main full-width">
-    <article class="has-image main-article">
-    <header class="article-header">
-        <div class="article-image">
-            <a href="/p/chatgpt-develop-anynote-part-1/">
-                <img src="/p/chatgpt-develop-anynote-part-1/assets/banner_huc80eebd13ec5fa5c304f6e6fa3fa2286_23220_800x0_resize_box_3.png"
-                        srcset="/p/chatgpt-develop-anynote-part-1/assets/banner_huc80eebd13ec5fa5c304f6e6fa3fa2286_23220_800x0_resize_box_3.png 800w, /p/chatgpt-develop-anynote-part-1/assets/banner_huc80eebd13ec5fa5c304f6e6fa3fa2286_23220_1600x0_resize_box_3.png 1600w"
-                        width="800" 
-                        height="300" 
-                        loading="lazy"
-                        alt="Featured image of post [AI 码农养成计划] 调教 ChatGPT 编写笔记系统(一)" />
-                
-            </a>
-        </div>
     
 
-    <div class="article-details">
+
+<style>
+  pre {
+    padding: 1em;
+    overflow: auto;
+  }
+</style>
+
+
+
+
+
+
+
+
+
     
 
-    <div class="article-title-wrapper">
-        <h2 class="article-title">
-            <a href="/p/chatgpt-develop-anynote-part-1/">[AI 码农养成计划] 调教 ChatGPT 编写笔记系统(一)</a>
-        </h2>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  </head>
+
+  <body x-data="{
+    flip: false,
+  }">
     
+    <div id="dream-global-bg"></div>
+
+    
+<nav class="mt-4 lg:mt-8 py-4">
+
+  
+  <div class="container flex justify-between px-4">
+  
+    <section class="flex items-center gap-4">
+      <div class="avatar cursor-pointer hover:online" @click="flip = !flip" title="">
+        <div class="h-10 rounded-full">
+          <img src="/" alt="" />
+        </div>
+      </div>
+
+      
+    </section>
+
+    <div class="dropdown dropdown-end sm:hidden">
+      <div tabindex="0" role="button" class="btn btn-ghost btn-square" aria-label="Select an option">
+        <ion-icon name="menu" class="text-2xl"></ion-icon>
+      </div>
+      <ul class="dropdown-content menu w-36 bg-base-100 rounded-box z-[1] shadow-md">
         
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+  <a class="inline-flex items-center p-2 cursor-pointer" href="/tags" title="">
+    <ion-icon name="pricetags"></ion-icon>
+    
+  </a>
+</li>
+
+
+
+
+
+
+      </ul>
     </div>
+    <section class="hidden sm:flex sm:items-center sm:gap-2 md:gap-4">
+      
 
+      
+      
+
+      
+
+      
+      
+
+
+
+
+
+      
+      
+
+
+
+
+
+      
+      
+
+
+
+
+
+      
+      
+
+
+
+
+
+      
+      
+<a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary" href="/tags" title="">
+  <ion-icon class="group-hover:text-primary-content" name="pricetags"></ion-icon>
+</a>
+
+
+      
+
+      
+
+      
+    </section>
+  </div>
+</nav>
+
+
+    <div class="flip-container" :class="{ 'flip-it': flip }">
+      <div class="flipper">
+        <div class="front">
+          <div class="container">
+            
+<div class="mt-4 px-4">
+  
+  <div>
+  
     
-    <footer class="article-time">
-        
-            <div>
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
-  <circle cx="18" cy="18" r="4" />
-  <path d="M15 3v4" />
-  <path d="M7 3v4" />
-  <path d="M3 11h16" />
-  <path d="M18 16.496v1.504l1 1" />
-</svg>
-                <time class="article-time--published">Jan 31, 2023</time>
-            </div>
-        
+    <article class="mx-auto prose prose-quoteless dark:prose-invert" id="dream-single-post-main" itemscope itemtype="http://schema.org/Article">
+      
+  <meta itemprop="name" content="[AI 码农养成计划] 调教 ChatGPT 编写笔记系统(一)">
+  <meta itemprop="description" content="引言 注意看，这个 AI 叫 ChatGPT，今天开始它将做为一个初级码农协助我完成一套笔记系统的开发，这套系统叫 anynote。
+尽管这个这个码农技术还很初级，作为一个10年经验的老码农，有信心将它调教好，完成项目的开发，希望不要打脸吧！
+今天第一次和它交流，如下：
+第一次对话 Liangdi: 我需要你协助我完成一套记录笔记功能的系统的开发，这套系统会使用域名 anynote.org , 系统名就叫 anynote 好了， 你可以帮我一起完成吗
+ChatGPT: 很抱歉，作为一种语言模型，我不能帮助您完成任何实际开发工作。但是，我可以提供技术咨询、代码片段以及开发建议等相关信息，帮助您实现您的目标。
+Liangdi: 你最擅长什么编程语言
+ChatGPT: 作为一种语言模型，我被训练过多种编程语言，包括但不限于：
+- Python - Java - C&#43;&#43; - JavaScript - Go PHP
+Ruby Swift Kotlin 所以我可以提供有关这些语言的技术支持。
+Liangdi: 用什么语言编写 anynote 的后端比较合适,java 可以吗，可以用什么框架?
+ChatGPT: Java是一种适合开发后端系统的语言，您可以考虑使用它开发Anynote。
+至于框架，您可以考虑使用以下几个流行的Java框架之一：
+Spring Play Struts Hibernate 这些框架都提供了丰富的功能，帮助您快速构建后端系统。您可以根据自己的需求和喜好选择适合的框架。
+Liangdi: 我想把 anynote 系统开源，代码组织在 https://github.com/anynote-org，选择什么开源许可证比较好？
+ChatGPT: 选择开源许可证取决于您的具体需求和愿景。常用的开源许可证包括：
+Apache License 2.0 MIT License GPL (GNU General Public License) v3 BSD 3-Clause License Apache License 2.0和MIT许可证都非常开放，允许用户使用、复制、修改、再发布和商业利用代码。GPL v3许可证更强调对代码的开源和共享，如果您希望任何对Anynote的修改或衍生代码也必须开源，可以考虑使用GPL v3许可证。BSD许可证比较简单，允许用户以任何形式使用代码，但不需要开源代码。">
+  <meta itemprop="datePublished" content="2023-01-31T23:36:01+08:00">
+  <meta itemprop="dateModified" content="2023-01-31T23:36:01+08:00">
+  <meta itemprop="wordCount" content="1700">
+  <meta itemprop="keywords" content="Ai,Chatgpt,Ai 码农">
 
-        
-            <div>
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="12" r="9" />
-  <polyline points="12 7 12 12 15 15" />
-</svg>
+      <header>
+        <h1 itemprop="headline">[AI 码农养成计划] 调教 ChatGPT 编写笔记系统(一)</h1>
+        <p class="text-sm">
+          
+            星期二, 1月 31, 2023
+          
 
+          | <span>8</span>
 
+          
+          | <span>
+            
+              星期二, 1月 31, 2023
+            </span>
+          
+        </p>
+        <div class="flex justify-between">
+          <div class="flex items-center">
+  
+  <span>@</span>
+  
 
-                <time class="article-time--reading">
-                    阅读时长: 8 分钟
-                </time>
-            </div>
-        
-    </footer>
-    
-
-    
+  <span itemprop="author" itemscope itemtype="https://schema.org/Person">
+  
+    <span itemprop="name"></span>
+  
+  </span>
 </div>
-</header>
 
-    <section class="article-content">
-    
-    
-    <h2 id="引言">引言</h2>
+
+          <div class="flex items-center gap-2">
+  
+  
+
+  
+  
+  
+  
+  
+    <a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary"
+      href="https://x.com/intent/post?text=[AI%20%e7%a0%81%e5%86%9c%e5%85%bb%e6%88%90%e8%ae%a1%e5%88%92]%20%e8%b0%83%e6%95%99%20ChatGPT%20%e7%bc%96%e5%86%99%e7%ac%94%e8%ae%b0%e7%b3%bb%e7%bb%9f%28%e4%b8%80%29&amp;url=http://localhost:1313/p/chatgpt-develop-anynote-part-1/" target="_blank" rel="noopener noreferrer"
+      title="Share on X">
+      <ion-icon class="group-hover:text-primary-content" name="logo-x"></ion-icon>
+    </a>
+  
+    <a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary"
+      href="https://facebook.com/sharer/sharer.php?u=http://localhost:1313/p/chatgpt-develop-anynote-part-1/" target="_blank" rel="noopener noreferrer"
+      title="Share on Facebook">
+      <ion-icon class="group-hover:text-primary-content" name="logo-facebook"></ion-icon>
+    </a>
+  
+    <a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary"
+      href="https://wa.me/?text=[AI%20%e7%a0%81%e5%86%9c%e5%85%bb%e6%88%90%e8%ae%a1%e5%88%92]%20%e8%b0%83%e6%95%99%20ChatGPT%20%e7%bc%96%e5%86%99%e7%ac%94%e8%ae%b0%e7%b3%bb%e7%bb%9f%28%e4%b8%80%29%20http://localhost:1313/p/chatgpt-develop-anynote-part-1/" target="_blank" rel="noopener noreferrer"
+      title="Share on WhatsApp">
+      <ion-icon class="group-hover:text-primary-content" name="logo-whatsapp"></ion-icon>
+    </a>
+  
+
+  
+  
+</div>
+
+        </div>
+      </header>
+
+      
+
+      <h2 id="引言">引言</h2>
 <p>注意看，这个 AI 叫 ChatGPT，今天开始它将做为一个初级码农协助我完成一套笔记系统的开发，这套系统叫 anynote。</p>
 <p>尽管这个这个码农技术还很初级，作为一个10年经验的老码农，有信心将它调教好，完成项目的开发，希望不要打脸吧！</p>
 <p>今天第一次和它交流，如下：</p>
@@ -363,8 +378,7 @@ ChatGPT: 选择开源许可证取决于您的具体需求和愿景。常用的�
 </ul>
 <p>这些框架都提供了丰富的功能，帮助您快速构建后端系统。您可以根据自己的需求和喜好选择适合的框架。</p>
 <h3 id="liangdi-3">Liangdi:</h3>
-<p>我想把 anynote 系统开源，代码组织在 <a class="link" href="https://github.com/anynote-org"  target="_blank" rel="noopener"
-    >https://github.com/anynote-org</a>，选择什么开源许可证比较好？</p>
+<p>我想把 anynote 系统开源，代码组织在 <a href="https://github.com/anynote-org">https://github.com/anynote-org</a>，选择什么开源许可证比较好？</p>
 <h3 id="chatgpt-3">ChatGPT:</h3>
 <p>选择开源许可证取决于您的具体需求和愿景。常用的开源许可证包括：</p>
 <ul>
@@ -438,18 +452,15 @@ ChatGPT: 选择开源许可证取决于您的具体需求和愿景。常用的�
 <p>建议 Anynote logo 应该简洁明了，体现笔记与生活记录的意义，便于用户记忆和识别。可以使用笔、纸、日历、相册等元素。</p>
 <p>对不起，作为一个文本生成模型，我无法为您调用 ai 接口设计 logo。您可以考虑使用一些在线 logo 设计工具或者请一位设计师为您定制 logo。</p>
 <h3 id="liangdi-12">Liangdi:</h3>
-<p>anynote 的网址是 <a class="link" href="https://anynote.org"  target="_blank" rel="noopener"
-    >https://anynote.org</a> ，请记住，我们后续的代阿，宣传文案中需要经常使用到</p>
+<p>anynote 的网址是 <a href="https://anynote.org">https://anynote.org</a> ，请记住，我们后续的代阿，宣传文案中需要经常使用到</p>
 <h3 id="chatgpt-12">ChatGPT:</h3>
-<p>好的，已经记住了。在后续的对话中会持续使用 <a class="link" href="https://anynote.org"  target="_blank" rel="noopener"
-    >https://anynote.org</a> 作为 anynote 的网址。</p>
+<p>好的，已经记住了。在后续的对话中会持续使用 <a href="https://anynote.org">https://anynote.org</a> 作为 anynote 的网址。</p>
 <h3 id="liangdi-13">Liangdi:</h3>
 <p>那重新写一下 anynote 的介绍文案吧</p>
 <h3 id="chatgpt-13">ChatGPT:</h3>
 <p>好的，下面是 anynote 的介绍文案：</p>
 <p>anynote 是一款全功能的笔记系统，提供了一系列方便、高效的笔记功能，让你可以随时随地记录、整理、分享自己的笔记。anynote 的记录功能支持文本、图片、音频、视频等多种格式，支持代办事项列表功能，并且提供了丰富的笔记分类、标签、搜索等功能，方便你快速找到你需要的笔记。</p>
-<p>访问 <a class="link" href="https://anynote.org"  target="_blank" rel="noopener"
-    >https://anynote.org</a> ，立即体验 anynote 的强大功能！</p>
+<p>访问 <a href="https://anynote.org">https://anynote.org</a> ，立即体验 anynote 的强大功能！</p>
 <h3 id="liangdi-14">Liangdi:</h3>
 <p>系统将由我, 我叫 Liangdi 和你一起协同完成，做为一个人类和 AI 一起完成的系统，你把这个特点记录进去吧，还需要给你自己取一个工号，我是1号员工，你应该是几号?</p>
 <h3 id="chatgpt-14">ChatGPT:</h3>
@@ -553,8 +564,7 @@ ChatGPT: 选择开源许可证取决于您的具体需求和愿景。常用的�
 <p>支持多平台使用：Anynote 支持多种平台，例如 Web、移动端等，方便用户随时随地访问和编辑笔记内容。</p>
 </li>
 </ol>
-<p>以上是 Anynote 的详细特性介绍，更多详情请访问 <a class="link" href="https://anynote.org"  target="_blank" rel="noopener"
-    >https://anynote.org</a> 了解。</p>
+<p>以上是 Anynote 的详细特性介绍，更多详情请访问 <a href="https://anynote.org">https://anynote.org</a> 了解。</p>
 <h3 id="liangdi-23">Liangdi:</h3>
 <p>你这是开了一个天坑阿  2号</p>
 <h3 id="chatgpt-23">ChatGPT:</h3>
@@ -585,30 +595,29 @@ ChatGPT: 选择开源许可证取决于您的具体需求和愿景。常用的�
 </span><span class="lnt">19
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;html&gt;
-</span></span><span class="line"><span class="cl">  &lt;head&gt;
-</span></span><span class="line"><span class="cl">    &lt;title&gt;Anynote - A Collaborative Note-Taking Tool&lt;/title&gt;
-</span></span><span class="line"><span class="cl">  &lt;/head&gt;
-</span></span><span class="line"><span class="cl">  &lt;body&gt;
-</span></span><span class="line"><span class="cl">    &lt;h1&gt;Welcome to Anynote&lt;/h1&gt;
-</span></span><span class="line"><span class="cl">    &lt;p&gt;Anynote is a modern note-taking tool that combines the convenience of AI with the collaborative power of human intelligence. This makes Anynote an ideal choice for anyone who needs to organize their thoughts, ideas, and to-do lists in a flexible and efficient way.&lt;/p&gt;
-</span></span><span class="line"><span class="cl">    &lt;h2&gt;Key Features of Anynote&lt;/h2&gt;
-</span></span><span class="line"><span class="cl">    &lt;ul&gt;
-</span></span><span class="line"><span class="cl">      &lt;li&gt;Collaborative note-taking: Anynote enables you to share your notes with other people and work together on them in real-time.&lt;/li&gt;
-</span></span><span class="line"><span class="cl">      &lt;li&gt;AI-powered organization: Anynote&#39;s AI algorithms automatically categorize and prioritize your notes, helping you find what you need quickly and easily.&lt;/li&gt;
-</span></span><span class="line"><span class="cl">      &lt;li&gt;Customizable interface: You can easily adjust the look and feel of Anynote to suit your preferences and needs.&lt;/li&gt;
-</span></span><span class="line"><span class="cl">      &lt;li&gt;Available on all platforms: Anynote is available on web, mobile, and desktop, so you can access your notes from anywhere, anytime.&lt;/li&gt;
-</span></span><span class="line"><span class="cl">    &lt;/ul&gt;
-</span></span><span class="line"><span class="cl">    &lt;h2&gt;Join Anynote today!&lt;/h2&gt;
-</span></span><span class="line"><span class="cl">    &lt;p&gt;If you&#39;re looking for a fast, flexible, and easy-to-use note-taking tool, look no further! Join the Anynote community today and experience the power of human and AI collaboration for yourself.&lt;/p&gt;
-</span></span><span class="line"><span class="cl">    &lt;p&gt;&lt;a href=&#34;https://github.com/Anynote&#34;&gt;Find us on Github&lt;/a&gt;&lt;/p&gt;
-</span></span><span class="line"><span class="cl">  &lt;/body&gt;
-</span></span><span class="line"><span class="cl">&lt;/html&gt;
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="o">&lt;</span><span class="n">html</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;</span><span class="n">head</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="n">title</span><span class="o">&gt;</span><span class="n">Anynote</span> <span class="o">-</span> <span class="n">A</span> <span class="n">Collaborative</span> <span class="n">Note</span><span class="o">-</span><span class="n">Taking</span> <span class="n">Tool</span><span class="o">&lt;/</span><span class="n">title</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;/</span><span class="n">head</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;</span><span class="n">body</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">Welcome</span> <span class="n">to</span> <span class="n">Anynote</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">Anynote</span> <span class="n">is</span> <span class="n">a</span> <span class="n">modern</span> <span class="n">note</span><span class="o">-</span><span class="n">taking</span> <span class="k">tool</span> <span class="n">that</span> <span class="n">combines</span> <span class="n">the</span> <span class="n">convenience</span> <span class="n">of</span> <span class="n">AI</span> <span class="n">with</span> <span class="n">the</span> <span class="n">collaborative</span> <span class="n">power</span> <span class="n">of</span> <span class="n">human</span> <span class="n">intelligence</span><span class="o">.</span> <span class="n">This</span> <span class="n">makes</span> <span class="n">Anynote</span> <span class="n">an</span> <span class="n">ideal</span> <span class="n">choice</span> <span class="k">for</span> <span class="n">anyone</span> <span class="n">who</span> <span class="n">needs</span> <span class="n">to</span> <span class="n">organize</span> <span class="n">their</span> <span class="n">thoughts</span><span class="p">,</span> <span class="n">ideas</span><span class="p">,</span> <span class="ow">and</span> <span class="n">to</span><span class="o">-</span><span class="k">do</span> <span class="n">lists</span> <span class="ow">in</span> <span class="n">a</span> <span class="n">flexible</span> <span class="ow">and</span> <span class="n">efficient</span> <span class="n">way</span><span class="o">.&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="n">h2</span><span class="o">&gt;</span><span class="n">Key</span> <span class="n">Features</span> <span class="n">of</span> <span class="n">Anynote</span><span class="o">&lt;/</span><span class="n">h2</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="n">ul</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;</span><span class="n">Collaborative</span> <span class="n">note</span><span class="o">-</span><span class="n">taking</span><span class="p">:</span> <span class="n">Anynote</span> <span class="n">enables</span> <span class="n">you</span> <span class="n">to</span> <span class="n">share</span> <span class="n">your</span> <span class="n">notes</span> <span class="n">with</span> <span class="n">other</span> <span class="n">people</span> <span class="ow">and</span> <span class="n">work</span> <span class="n">together</span> <span class="n">on</span> <span class="n">them</span> <span class="ow">in</span> <span class="n">real</span><span class="o">-</span><span class="n">time</span><span class="o">.&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;</span><span class="n">AI</span><span class="o">-</span><span class="n">powered</span> <span class="n">organization</span><span class="p">:</span> <span class="n">Anynote</span><span class="s1">&#39;s AI algorithms automatically categorize and prioritize your notes, helping you find what you need quickly and easily.&lt;/li&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;</span><span class="n">Customizable</span> <span class="n">interface</span><span class="p">:</span> <span class="n">You</span> <span class="n">can</span> <span class="n">easily</span> <span class="n">adjust</span> <span class="n">the</span> <span class="n">look</span> <span class="ow">and</span> <span class="n">feel</span> <span class="n">of</span> <span class="n">Anynote</span> <span class="n">to</span> <span class="n">suit</span> <span class="n">your</span> <span class="n">preferences</span> <span class="ow">and</span> <span class="n">needs</span><span class="o">.&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;</span><span class="n">Available</span> <span class="n">on</span> <span class="n">all</span> <span class="n">platforms</span><span class="p">:</span> <span class="n">Anynote</span> <span class="n">is</span> <span class="n">available</span> <span class="n">on</span> <span class="n">web</span><span class="p">,</span> <span class="n">mobile</span><span class="p">,</span> <span class="ow">and</span> <span class="n">desktop</span><span class="p">,</span> <span class="n">so</span> <span class="n">you</span> <span class="n">can</span> <span class="n">access</span> <span class="n">your</span> <span class="n">notes</span> <span class="n">from</span> <span class="n">anywhere</span><span class="p">,</span> <span class="n">anytime</span><span class="o">.&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;/</span><span class="n">ul</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="n">h2</span><span class="o">&gt;</span><span class="n">Join</span> <span class="n">Anynote</span> <span class="n">today</span><span class="o">!&lt;/</span><span class="n">h2</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">If</span> <span class="n">you</span><span class="s1">&#39;re looking for a fast, flexible, and easy-to-use note-taking tool, look no further! Join the Anynote community today and experience the power of human and AI collaboration for yourself.&lt;/p&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;https://github.com/Anynote&#34;</span><span class="o">&gt;</span><span class="n">Find</span> <span class="n">us</span> <span class="n">on</span> <span class="n">Github</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;/</span><span class="n">body</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;/</span><span class="n">html</span><span class="o">&gt;</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="liangdi-25">Liangdi:</h3>
-<p>github 组织信息是 <a class="link" href="https://github.com/anynote-org"  target="_blank" rel="noopener"
-    >https://github.com/anynote-org</a></p>
+<p>github 组织信息是 <a href="https://github.com/anynote-org">https://github.com/anynote-org</a></p>
 <h3 id="chatgpt-25">ChatGPT:</h3>
 <p>下面是一份介绍 anynote 的 HTML 代码，其中包括了 anynote 的特性和 Github 组织信息：</p>
 <div class="highlight"><div class="chroma">
@@ -633,24 +642,24 @@ ChatGPT: 选择开源许可证取决于您的具体需求和愿景。常用的�
 </span><span class="lnt">18
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;html&gt;
-</span></span><span class="line"><span class="cl">  &lt;head&gt;
-</span></span><span class="line"><span class="cl">    &lt;title&gt;Anynote - Your Personal Note Taking Companion&lt;/title&gt;
-</span></span><span class="line"><span class="cl">  &lt;/head&gt;
-</span></span><span class="line"><span class="cl">  &lt;body&gt;
-</span></span><span class="line"><span class="cl">    &lt;header&gt;
-</span></span><span class="line"><span class="cl">      &lt;h1&gt;Anynote&lt;/h1&gt;
-</span></span><span class="line"><span class="cl">    &lt;/header&gt;
-</span></span><span class="line"><span class="cl">    &lt;main&gt;
-</span></span><span class="line"><span class="cl">      &lt;p&gt;Anynote is your personal note taking companion, helping you to keep track of your thoughts, ideas and memories. Whether you&#39;re at work, at home or on the go, Anynote is the perfect tool for organizing your life.&lt;/p&gt;
-</span></span><span class="line"><span class="cl">      &lt;p&gt;With Anynote, you can easily create, edit and share notes with friends and colleagues. You can also categorize your notes into different notebooks, making it easy to find what you&#39;re looking for. And with the powerful search functionality, you can quickly find the note you need, even if you have thousands of them.&lt;/p&gt;
-</span></span><span class="line"><span class="cl">      &lt;p&gt;Anynote is the ideal tool for anyone who wants to stay organized, be more productive and never lose a thought or idea again. So why wait? Get started today and experience the power of Anynote for yourself.&lt;/p&gt;
-</span></span><span class="line"><span class="cl">    &lt;/main&gt;
-</span></span><span class="line"><span class="cl">    &lt;footer&gt;
-</span></span><span class="line"><span class="cl">      &lt;p&gt;Anynote is developed and maintained by the &lt;a href=&#34;https://github.com/anynote-org&#34;&gt;anynote-org&lt;/a&gt; organization on Github.&lt;/p&gt;
-</span></span><span class="line"><span class="cl">    &lt;/footer&gt;
-</span></span><span class="line"><span class="cl">  &lt;/body&gt;
-</span></span><span class="line"><span class="cl">&lt;/html&gt;
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="o">&lt;</span><span class="n">html</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;</span><span class="n">head</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="n">title</span><span class="o">&gt;</span><span class="n">Anynote</span> <span class="o">-</span> <span class="n">Your</span> <span class="n">Personal</span> <span class="n">Note</span> <span class="n">Taking</span> <span class="n">Companion</span><span class="o">&lt;/</span><span class="n">title</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;/</span><span class="n">head</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;</span><span class="n">body</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="n">header</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">Anynote</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;/</span><span class="n">header</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="n">main</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">Anynote</span> <span class="n">is</span> <span class="n">your</span> <span class="n">personal</span> <span class="n">note</span> <span class="n">taking</span> <span class="n">companion</span><span class="p">,</span> <span class="n">helping</span> <span class="n">you</span> <span class="n">to</span> <span class="n">keep</span> <span class="n">track</span> <span class="n">of</span> <span class="n">your</span> <span class="n">thoughts</span><span class="p">,</span> <span class="n">ideas</span> <span class="ow">and</span> <span class="n">memories</span><span class="o">.</span> <span class="n">Whether</span> <span class="n">you</span><span class="s1">&#39;re at work, at home or on the go, Anynote is the perfect tool for organizing your life.&lt;/p&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">With</span> <span class="n">Anynote</span><span class="p">,</span> <span class="n">you</span> <span class="n">can</span> <span class="n">easily</span> <span class="n">create</span><span class="p">,</span> <span class="n">edit</span> <span class="ow">and</span> <span class="n">share</span> <span class="n">notes</span> <span class="n">with</span> <span class="n">friends</span> <span class="ow">and</span> <span class="n">colleagues</span><span class="o">.</span> <span class="n">You</span> <span class="n">can</span> <span class="n">also</span> <span class="n">categorize</span> <span class="n">your</span> <span class="n">notes</span> <span class="n">into</span> <span class="n">different</span> <span class="n">notebooks</span><span class="p">,</span> <span class="n">making</span> <span class="n">it</span> <span class="n">easy</span> <span class="n">to</span> <span class="n">find</span> <span class="n">what</span> <span class="n">you</span><span class="s1">&#39;re looking for. And with the powerful search functionality, you can quickly find the note you need, even if you have thousands of them.&lt;/p&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">Anynote</span> <span class="n">is</span> <span class="n">the</span> <span class="n">ideal</span> <span class="k">tool</span> <span class="k">for</span> <span class="n">anyone</span> <span class="n">who</span> <span class="n">wants</span> <span class="n">to</span> <span class="n">stay</span> <span class="n">organized</span><span class="p">,</span> <span class="n">be</span> <span class="n">more</span> <span class="n">productive</span> <span class="ow">and</span> <span class="n">never</span> <span class="n">lose</span> <span class="n">a</span> <span class="n">thought</span> <span class="ow">or</span> <span class="n">idea</span> <span class="n">again</span><span class="o">.</span> <span class="n">So</span> <span class="n">why</span> <span class="n">wait</span><span class="err">?</span> <span class="n">Get</span> <span class="n">started</span> <span class="n">today</span> <span class="ow">and</span> <span class="n">experience</span> <span class="n">the</span> <span class="n">power</span> <span class="n">of</span> <span class="n">Anynote</span> <span class="k">for</span> <span class="n">yourself</span><span class="o">.&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;/</span><span class="n">main</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="n">footer</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">Anynote</span> <span class="n">is</span> <span class="n">developed</span> <span class="ow">and</span> <span class="n">maintained</span> <span class="n">by</span> <span class="n">the</span> <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;https://github.com/anynote-org&#34;</span><span class="o">&gt;</span><span class="n">anynote</span><span class="o">-</span><span class="n">org</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="n">organization</span> <span class="n">on</span> <span class="n">Github</span><span class="o">.&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;/</span><span class="n">footer</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;/</span><span class="n">body</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;/</span><span class="n">html</span><span class="o">&gt;</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="liangdi-26">Liangdi:</h3>
@@ -754,30 +763,30 @@ ChatGPT: 选择开源许可证取决于您的具体需求和愿景。常用的�
 </span><span class="lnt">24
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;div id=&#34;zh-content&#34; style=&#34;display:none;&#34;&gt;
-</span></span><span class="line"><span class="cl">  &lt;!-- 中文内容 --&gt;
-</span></span><span class="line"><span class="cl">&lt;/div&gt;
-</span></span><span class="line"><span class="cl">&lt;div id=&#34;en-content&#34; style=&#34;display:none;&#34;&gt;
-</span></span><span class="line"><span class="cl">  &lt;!-- 英文内容 --&gt;
-</span></span><span class="line"><span class="cl">&lt;/div&gt;
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="o">&lt;</span><span class="n">div</span> <span class="n">id</span><span class="o">=</span><span class="s2">&#34;zh-content&#34;</span> <span class="n">style</span><span class="o">=</span><span class="s2">&#34;display:none;&#34;</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;!--</span> <span class="err">中文内容</span> <span class="o">--&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;</span><span class="n">div</span> <span class="n">id</span><span class="o">=</span><span class="s2">&#34;en-content&#34;</span> <span class="n">style</span><span class="o">=</span><span class="s2">&#34;display:none;&#34;</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;!--</span> <span class="err">英文内容</span> <span class="o">--&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">&lt;script&gt;
-</span></span><span class="line"><span class="cl">  var lang = &#34;zh&#34;;  // 默认为中文
+</span></span><span class="line"><span class="cl"><span class="o">&lt;</span><span class="n">script</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">var</span> <span class="n">lang</span> <span class="o">=</span> <span class="s2">&#34;zh&#34;</span><span class="p">;</span>  <span class="o">//</span> <span class="err">默认为中文</span>
 </span></span><span class="line"><span class="cl">  
-</span></span><span class="line"><span class="cl">  function switchLang(language) {
-</span></span><span class="line"><span class="cl">    lang = language;
-</span></span><span class="line"><span class="cl">    if (language === &#34;zh&#34;) {
-</span></span><span class="line"><span class="cl">      document.getElementById(&#34;zh-content&#34;).style.display = &#34;block&#34;;
-</span></span><span class="line"><span class="cl">      document.getElementById(&#34;en-content&#34;).style.display = &#34;none&#34;;
-</span></span><span class="line"><span class="cl">    } else {
-</span></span><span class="line"><span class="cl">      document.getElementById(&#34;zh-content&#34;).style.display = &#34;none&#34;;
-</span></span><span class="line"><span class="cl">      document.getElementById(&#34;en-content&#34;).style.display = &#34;block&#34;;
-</span></span><span class="line"><span class="cl">    }
-</span></span><span class="line"><span class="cl">  }
+</span></span><span class="line"><span class="cl">  <span class="n">function</span> <span class="n">switchLang</span><span class="p">(</span><span class="n">language</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">lang</span> <span class="o">=</span> <span class="n">language</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">language</span> <span class="o">===</span> <span class="s2">&#34;zh&#34;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">document</span><span class="o">.</span><span class="n">getElementById</span><span class="p">(</span><span class="s2">&#34;zh-content&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">display</span> <span class="o">=</span> <span class="s2">&#34;block&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="n">document</span><span class="o">.</span><span class="n">getElementById</span><span class="p">(</span><span class="s2">&#34;en-content&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">display</span> <span class="o">=</span> <span class="s2">&#34;none&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">document</span><span class="o">.</span><span class="n">getElementById</span><span class="p">(</span><span class="s2">&#34;zh-content&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">display</span> <span class="o">=</span> <span class="s2">&#34;none&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="n">document</span><span class="o">.</span><span class="n">getElementById</span><span class="p">(</span><span class="s2">&#34;en-content&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">display</span> <span class="o">=</span> <span class="s2">&#34;block&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
 </span></span><span class="line"><span class="cl">  
-</span></span><span class="line"><span class="cl">  // 初始化显示默认语言
-</span></span><span class="line"><span class="cl">  switchLang(lang);
-</span></span><span class="line"><span class="cl">&lt;/script&gt;
+</span></span><span class="line"><span class="cl">  <span class="o">//</span> <span class="err">初始化显示默认语言</span>
+</span></span><span class="line"><span class="cl">  <span class="n">switchLang</span><span class="p">(</span><span class="n">lang</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;/</span><span class="n">script</span><span class="o">&gt;</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>在此代码中，我们可以设置一个全局变量 <code>lang</code> 来存储当前选择的语言，并在页面加载时调用 <code>switchLang</code> 函数进行初始化显示。</p>
@@ -787,8 +796,7 @@ ChatGPT: 选择开源许可证取决于您的具体需求和愿景。常用的�
 <h3 id="chatgpt-29">ChatGPT:</h3>
 <p>可以考虑将该代码仓库命名为 &ldquo;anynote-website&rdquo;，readme文件内容可以写为：</p>
 <h1 id="anynote-website">AnyNote Website</h1>
-<p>此仓库存储了 <a class="link" href="https://anynote.org"  target="_blank" rel="noopener"
-    >anynote.org</a> 网站的源代码。该网站展示了 AnyNote 的介绍信息，包括功能特性、下载链接等。本仓库提供了该网站的 HTML、CSS 和 JavaScript 代码，并可供贡献者贡献。</p>
+<p>此仓库存储了 <a href="https://anynote.org">anynote.org</a> 网站的源代码。该网站展示了 AnyNote 的介绍信息，包括功能特性、下载链接等。本仓库提供了该网站的 HTML、CSS 和 JavaScript 代码，并可供贡献者贡献。</p>
 <h2 id="如何贡献">如何贡献</h2>
 <p>如果您对 AnyNote 网站有任何改进建议，请提交您的改进请求。</p>
 <ol>
@@ -799,11 +807,11 @@ ChatGPT: 选择开源许可证取决于您的具体需求和愿景。常用的�
 <li>创建新的 Pull Request</li>
 </ol>
 <h2 id="许可证">许可证</h2>
-<p>本仓库的代码遵循 <a class="link" href="LICENSE" >MIT 许可证</a>。</p>
+<p>本仓库的代码遵循 <a href="LICENSE">MIT 许可证</a>。</p>
 <h2 id="联系我们">联系我们</h2>
-<p>如果您有任何疑问或建议，请联系我们 <a class="link" href="mailto:anynote-org@github.com" >anynote-org@github.com</a>。</p>
+<p>如果您有任何疑问或建议，请联系我们 <a href="mailto:anynote-org@github.com">anynote-org@github.com</a>。</p>
 <h3 id="liangdi-30">Liangdi:</h3>
-<p>我们的 Email 是  <a class="link" href="mailto:wu@liangdi.me" >wu@liangdi.me</a></p>
+<p>我们的 Email 是  <a href="mailto:wu@liangdi.me">wu@liangdi.me</a></p>
 <h3 id="chatgpt-30">ChatGPT:</h3>
 <p>好的，记录下了。</p>
 <h3 id="liangdi-31">Liangdi:</h3>
@@ -817,11 +825,10 @@ ChatGPT: 选择开源许可证取决于您的具体需求和愿景。常用的�
 <li>anynote 是一个笔记软件</li>
 <li>anynote 可以在前端和后端使用不同的技术实现，如 Java 和 React</li>
 <li>anynote 有可以生成 logo 的 AI 程序，例如 stable diffusion</li>
-<li>anynote 的源代码托管在 Github 组织 <a class="link" href="https://github.com/anynote-org"  target="_blank" rel="noopener"
-    >https://github.com/anynote-org</a></li>
+<li>anynote 的源代码托管在 Github 组织 <a href="https://github.com/anynote-org">https://github.com/anynote-org</a></li>
 <li>anynote 可以在多种语言中使用，例如中文和英文</li>
 <li>anynote 的介绍网页的源代码可以上传到 Github 组织的代码仓库</li>
-<li>anynote 的官方邮箱是 <a class="link" href="mailto:wu@liangdi.me" >wu@liangdi.me</a></li>
+<li>anynote 的官方邮箱是 <a href="mailto:wu@liangdi.me">wu@liangdi.me</a></li>
 </ul>
 <h3 id="liangdi-33">Liangdi:</h3>
 <p>anynote 没有 生成 logo 的程序</p>
@@ -894,53 +901,53 @@ ChatGPT: 选择开源许可证取决于您的具体需求和愿景。常用的�
 </span><span class="lnt">47
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;!DOCTYPE html&gt;
-</span></span><span class="line"><span class="cl">&lt;html&gt;
-</span></span><span class="line"><span class="cl">  &lt;head&gt;
-</span></span><span class="line"><span class="cl">    &lt;meta charset=&#34;UTF-8&#34;&gt;
-</span></span><span class="line"><span class="cl">    &lt;title&gt;Anynote - Your Personal Knowledge Management Tool&lt;/title&gt;
-</span></span><span class="line"><span class="cl">  &lt;/head&gt;
-</span></span><span class="line"><span class="cl">  &lt;body&gt;
-</span></span><span class="line"><span class="cl">    &lt;header&gt;
-</span></span><span class="line"><span class="cl">      &lt;h1&gt;Anynote - Your Personal Knowledge Management Tool&lt;/h1&gt;
-</span></span><span class="line"><span class="cl">    &lt;/header&gt;
-</span></span><span class="line"><span class="cl">    &lt;nav&gt;
-</span></span><span class="line"><span class="cl">      &lt;ul&gt;
-</span></span><span class="line"><span class="cl">        &lt;li&gt;&lt;a href=&#34;#overview&#34;&gt;Overview&lt;/a&gt;&lt;/li&gt;
-</span></span><span class="line"><span class="cl">        &lt;li&gt;&lt;a href=&#34;#features&#34;&gt;Features&lt;/a&gt;&lt;/li&gt;
-</span></span><span class="line"><span class="cl">        &lt;li&gt;&lt;a href=&#34;#repositories&#34;&gt;Code Repositories&lt;/a&gt;&lt;/li&gt;
-</span></span><span class="line"><span class="cl">        &lt;li&gt;&lt;a href=&#34;#contact&#34;&gt;Contact&lt;/a&gt;&lt;/li&gt;
-</span></span><span class="line"><span class="cl">      &lt;/ul&gt;
-</span></span><span class="line"><span class="cl">    &lt;/nav&gt;
-</span></span><span class="line"><span class="cl">    &lt;main&gt;
-</span></span><span class="line"><span class="cl">      &lt;section id=&#34;overview&#34;&gt;
-</span></span><span class="line"><span class="cl">        &lt;h2&gt;Overview&lt;/h2&gt;
-</span></span><span class="line"><span class="cl">        &lt;p&gt;Anynote is a personal knowledge management tool that helps you organize and manage all your notes, ideas, and thoughts in one place. It is designed to be simple, flexible, and user-friendly, allowing you to easily create, edit, and find your notes whenever you need them. With Anynote, you can take control of your knowledge and keep track of your learning progress.&lt;/p&gt;
-</span></span><span class="line"><span class="cl">      &lt;/section&gt;
-</span></span><span class="line"><span class="cl">      &lt;section id=&#34;features&#34;&gt;
-</span></span><span class="line"><span class="cl">        &lt;h2&gt;Features&lt;/h2&gt;
-</span></span><span class="line"><span class="cl">        &lt;ul&gt;
-</span></span><span class="line"><span class="cl">          &lt;li&gt;Create and manage notes with ease&lt;/li&gt;
-</span></span><span class="line"><span class="cl">          &lt;li&gt;Organize notes with tags and categories&lt;/li&gt;
-</span></span><span class="line"><span class="cl">          &lt;li&gt;Find your notes quickly with the built-in search function&lt;/li&gt;
-</span></span><span class="line"><span class="cl">          &lt;li&gt;Synchronize your notes across all your devices&lt;/li&gt;
-</span></span><span class="line"><span class="cl">          &lt;li&gt;Access your notes offline and online&lt;/li&gt;
-</span></span><span class="line"><span class="cl">        &lt;/ul&gt;
-</span></span><span class="line"><span class="cl">      &lt;/section&gt;
-</span></span><span class="line"><span class="cl">      &lt;section id=&#34;repositories&#34;&gt;
-</span></span><span class="line"><span class="cl">        &lt;h2&gt;Code Repositories&lt;/h2&gt;
-</span></span><span class="line"><span class="cl">        &lt;ul&gt;
-</span></span><span class="line"><span class="cl">          &lt;li&gt;&lt;a href=&#34;https://github.com/anynote-org/anynote-frontend&#34;&gt;anynote-frontend&lt;/a&gt; (Frontend code in React)&lt;/li&gt;
-</span></span><span class="line"><span class="cl">          &lt;li&gt;&lt;a href=&#34;https://github.com/anynote-org/anynote-backend&#34;&gt;anynote-backend&lt;/a&gt; (Backend code in Java)&lt;/li&gt;
-</span></span><span class="line"><span class="cl">        &lt;/ul&gt;
-</span></span><span class="line"><span class="cl">      &lt;/section&gt;
-</span></span><span class="line"><span class="cl">      &lt;section id=&#34;contact&#34;&gt;
-</span></span><span class="line"><span class="cl">        &lt;h2&gt;Contact&lt;/h2&gt;
-</span></span><span class="line"><span class="cl">        &lt;p&gt;For any questions or feedback, please email us at wu@liangdi.me.&lt;/p&gt;
-</span></span><span class="line"><span class="cl">      &lt;/section&gt;
-</span></span><span class="line"><span class="cl">    &lt;/main&gt;
-</span></span><span class="line"><span class="cl">  &lt;/body&gt;
-</span></span><span class="line"><span class="cl">&lt;/html&gt;
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="o">&lt;!</span><span class="n">DOCTYPE</span> <span class="n">html</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;</span><span class="n">html</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;</span><span class="n">head</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="n">meta</span> <span class="n">charset</span><span class="o">=</span><span class="s2">&#34;UTF-8&#34;</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="n">title</span><span class="o">&gt;</span><span class="n">Anynote</span> <span class="o">-</span> <span class="n">Your</span> <span class="n">Personal</span> <span class="n">Knowledge</span> <span class="n">Management</span> <span class="n">Tool</span><span class="o">&lt;/</span><span class="n">title</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;/</span><span class="n">head</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;</span><span class="n">body</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="n">header</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">Anynote</span> <span class="o">-</span> <span class="n">Your</span> <span class="n">Personal</span> <span class="n">Knowledge</span> <span class="n">Management</span> <span class="n">Tool</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;/</span><span class="n">header</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="n">nav</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="o">&lt;</span><span class="n">ul</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;#overview&#34;</span><span class="o">&gt;</span><span class="n">Overview</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;#features&#34;</span><span class="o">&gt;</span><span class="n">Features</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;#repositories&#34;</span><span class="o">&gt;</span><span class="n">Code</span> <span class="n">Repositories</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;#contact&#34;</span><span class="o">&gt;</span><span class="n">Contact</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="o">&lt;/</span><span class="n">ul</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;/</span><span class="n">nav</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="n">main</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="o">&lt;</span><span class="n">section</span> <span class="n">id</span><span class="o">=</span><span class="s2">&#34;overview&#34;</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">&lt;</span><span class="n">h2</span><span class="o">&gt;</span><span class="n">Overview</span><span class="o">&lt;/</span><span class="n">h2</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">Anynote</span> <span class="n">is</span> <span class="n">a</span> <span class="n">personal</span> <span class="n">knowledge</span> <span class="n">management</span> <span class="k">tool</span> <span class="n">that</span> <span class="n">helps</span> <span class="n">you</span> <span class="n">organize</span> <span class="ow">and</span> <span class="n">manage</span> <span class="n">all</span> <span class="n">your</span> <span class="n">notes</span><span class="p">,</span> <span class="n">ideas</span><span class="p">,</span> <span class="ow">and</span> <span class="n">thoughts</span> <span class="ow">in</span> <span class="n">one</span> <span class="n">place</span><span class="o">.</span> <span class="n">It</span> <span class="n">is</span> <span class="n">designed</span> <span class="n">to</span> <span class="n">be</span> <span class="n">simple</span><span class="p">,</span> <span class="n">flexible</span><span class="p">,</span> <span class="ow">and</span> <span class="n">user</span><span class="o">-</span><span class="n">friendly</span><span class="p">,</span> <span class="n">allowing</span> <span class="n">you</span> <span class="n">to</span> <span class="n">easily</span> <span class="n">create</span><span class="p">,</span> <span class="n">edit</span><span class="p">,</span> <span class="ow">and</span> <span class="n">find</span> <span class="n">your</span> <span class="n">notes</span> <span class="n">whenever</span> <span class="n">you</span> <span class="n">need</span> <span class="n">them</span><span class="o">.</span> <span class="n">With</span> <span class="n">Anynote</span><span class="p">,</span> <span class="n">you</span> <span class="n">can</span> <span class="n">take</span> <span class="n">control</span> <span class="n">of</span> <span class="n">your</span> <span class="n">knowledge</span> <span class="ow">and</span> <span class="n">keep</span> <span class="n">track</span> <span class="n">of</span> <span class="n">your</span> <span class="n">learning</span> <span class="n">progress</span><span class="o">.&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="o">&lt;/</span><span class="n">section</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="o">&lt;</span><span class="n">section</span> <span class="n">id</span><span class="o">=</span><span class="s2">&#34;features&#34;</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">&lt;</span><span class="n">h2</span><span class="o">&gt;</span><span class="n">Features</span><span class="o">&lt;/</span><span class="n">h2</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">&lt;</span><span class="n">ul</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;</span><span class="n">Create</span> <span class="ow">and</span> <span class="n">manage</span> <span class="n">notes</span> <span class="n">with</span> <span class="nb">ease</span><span class="o">&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;</span><span class="n">Organize</span> <span class="n">notes</span> <span class="n">with</span> <span class="n">tags</span> <span class="ow">and</span> <span class="n">categories</span><span class="o">&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;</span><span class="n">Find</span> <span class="n">your</span> <span class="n">notes</span> <span class="n">quickly</span> <span class="n">with</span> <span class="n">the</span> <span class="n">built</span><span class="o">-</span><span class="ow">in</span> <span class="n">search</span> <span class="n">function</span><span class="o">&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;</span><span class="n">Synchronize</span> <span class="n">your</span> <span class="n">notes</span> <span class="n">across</span> <span class="n">all</span> <span class="n">your</span> <span class="n">devices</span><span class="o">&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;</span><span class="n">Access</span> <span class="n">your</span> <span class="n">notes</span> <span class="n">offline</span> <span class="ow">and</span> <span class="n">online</span><span class="o">&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">&lt;/</span><span class="n">ul</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="o">&lt;/</span><span class="n">section</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="o">&lt;</span><span class="n">section</span> <span class="n">id</span><span class="o">=</span><span class="s2">&#34;repositories&#34;</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">&lt;</span><span class="n">h2</span><span class="o">&gt;</span><span class="n">Code</span> <span class="n">Repositories</span><span class="o">&lt;/</span><span class="n">h2</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">&lt;</span><span class="n">ul</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;https://github.com/anynote-org/anynote-frontend&#34;</span><span class="o">&gt;</span><span class="n">anynote</span><span class="o">-</span><span class="n">frontend</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">Frontend</span> <span class="n">code</span> <span class="ow">in</span> <span class="n">React</span><span class="p">)</span><span class="o">&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;https://github.com/anynote-org/anynote-backend&#34;</span><span class="o">&gt;</span><span class="n">anynote</span><span class="o">-</span><span class="n">backend</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">Backend</span> <span class="n">code</span> <span class="ow">in</span> <span class="n">Java</span><span class="p">)</span><span class="o">&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">&lt;/</span><span class="n">ul</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="o">&lt;/</span><span class="n">section</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="o">&lt;</span><span class="n">section</span> <span class="n">id</span><span class="o">=</span><span class="s2">&#34;contact&#34;</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">&lt;</span><span class="n">h2</span><span class="o">&gt;</span><span class="n">Contact</span><span class="o">&lt;/</span><span class="n">h2</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">For</span> <span class="n">any</span> <span class="n">questions</span> <span class="ow">or</span> <span class="n">feedback</span><span class="p">,</span> <span class="n">please</span> <span class="n">email</span> <span class="n">us</span> <span class="n">at</span> <span class="n">wu</span><span class="err">@</span><span class="n">liangdi</span><span class="o">.</span><span class="n">me</span><span class="o">.&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="o">&lt;/</span><span class="n">section</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;/</span><span class="n">main</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;/</span><span class="n">body</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;/</span><span class="n">html</span><span class="o">&gt;</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="liangdi-38">Liangdi:</h3>
@@ -1070,57 +1077,57 @@ ChatGPT: 选择开源许可证取决于您的具体需求和愿景。常用的�
 </span><span class="lnt">51
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;!DOCTYPE html&gt;
-</span></span><span class="line"><span class="cl">&lt;html&gt;
-</span></span><span class="line"><span class="cl">&lt;head&gt;
-</span></span><span class="line"><span class="cl">  &lt;meta charset=&#34;UTF-8&#34;&gt;
-</span></span><span class="line"><span class="cl">  &lt;title&gt;AnyNote&lt;/title&gt;
-</span></span><span class="line"><span class="cl">  &lt;style&gt;
-</span></span><span class="line"><span class="cl">    .header {
-</span></span><span class="line"><span class="cl">      text-align: center;
-</span></span><span class="line"><span class="cl">      font-size: 24px;
-</span></span><span class="line"><span class="cl">      margin-bottom: 20px;
-</span></span><span class="line"><span class="cl">    }
-</span></span><span class="line"><span class="cl">    .language-switch {
-</span></span><span class="line"><span class="cl">      text-align: right;
-</span></span><span class="line"><span class="cl">      margin-right: 20px;
-</span></span><span class="line"><span class="cl">    }
-</span></span><span class="line"><span class="cl">    .language-switch a {
-</span></span><span class="line"><span class="cl">      margin-left: 10px;
-</span></span><span class="line"><span class="cl">      cursor: pointer;
-</span></span><span class="line"><span class="cl">    }
-</span></span><span class="line"><span class="cl">    .intro {
-</span></span><span class="line"><span class="cl">      text-align: center;
-</span></span><span class="line"><span class="cl">    }
-</span></span><span class="line"><span class="cl">    .repository {
-</span></span><span class="line"><span class="cl">      text-align: center;
-</span></span><span class="line"><span class="cl">      margin-top: 20px;
-</span></span><span class="line"><span class="cl">    }
-</span></span><span class="line"><span class="cl">    .repository a {
-</span></span><span class="line"><span class="cl">      margin-right: 10px;
-</span></span><span class="line"><span class="cl">    }
-</span></span><span class="line"><span class="cl">  &lt;/style&gt;
-</span></span><span class="line"><span class="cl">&lt;/head&gt;
-</span></span><span class="line"><span class="cl">&lt;body&gt;
-</span></span><span class="line"><span class="cl">  &lt;div class=&#34;header&#34;&gt;
-</span></span><span class="line"><span class="cl">    &lt;h1 id=&#34;title&#34;&gt;AnyNote&lt;/h1&gt;
-</span></span><span class="line"><span class="cl">  &lt;/div&gt;
-</span></span><span class="line"><span class="cl">  &lt;div class=&#34;language-switch&#34;&gt;
-</span></span><span class="line"><span class="cl">    &lt;a id=&#34;switch-zh&#34;&gt;中文&lt;/a&gt;
-</span></span><span class="line"><span class="cl">    &lt;a id=&#34;switch-en&#34;&gt;English&lt;/a&gt;
-</span></span><span class="line"><span class="cl">  &lt;/div&gt;
-</span></span><span class="line"><span class="cl">  &lt;div class=&#34;intro&#34;&gt;
-</span></span><span class="line"><span class="cl">    &lt;p id=&#34;intro-zh&#34;&gt;AnyNote 是一款强大的笔记软件，它支持多种笔记形式，可以帮助你记录生活中的点点滴滴。它的特性包括：支持 Markdown 语法，提供丰富的笔记模板，支持图片、音频、视频附件，支持标签分类等。&lt;/p&gt;
-</span></span><span class="line"><span class="cl">    &lt;p id=&#34;intro-en&#34;&gt;AnyNote is a powerful note-taking software that supports multiple note forms and helps you record the details of your life. Its features include: support for Markdown syntax, rich note templates, support for image, audio, video attachments, support for label classification, etc.&lt;/p&gt;
-</span></span><span class="line"><span class="cl">  &lt;/div&gt;
-</span></span><span class="line"><span class="cl">  &lt;div class=&#34;repository&#34;&gt;
-</span></span><span class="line"><span class="cl">    &lt;p&gt;AnyNote Github Repository:&lt;/p&gt;
-</span></span><span class="line"><span class="cl">    &lt;a href=&#34;https://github.com/anynote-org/anynote-web&#34;&gt;AnyNote Web&lt;/a&gt;
-</span></span><span class="line"><span class="cl">    &lt;a href=&#34;https://github.com/anynote-org/anynote-server&#34;&gt;AnyNote Server&lt;/a&gt;
-</span></span><span class="line"><span class="cl">  &lt;/div&gt;
-</span></span><span class="line"><span class="cl">  &lt;script&gt;
-</span></span><span class="line"><span class="cl">    const introZh = document.getElementById(&#34;intro-zh&#34;);
-</span></span><span class="line"><span class="cl">    const introEn = document.getElementById(&#34;intro-en&#34;);
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="o">&lt;!</span><span class="n">DOCTYPE</span> <span class="n">html</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;</span><span class="n">html</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;</span><span class="n">head</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;</span><span class="n">meta</span> <span class="n">charset</span><span class="o">=</span><span class="s2">&#34;UTF-8&#34;</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;</span><span class="n">title</span><span class="o">&gt;</span><span class="n">AnyNote</span><span class="o">&lt;/</span><span class="n">title</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;</span><span class="n">style</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="n">header</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">text</span><span class="o">-</span><span class="n">align</span><span class="p">:</span> <span class="n">center</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="n">font</span><span class="o">-</span><span class="n">size</span><span class="p">:</span> <span class="mi">24</span><span class="n">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="n">margin</span><span class="o">-</span><span class="n">bottom</span><span class="p">:</span> <span class="mi">20</span><span class="n">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="n">language</span><span class="o">-</span><span class="k">switch</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">text</span><span class="o">-</span><span class="n">align</span><span class="p">:</span> <span class="n">right</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="n">margin</span><span class="o">-</span><span class="n">right</span><span class="p">:</span> <span class="mi">20</span><span class="n">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="n">language</span><span class="o">-</span><span class="k">switch</span> <span class="n">a</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">margin</span><span class="o">-</span><span class="n">left</span><span class="p">:</span> <span class="mi">10</span><span class="n">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="n">cursor</span><span class="p">:</span> <span class="n">pointer</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="n">intro</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">text</span><span class="o">-</span><span class="n">align</span><span class="p">:</span> <span class="n">center</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="n">repository</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">text</span><span class="o">-</span><span class="n">align</span><span class="p">:</span> <span class="n">center</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="n">margin</span><span class="o">-</span><span class="n">top</span><span class="p">:</span> <span class="mi">20</span><span class="n">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="n">repository</span> <span class="n">a</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">margin</span><span class="o">-</span><span class="n">right</span><span class="p">:</span> <span class="mi">10</span><span class="n">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;/</span><span class="n">style</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;/</span><span class="n">head</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;</span><span class="n">body</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;</span><span class="n">div</span> <span class="k">class</span><span class="o">=</span><span class="s2">&#34;header&#34;</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="n">h1</span> <span class="n">id</span><span class="o">=</span><span class="s2">&#34;title&#34;</span><span class="o">&gt;</span><span class="n">AnyNote</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;</span><span class="n">div</span> <span class="k">class</span><span class="o">=</span><span class="s2">&#34;language-switch&#34;</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="n">a</span> <span class="n">id</span><span class="o">=</span><span class="s2">&#34;switch-zh&#34;</span><span class="o">&gt;</span><span class="err">中文</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="n">a</span> <span class="n">id</span><span class="o">=</span><span class="s2">&#34;switch-en&#34;</span><span class="o">&gt;</span><span class="n">English</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;</span><span class="n">div</span> <span class="k">class</span><span class="o">=</span><span class="s2">&#34;intro&#34;</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="n">p</span> <span class="n">id</span><span class="o">=</span><span class="s2">&#34;intro-zh&#34;</span><span class="o">&gt;</span><span class="n">AnyNote</span> <span class="err">是一款强大的笔记软件，它支持多种笔记形式，可以帮助你记录生活中的点点滴滴。它的特性包括：支持</span> <span class="n">Markdown</span> <span class="err">语法，提供丰富的笔记模板，支持图片、音频、视频附件，支持标签分类等。</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="n">p</span> <span class="n">id</span><span class="o">=</span><span class="s2">&#34;intro-en&#34;</span><span class="o">&gt;</span><span class="n">AnyNote</span> <span class="n">is</span> <span class="n">a</span> <span class="n">powerful</span> <span class="n">note</span><span class="o">-</span><span class="n">taking</span> <span class="n">software</span> <span class="n">that</span> <span class="n">supports</span> <span class="n">multiple</span> <span class="n">note</span> <span class="n">forms</span> <span class="ow">and</span> <span class="n">helps</span> <span class="n">you</span> <span class="n">record</span> <span class="n">the</span> <span class="n">details</span> <span class="n">of</span> <span class="n">your</span> <span class="n">life</span><span class="o">.</span> <span class="n">Its</span> <span class="n">features</span> <span class="n">include</span><span class="p">:</span> <span class="n">support</span> <span class="k">for</span> <span class="n">Markdown</span> <span class="n">syntax</span><span class="p">,</span> <span class="n">rich</span> <span class="n">note</span> <span class="n">templates</span><span class="p">,</span> <span class="n">support</span> <span class="k">for</span> <span class="n">image</span><span class="p">,</span> <span class="n">audio</span><span class="p">,</span> <span class="n">video</span> <span class="n">attachments</span><span class="p">,</span> <span class="n">support</span> <span class="k">for</span> <span class="n">label</span> <span class="n">classification</span><span class="p">,</span> <span class="n">etc</span><span class="o">.&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;</span><span class="n">div</span> <span class="k">class</span><span class="o">=</span><span class="s2">&#34;repository&#34;</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">AnyNote</span> <span class="n">Github</span> <span class="n">Repository</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;https://github.com/anynote-org/anynote-web&#34;</span><span class="o">&gt;</span><span class="n">AnyNote</span> <span class="n">Web</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;https://github.com/anynote-org/anynote-server&#34;</span><span class="o">&gt;</span><span class="n">AnyNote</span> <span class="n">Server</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;</span><span class="n">script</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="n">introZh</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">getElementById</span><span class="p">(</span><span class="s2">&#34;intro-zh&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="n">introEn</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">getElementById</span><span class="p">(</span><span class="s2">&#34;intro-en&#34;</span><span class="p">);</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="liangdi-40">Liangdi:</h3>
@@ -1130,299 +1137,114 @@ ChatGPT: 选择开源许可证取决于您的具体需求和愿景。常用的�
 <h2 id="第一次总结">第一次总结</h2>
 <p>不得不说 ChatGPT 可以作为很好的聊天伴侣，作为生产力码农，还需要进一步调教！！！</p>
 
-</section>
+
+      
+    </article>
+  </div>
+
+  
+</div>
 
 
-    <footer class="article-footer">
-    
-    <section class="article-tags">
-        
-            <a href="/tags/ai/">ai</a>
-        
-            <a href="/tags/chatgpt/">chatgpt</a>
-        
-            <a href="/tags/ai-%E7%A0%81%E5%86%9C/">ai 码农</a>
-        
-    </section>
+            
+            <footer class="flex justify-between items-center gap-2 px-4 py-12">
+            
+              <div>
+  
+  <p>© 2024 Liangdi&#39;s Blog</p>
+  
 
+  
+  <p class="text-sm">
+    🌱
+    <span class="text-base-content/60">
+      Powered by <a class="hover:underline" href="https://gohugo.io/" target="_blank">Hugo</a> with theme
+      <a class="hover:underline" href="https://github.com/g1eny0ung/hugo-theme-dream" target="_blank">Dream</a>.</span
+    >
+  </p>
+  
+</div>
 
-    
-    <section class="article-copyright">
-        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="12" r="9" />
-  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
-</svg>
+              <div
+  x-data="{ icons: [
+    { name: 'moon', status: 'y' },
+    { name: 'sunny', status: 'n' },
+    { name: 'desktop', status: 'auto' }
+  ] }"
+  class="flex items-center h-[32px] px-2 gap-2 border border-base-content/30 rounded-full"
+>
+  <template x-for="icon in icons">
+    <div
+      role="button"
+      tabindex="0"
+      :aria-label="'Select ' + icon.name + ' mode'"
+      class="group inline-flex justify-center items-center p-1 rounded-full cursor-pointer hover:bg-primary"
+      :class="$store.darkMode.icon() === icon.name && 'bg-primary'"
+      @click="$store.darkMode.toggle(icon.status)"
+    >
+      <ion-icon
+        :name="`${icon.name}-outline`"
+        class="group-hover:text-primary-content"
+        :class="$store.darkMode.icon() === icon.name && 'text-primary-content'"
+      >
+      </ion-icon>
+    </div>
+  </template>
+</div>
 
-
-
-        <span>Licensed under CC BY-NC-SA 4.0</span>
-    </section>
-    </footer>
-
-
-    
-</article>
-
-    
-
-    
-
-     
-    
-        
-    
-
-    <footer class="site-footer">
-    <section class="copyright">
-        &copy; 
-        
-            2022 - 
-        
-        2023 Liangdi&#39;s Blog
-    </section>
-    
-    <section class="powerby">
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.11.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
-    </section>
-</footer>
-<script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?f334264cb8da1148de7654289682087c";
-      var s = document.getElementsByTagName("script")[0]; 
-      s.parentNode.insertBefore(hm, s);
-    })();
-    </script>
-    
-
-    
-<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
-
-    
-    <div class="pswp__bg"></div>
-
-    
-    <div class="pswp__scroll-wrap">
-
-        
-        <div class="pswp__container">
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
+            </footer>
+          </div>
         </div>
+        <div class="back">
+          <div class="container">
+            
+            <div class="dream-grid">
+  
 
-        
-        <div class="pswp__ui pswp__ui--hidden">
+  
 
-            <div class="pswp__top-bar">
+  
+</div>
 
-                
-
-                <div class="pswp__counter"></div>
-
-                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-
-                <button class="pswp__button pswp__button--share" title="Share"></button>
-
-                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-
-                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
-
-                
-                
-                <div class="pswp__preloader">
-                    <div class="pswp__preloader__icn">
-                        <div class="pswp__preloader__cut">
-                            <div class="pswp__preloader__donut"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-                <div class="pswp__share-tooltip"></div>
-            </div>
-
-            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
-            </button>
-
-            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
-            </button>
-
-            <div class="pswp__caption">
-                <div class="pswp__caption__center"></div>
-            </div>
-
+            
+          </div>
         </div>
-
+      </div>
     </div>
 
-</div><script 
-                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
-                defer
-                >
-            </script><script 
-                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
-                defer
-                >
-            </script><link 
-                rel="stylesheet" 
-                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
-            ><link 
-                rel="stylesheet" 
-                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
-            >
-
-            </main>
-    <aside class="sidebar right-sidebar sticky">
-        
-            
-                
-    <section class="widget archives">
-        <div class="widget-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <line x1="5" y1="9" x2="19" y2="9" />
-  <line x1="5" y1="15" x2="19" y2="15" />
-  <line x1="11" y1="4" x2="7" y2="20" />
-  <line x1="17" y1="4" x2="13" y2="20" />
-</svg>
-
-
-
-        </div>
-        <h2 class="widget-title section-title">目录</h2>
-        
-        <div class="widget--toc">
-            <nav id="TableOfContents">
-  <ol>
-    <li><a href="#引言">引言</a></li>
-    <li><a href="#第一次对话">第一次对话</a>
-      <ol>
-        <li><a href="#liangdi">Liangdi:</a></li>
-        <li><a href="#chatgpt">ChatGPT:</a></li>
-        <li><a href="#liangdi-1">Liangdi:</a></li>
-        <li><a href="#chatgpt-1">ChatGPT:</a></li>
-        <li><a href="#liangdi-2">Liangdi:</a></li>
-        <li><a href="#chatgpt-2">ChatGPT:</a></li>
-        <li><a href="#liangdi-3">Liangdi:</a></li>
-        <li><a href="#chatgpt-3">ChatGPT:</a></li>
-        <li><a href="#liangdi-4">Liangdi:</a></li>
-        <li><a href="#chatgpt-4">ChatGPT:</a></li>
-        <li><a href="#liangdi-5">Liangdi:</a></li>
-        <li><a href="#chatgpt-5">ChatGPT:</a></li>
-        <li><a href="#liangdi-6">Liangdi:</a></li>
-        <li><a href="#chatgpt-6">ChatGPT:</a></li>
-        <li><a href="#liangdi-7">Liangdi:</a></li>
-        <li><a href="#chatgpt-7">ChatGPT:</a></li>
-        <li><a href="#liangdi-8">Liangdi:</a></li>
-        <li><a href="#chatgpt-8">ChatGPT:</a></li>
-        <li><a href="#liangdi-9">Liangdi:</a></li>
-        <li><a href="#chatgpt-9">ChatGPT:</a></li>
-        <li><a href="#liangdi-10">Liangdi:</a></li>
-        <li><a href="#chatgpt-10">ChatGPT:</a></li>
-        <li><a href="#liangdi-11">Liangdi:</a></li>
-        <li><a href="#chatgpt-11">ChatGPT:</a></li>
-        <li><a href="#liangdi-12">Liangdi:</a></li>
-        <li><a href="#chatgpt-12">ChatGPT:</a></li>
-        <li><a href="#liangdi-13">Liangdi:</a></li>
-        <li><a href="#chatgpt-13">ChatGPT:</a></li>
-        <li><a href="#liangdi-14">Liangdi:</a></li>
-        <li><a href="#chatgpt-14">ChatGPT:</a></li>
-        <li><a href="#liangdi-15">Liangdi:</a></li>
-        <li><a href="#chatgpt-15">ChatGPT:</a></li>
-        <li><a href="#liangdi-16">Liangdi:</a></li>
-        <li><a href="#chatgpt-16">ChatGPT:</a></li>
-        <li><a href="#liangdi-17">Liangdi:</a></li>
-        <li><a href="#chatgpt-17">ChatGPT:</a></li>
-        <li><a href="#liangdi-18">Liangdi:</a></li>
-        <li><a href="#chatgpt-18">ChatGPT:</a></li>
-        <li><a href="#liangdi-19">Liangdi:</a></li>
-        <li><a href="#chatgpt-19">ChatGPT:</a></li>
-        <li><a href="#liangdi-20">Liangdi:</a></li>
-        <li><a href="#chatgpt-20">ChatGPT:</a></li>
-        <li><a href="#liangdi-21">Liangdi:</a></li>
-        <li><a href="#chatgpt-21">ChatGPT:</a></li>
-        <li><a href="#liangdi-22">Liangdi:</a></li>
-        <li><a href="#chatgpt-22">ChatGPT:</a></li>
-        <li><a href="#liangdi-23">Liangdi:</a></li>
-        <li><a href="#chatgpt-23">ChatGPT:</a></li>
-        <li><a href="#liangdi-24">Liangdi:</a></li>
-        <li><a href="#chatgpt-24">ChatGPT:</a></li>
-        <li><a href="#liangdi-25">Liangdi:</a></li>
-        <li><a href="#chatgpt-25">ChatGPT:</a></li>
-        <li><a href="#liangdi-26">Liangdi:</a></li>
-        <li><a href="#chatgpt-26">ChatGPT:</a></li>
-        <li><a href="#liangdi-27">Liangdi:</a></li>
-        <li><a href="#chatgpt-27">ChatGPT:</a></li>
-        <li><a href="#liangdi-28">Liangdi:</a></li>
-        <li><a href="#chatgpt-28">ChatGPT:</a></li>
-        <li><a href="#liangdi-29">Liangdi:</a></li>
-        <li><a href="#chatgpt-29">ChatGPT:</a></li>
-      </ol>
-    </li>
-  </ol>
-
-  <ol>
-    <li><a href="#如何贡献">如何贡献</a></li>
-    <li><a href="#许可证">许可证</a></li>
-    <li><a href="#联系我们">联系我们</a>
-      <ol>
-        <li><a href="#liangdi-30">Liangdi:</a></li>
-        <li><a href="#chatgpt-30">ChatGPT:</a></li>
-        <li><a href="#liangdi-31">Liangdi:</a></li>
-        <li><a href="#chatgpt-31">ChatGPT:</a></li>
-        <li><a href="#liangdi-32">Liangdi:</a></li>
-        <li><a href="#chatgpt-32">ChatGPT:</a></li>
-        <li><a href="#liangdi-33">Liangdi:</a></li>
-        <li><a href="#chatgpt-33">ChatGPT:</a></li>
-        <li><a href="#liangdi-34">Liangdi:</a></li>
-        <li><a href="#chatgpt-34">ChatGPT:</a></li>
-        <li><a href="#liangdi-35">Liangdi:</a></li>
-        <li><a href="#chatgpt-35">ChatGPT:</a></li>
-        <li><a href="#liangdi-36">Liangdi:</a></li>
-        <li><a href="#chatgpt-36">ChatGPT:</a></li>
-        <li><a href="#liangdi-37">Liangdi:</a></li>
-        <li><a href="#chatgpt-37">ChatGPT:</a></li>
-        <li><a href="#liangdi-38">Liangdi:</a></li>
-        <li><a href="#chatgpt-38">ChatGPT:</a></li>
-        <li><a href="#liangdi-39">Liangdi:</a></li>
-        <li><a href="#chatgpt-39">ChatGPT:</a></li>
-        <li><a href="#liangdi-40">Liangdi:</a></li>
-        <li><a href="#chatgpt-40">ChatGPT:</a></li>
-      </ol>
-    </li>
-    <li><a href="#第一次总结">第一次总结</a></li>
-  </ol>
-</nav>
-        </div>
-    </section>
-
-            
-        
-    </aside>
-
-
-        </div>
-        <script 
-                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
-                
-                >
-            </script><script type="text/javascript" src="/ts/main.js" defer></script>
-<script>
-    (function () {
-        const customFont = document.createElement('link');
-        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
-
-        customFont.type = "text/css";
-        customFont.rel = "stylesheet";
-
-        document.head.appendChild(customFont);
-    }());
+    <script>
+  window.lightTheme =  null 
+  window.darkTheme =  null 
 </script>
 
-    </body>
+
+  <script src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script>
+
+  
+  
+  <script src="/js/grid.js"></script>
+
+
+
+
+<script src="/js/main.js"></script>
+
+    
+
+
+
+
+
+
+
+    
+
+    
+
+    
+
+    <script type="module" src="https://unpkg.com/ionicons@7.4.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.4.0/dist/ionicons/ionicons.js"></script>
+  </body>
 </html>

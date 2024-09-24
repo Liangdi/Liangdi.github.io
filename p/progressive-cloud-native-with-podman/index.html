@@ -1,11 +1,37 @@
 <!DOCTYPE html>
-<html lang="en-us" dir="ltr">
-    <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='何为云原生  云原生一词可谓是大红大紫, 老板见面不说一下都觉得落伍了,技术人员更是要与时俱进,学习这一系列的新技术
- 先看看 CNCF 对云原生的最新定义,注意云原生的定义一直是演进的,随着新技术,新架构的发展,定义也会变化.
- 云原生技术有利于各组织在公有云、私有云和混合云等新型动态环境中，构建和运行可弹性扩展的应用。云原生的代表技术包括容器、服务网格、微服务、不可变基础设施和声明式API。
-  这些技术能够构建容错性好、易于管理和便于观察的松耦合系统。结合可靠的自动化手段，云原生技术使工程师能够轻松地对系统作出频繁和可预测的重大变更。
- 以上这两段话来自 CNCF 的云原生定义.
+<html lang="zh"
+  x-data
+  :class="$store.darkMode.class()"
+  :data-theme="$store.darkMode.theme()">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>渐进式云原生实践: 使用 podman 容器化你的应用 | Liangdi&#39;s Blog</title>
+
+    
+<link href="/" rel="icon" type="image/x-icon" />
+
+
+<link rel="canonical" href="http://localhost:1313/p/progressive-cloud-native-with-podman/" />
+
+
+
+<meta name="author" content="" />
+<meta name="description" content="" />
+
+
+
+<meta name="generator" content="Hugo 0.134.3">
+
+
+<meta property="og:url" content="http://localhost:1313/p/progressive-cloud-native-with-podman/">
+  <meta property="og:site_name" content="Liangdi&#39;s Blog">
+  <meta property="og:title" content="渐进式云原生实践: 使用 podman 容器化你的应用">
+  <meta property="og:description" content="何为云原生 云原生一词可谓是大红大紫, 老板见面不说一下都觉得落伍了,技术人员更是要与时俱进,学习这一系列的新技术
+先看看 CNCF 对云原生的最新定义,注意云原生的定义一直是演进的,随着新技术,新架构的发展,定义也会变化.
+云原生技术有利于各组织在公有云、私有云和混合云等新型动态环境中，构建和运行可弹性扩展的应用。云原生的代表技术包括容器、服务网格、微服务、不可变基础设施和声明式API。
+这些技术能够构建容错性好、易于管理和便于观察的松耦合系统。结合可靠的自动化手段，云原生技术使工程师能够轻松地对系统作出频繁和可预测的重大变更。
+以上这两段话来自 CNCF 的云原生定义.
 简单的说就是用各种技术实现了大多数人梦寐以求的理想系统方案!
 但是,如果一个传统技术栈的团队,要向云原生迁移,代价会是多大呢? 这是个值得思考的问题.
 CNCF 有两个子站点 https://glossary.cncf.io/ 和 https://landscape.cncf.io/
@@ -15,16 +41,27 @@ CNCF 有两个子站点 https://glossary.cncf.io/ 和 https://landscape.cncf.io/
 所以这系列应该不会出现一来就叫你部署一套 k8s 集群, 可能到最后也不会,而是取决于你自己的选择.
 这一系列就是一次渐进式云原生的实践,废话一大推,我们进入正题
 使用 podman 容器化你的应用 第一篇是使用 podman 容器化你的应用 , 我认为容器化是迈向云原生过程中最简单的部分, 技术也成熟,风险不大. 这里为什么选择 podman ,详谈的话,需要再开一篇文章.
-实践目标 将一个传统的项目 CentOS -&amp;gt; Nginx -&amp;gt; (Spring Boot, MySQL, Redis) 容器化'><title>渐进式云原生实践: 使用 podman 容器化你的应用</title>
+实践目标 将一个传统的项目 CentOS -&gt; Nginx -&gt; (Spring Boot, MySQL, Redis) 容器化
+原项目是一个不算复杂的 Spring Boot 应用, 由于 Java 没法热更新, 所以使用 Nginx 反向代理了两套 Spring Boot 应用(两套应用可以同时运行也可以只运行一套), 关键时刻可实现用户无感知更新.">
+  <meta property="og:locale" content="zh">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2022-04-23T16:59:14+08:00">
+    <meta property="article:modified_time" content="2022-04-23T16:59:14+08:00">
+    <meta property="article:tag" content="Podman">
+    <meta property="article:tag" content="云原生">
+    <meta property="article:tag" content="容器技术">
 
-<link rel='canonical' href='https://liangdi.me/p/progressive-cloud-native-with-podman/'>
 
-<link rel="stylesheet" href="/scss/style.min.070a1f1fa7cad6c7ccb4af4d49452541cddf145911de65e6dbd542983c495cd1.css"><meta property='og:title' content='渐进式云原生实践: 使用 podman 容器化你的应用'>
-<meta property='og:description' content='何为云原生  云原生一词可谓是大红大紫, 老板见面不说一下都觉得落伍了,技术人员更是要与时俱进,学习这一系列的新技术
- 先看看 CNCF 对云原生的最新定义,注意云原生的定义一直是演进的,随着新技术,新架构的发展,定义也会变化.
- 云原生技术有利于各组织在公有云、私有云和混合云等新型动态环境中，构建和运行可弹性扩展的应用。云原生的代表技术包括容器、服务网格、微服务、不可变基础设施和声明式API。
-  这些技术能够构建容错性好、易于管理和便于观察的松耦合系统。结合可靠的自动化手段，云原生技术使工程师能够轻松地对系统作出频繁和可预测的重大变更。
- 以上这两段话来自 CNCF 的云原生定义.
+
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="渐进式云原生实践: 使用 podman 容器化你的应用">
+  <meta name="twitter:description" content="何为云原生 云原生一词可谓是大红大紫, 老板见面不说一下都觉得落伍了,技术人员更是要与时俱进,学习这一系列的新技术
+先看看 CNCF 对云原生的最新定义,注意云原生的定义一直是演进的,随着新技术,新架构的发展,定义也会变化.
+云原生技术有利于各组织在公有云、私有云和混合云等新型动态环境中，构建和运行可弹性扩展的应用。云原生的代表技术包括容器、服务网格、微服务、不可变基础设施和声明式API。
+这些技术能够构建容错性好、易于管理和便于观察的松耦合系统。结合可靠的自动化手段，云原生技术使工程师能够轻松地对系统作出频繁和可预测的重大变更。
+以上这两段话来自 CNCF 的云原生定义.
 简单的说就是用各种技术实现了大多数人梦寐以求的理想系统方案!
 但是,如果一个传统技术栈的团队,要向云原生迁移,代价会是多大呢? 这是个值得思考的问题.
 CNCF 有两个子站点 https://glossary.cncf.io/ 和 https://landscape.cncf.io/
@@ -34,293 +71,299 @@ CNCF 有两个子站点 https://glossary.cncf.io/ 和 https://landscape.cncf.io/
 所以这系列应该不会出现一来就叫你部署一套 k8s 集群, 可能到最后也不会,而是取决于你自己的选择.
 这一系列就是一次渐进式云原生的实践,废话一大推,我们进入正题
 使用 podman 容器化你的应用 第一篇是使用 podman 容器化你的应用 , 我认为容器化是迈向云原生过程中最简单的部分, 技术也成熟,风险不大. 这里为什么选择 podman ,详谈的话,需要再开一篇文章.
-实践目标 将一个传统的项目 CentOS -&amp;gt; Nginx -&amp;gt; (Spring Boot, MySQL, Redis) 容器化'>
-<meta property='og:url' content='https://liangdi.me/p/progressive-cloud-native-with-podman/'>
-<meta property='og:site_name' content='Liangdi&#39;s Blog'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='podman' /><meta property='article:tag' content='云原生' /><meta property='article:tag' content='容器技术' /><meta property='article:published_time' content='2022-04-23T16:59:14&#43;08:00'/><meta property='article:modified_time' content='2022-04-23T16:59:14&#43;08:00'/>
-<meta name="twitter:title" content="渐进式云原生实践: 使用 podman 容器化你的应用">
-<meta name="twitter:description" content="何为云原生  云原生一词可谓是大红大紫, 老板见面不说一下都觉得落伍了,技术人员更是要与时俱进,学习这一系列的新技术
- 先看看 CNCF 对云原生的最新定义,注意云原生的定义一直是演进的,随着新技术,新架构的发展,定义也会变化.
- 云原生技术有利于各组织在公有云、私有云和混合云等新型动态环境中，构建和运行可弹性扩展的应用。云原生的代表技术包括容器、服务网格、微服务、不可变基础设施和声明式API。
-  这些技术能够构建容错性好、易于管理和便于观察的松耦合系统。结合可靠的自动化手段，云原生技术使工程师能够轻松地对系统作出频繁和可预测的重大变更。
- 以上这两段话来自 CNCF 的云原生定义.
-简单的说就是用各种技术实现了大多数人梦寐以求的理想系统方案!
-但是,如果一个传统技术栈的团队,要向云原生迁移,代价会是多大呢? 这是个值得思考的问题.
-CNCF 有两个子站点 https://glossary.cncf.io/ 和 https://landscape.cncf.io/
-这两个站点可以大致了解云原生涉及到新概念以及生态图谱, 如此多的概念和繁杂的生态,对于传统技术团队来说将会带来额外的心智负担以及新的挑战.
-渐进式云原生 因此针对我们小团队以及小部门,我提出了渐进式云原生 和 轻量化云原生 的概念,以便云原生落地.
-渐进式云原生 是指自下往上,分阶段完成云原生迁移和落地. 这里大概会包含 容器化, 微服务化 , DevOps ,CI/DI 等方面向云端迁移, 而且不强调顺序, 实际的顺序大多数根团队的技术栈相关.
-所以这系列应该不会出现一来就叫你部署一套 k8s 集群, 可能到最后也不会,而是取决于你自己的选择.
-这一系列就是一次渐进式云原生的实践,废话一大推,我们进入正题
-使用 podman 容器化你的应用 第一篇是使用 podman 容器化你的应用 , 我认为容器化是迈向云原生过程中最简单的部分, 技术也成熟,风险不大. 这里为什么选择 podman ,详谈的话,需要再开一篇文章.
-实践目标 将一个传统的项目 CentOS -&amp;gt; Nginx -&amp;gt; (Spring Boot, MySQL, Redis) 容器化">
-    </head>
-    <body class="
-    article-page
-    ">
-    <script>
-        (function() {
-            const colorSchemeKey = 'StackColorScheme';
-            if(!localStorage.getItem(colorSchemeKey)){
-                localStorage.setItem(colorSchemeKey, "auto");
-            }
-        })();
-    </script><script>
-    (function() {
-        const colorSchemeKey = 'StackColorScheme';
-        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
-        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
-
-        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
-            
-
-            document.documentElement.dataset.scheme = 'dark';
-        } else {
-            document.documentElement.dataset.scheme = 'light';
-        }
-    })();
-</script>
-<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
-    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
-        <span class="hamburger-box">
-            <span class="hamburger-inner"></span>
-        </span>
-    </button>
-
-    <header>
-        
-            
-            <figure class="site-avatar">
-                <a href="/">
-                
-                    
-                    
-                    
-                        
-                        <img src="/img/avatar_hu28bd9f10f249b3300884b5b9ecc99bfa_1618568_300x0_resize_box_3.png" width="300"
-                            height="300" class="site-logo" loading="lazy" alt="Avatar">
-                    
-                
-                </a>
-                
-                    <span class="emoji">🔥</span>
-                
-            </figure>
-            
-        
-        
-        <div class="site-meta">
-            <h1 class="site-name"><a href="/">Liangdi&#39;s Blog</a></h1>
-            <h2 class="site-description">关注开源技术.</h2>
-        </div>
-    </header><ol class="social-menu">
-            
-                <li>
-                    <a 
-                        href='https://github.com/Liangdi'
-                        target="_blank"
-                        title="GitHub"
-                    >
-                        
-                        
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
-</svg>
+实践目标 将一个传统的项目 CentOS -&gt; Nginx -&gt; (Spring Boot, MySQL, Redis) 容器化
+原项目是一个不算复杂的 Spring Boot 应用, 由于 Java 没法热更新, 所以使用 Nginx 反向代理了两套 Spring Boot 应用(两套应用可以同时运行也可以只运行一套), 关键时刻可实现用户无感知更新.">
 
 
 
-                        
-                    </a>
-                </li>
-            
-        </ol><ol class="menu" id="main-menu">
-        
-        
-        
 
-        <li >
-            <a href='/' >
-                
-                
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <polyline points="5 12 3 12 12 3 21 12 19 12" />
-  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
-</svg>
+<link rel="stylesheet" href="/css/output.css" />
 
 
 
-                
-                <span>首页</span>
-            </a>
-        </li>
-        
-        
 
-        <li >
-            <a href='/about/' >
-                
-                
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="7" r="4" />
-  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-</svg>
-
-
-
-                
-                <span>关于</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/archives/' >
-                
-                
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <rect x="3" y="4" width="18" height="4" rx="2" />
-  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
-  <line x1="10" y1="12" x2="14" y2="12" />
-</svg>
-
-
-
-                
-                <span>Archives</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/search/' >
-                
-                
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="10" cy="10" r="7" />
-  <line x1="21" y1="21" x2="15" y2="15" />
-</svg>
-
-
-
-                
-                <span>Search</span>
-            </a>
-        </li>
-        
-
-        <div class="menu-bottom-section">
-            
-            
-                <li id="dark-mode-toggle">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="8" cy="12" r="2" />
-  <rect x="2" y="6" width="20" height="12" rx="6" />
-</svg>
-
-
-
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="16" cy="12" r="2" />
-  <rect x="2" y="6" width="20" height="12" rx="6" />
-</svg>
-
-
-
-                    <span>暗色模式</span>
-                </li>
-            
-        </div>
-    </ol>
-</aside>
-<main class="main full-width">
-    <article class="main-article">
-    <header class="article-header">
-
-    <div class="article-details">
     
 
-    <div class="article-title-wrapper">
-        <h2 class="article-title">
-            <a href="/p/progressive-cloud-native-with-podman/">渐进式云原生实践: 使用 podman 容器化你的应用</a>
-        </h2>
+
+<style>
+  pre {
+    padding: 1em;
+    overflow: auto;
+  }
+</style>
+
+
+
+
+
+
+
+
+
     
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  </head>
+
+  <body x-data="{
+    flip: false,
+  }">
+    
+    <div id="dream-global-bg"></div>
+
+    
+<nav class="mt-4 lg:mt-8 py-4">
+
+  
+  <div class="container flex justify-between px-4">
+  
+    <section class="flex items-center gap-4">
+      <div class="avatar cursor-pointer hover:online" @click="flip = !flip" title="">
+        <div class="h-10 rounded-full">
+          <img src="/" alt="" />
+        </div>
+      </div>
+
+      
+    </section>
+
+    <div class="dropdown dropdown-end sm:hidden">
+      <div tabindex="0" role="button" class="btn btn-ghost btn-square" aria-label="Select an option">
+        <ion-icon name="menu" class="text-2xl"></ion-icon>
+      </div>
+      <ul class="dropdown-content menu w-36 bg-base-100 rounded-box z-[1] shadow-md">
         
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+  <a class="inline-flex items-center p-2 cursor-pointer" href="/tags" title="">
+    <ion-icon name="pricetags"></ion-icon>
+    
+  </a>
+</li>
+
+
+
+
+
+
+      </ul>
     </div>
+    <section class="hidden sm:flex sm:items-center sm:gap-2 md:gap-4">
+      
 
+      
+      
+
+      
+
+      
+      
+
+
+
+
+
+      
+      
+
+
+
+
+
+      
+      
+
+
+
+
+
+      
+      
+
+
+
+
+
+      
+      
+<a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary" href="/tags" title="">
+  <ion-icon class="group-hover:text-primary-content" name="pricetags"></ion-icon>
+</a>
+
+
+      
+
+      
+
+      
+    </section>
+  </div>
+</nav>
+
+
+    <div class="flip-container" :class="{ 'flip-it': flip }">
+      <div class="flipper">
+        <div class="front">
+          <div class="container">
+            
+<div class="mt-4 px-4">
+  
+  <div>
+  
     
-    <footer class="article-time">
-        
-            <div>
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
-  <circle cx="18" cy="18" r="4" />
-  <path d="M15 3v4" />
-  <path d="M7 3v4" />
-  <path d="M3 11h16" />
-  <path d="M18 16.496v1.504l1 1" />
-</svg>
-                <time class="article-time--published">Apr 23, 2022</time>
-            </div>
-        
+    <article class="mx-auto prose prose-quoteless dark:prose-invert" id="dream-single-post-main" itemscope itemtype="http://schema.org/Article">
+      
+  <meta itemprop="name" content="渐进式云原生实践: 使用 podman 容器化你的应用">
+  <meta itemprop="description" content="何为云原生 云原生一词可谓是大红大紫, 老板见面不说一下都觉得落伍了,技术人员更是要与时俱进,学习这一系列的新技术
+先看看 CNCF 对云原生的最新定义,注意云原生的定义一直是演进的,随着新技术,新架构的发展,定义也会变化.
+云原生技术有利于各组织在公有云、私有云和混合云等新型动态环境中，构建和运行可弹性扩展的应用。云原生的代表技术包括容器、服务网格、微服务、不可变基础设施和声明式API。
+这些技术能够构建容错性好、易于管理和便于观察的松耦合系统。结合可靠的自动化手段，云原生技术使工程师能够轻松地对系统作出频繁和可预测的重大变更。
+以上这两段话来自 CNCF 的云原生定义.
+简单的说就是用各种技术实现了大多数人梦寐以求的理想系统方案!
+但是,如果一个传统技术栈的团队,要向云原生迁移,代价会是多大呢? 这是个值得思考的问题.
+CNCF 有两个子站点 https://glossary.cncf.io/ 和 https://landscape.cncf.io/
+这两个站点可以大致了解云原生涉及到新概念以及生态图谱, 如此多的概念和繁杂的生态,对于传统技术团队来说将会带来额外的心智负担以及新的挑战.
+渐进式云原生 因此针对我们小团队以及小部门,我提出了渐进式云原生 和 轻量化云原生 的概念,以便云原生落地.
+渐进式云原生 是指自下往上,分阶段完成云原生迁移和落地. 这里大概会包含 容器化, 微服务化 , DevOps ,CI/DI 等方面向云端迁移, 而且不强调顺序, 实际的顺序大多数根团队的技术栈相关.
+所以这系列应该不会出现一来就叫你部署一套 k8s 集群, 可能到最后也不会,而是取决于你自己的选择.
+这一系列就是一次渐进式云原生的实践,废话一大推,我们进入正题
+使用 podman 容器化你的应用 第一篇是使用 podman 容器化你的应用 , 我认为容器化是迈向云原生过程中最简单的部分, 技术也成熟,风险不大. 这里为什么选择 podman ,详谈的话,需要再开一篇文章.
+实践目标 将一个传统的项目 CentOS -&gt; Nginx -&gt; (Spring Boot, MySQL, Redis) 容器化
+原项目是一个不算复杂的 Spring Boot 应用, 由于 Java 没法热更新, 所以使用 Nginx 反向代理了两套 Spring Boot 应用(两套应用可以同时运行也可以只运行一套), 关键时刻可实现用户无感知更新.">
+  <meta itemprop="datePublished" content="2022-04-23T16:59:14+08:00">
+  <meta itemprop="dateModified" content="2022-04-23T16:59:14+08:00">
+  <meta itemprop="wordCount" content="523">
+  <meta itemprop="keywords" content="Podman,云原生,容器技术">
 
-        
-            <div>
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="12" r="9" />
-  <polyline points="12 7 12 12 15 15" />
-</svg>
+      <header>
+        <h1 itemprop="headline">渐进式云原生实践: 使用 podman 容器化你的应用</h1>
+        <p class="text-sm">
+          
+            星期六, 4月 23, 2022
+          
 
+          | <span>3</span>
 
+          
+          | <span>
+            
+              星期六, 4月 23, 2022
+            </span>
+          
+        </p>
+        <div class="flex justify-between">
+          <div class="flex items-center">
+  
+  <span>@</span>
+  
 
-                <time class="article-time--reading">
-                    阅读时长: 3 分钟
-                </time>
-            </div>
-        
-    </footer>
-    
-
-    
+  <span itemprop="author" itemscope itemtype="https://schema.org/Person">
+  
+    <span itemprop="name"></span>
+  
+  </span>
 </div>
-</header>
 
-    <section class="article-content">
-    
-    
-    <h2 id="何为云原生">何为云原生</h2>
-<blockquote>
-<p><code>云原生</code>一词可谓是大红大紫, 老板见面不说一下都觉得落伍了,技术人员更是要与时俱进,学习这<code>一系列</code>的新技术</p>
-</blockquote>
-<p>先看看 <a class="link" href="cncf.io" >CNCF</a> 对云原生的最新定义,注意<code>云原生</code>的定义一直是演进的,随着新技术,新架构的发展,定义也会变化.</p>
-<blockquote>
-<p>云原生技术有利于各组织在公有云、私有云和混合云等新型动态环境中，构建和运行可弹性扩展的应用。云原生的代表技术包括容器、服务网格、微服务、不可变基础设施和声明式API。</p>
-</blockquote>
-<blockquote>
-<p>这些技术能够构建容错性好、易于管理和便于观察的松耦合系统。结合可靠的自动化手段，云原生技术使工程师能够轻松地对系统作出频繁和可预测的重大变更。</p>
-</blockquote>
-<p>以上这两段话来自 CNCF 的<a class="link" href="https://github.com/cncf/toc/blob/main/DEFINITION.md#%E4%B8%AD%E6%96%87%E7%89%88%E6%9C%AC"  target="_blank" rel="noopener"
-    >云原生定义</a>.</p>
+
+          <div class="flex items-center gap-2">
+  
+  
+
+  
+  
+  
+  
+  
+    <a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary"
+      href="https://x.com/intent/post?text=%e6%b8%90%e8%bf%9b%e5%bc%8f%e4%ba%91%e5%8e%9f%e7%94%9f%e5%ae%9e%e8%b7%b5:%20%e4%bd%bf%e7%94%a8%20podman%20%e5%ae%b9%e5%99%a8%e5%8c%96%e4%bd%a0%e7%9a%84%e5%ba%94%e7%94%a8&amp;url=http://localhost:1313/p/progressive-cloud-native-with-podman/" target="_blank" rel="noopener noreferrer"
+      title="Share on X">
+      <ion-icon class="group-hover:text-primary-content" name="logo-x"></ion-icon>
+    </a>
+  
+    <a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary"
+      href="https://facebook.com/sharer/sharer.php?u=http://localhost:1313/p/progressive-cloud-native-with-podman/" target="_blank" rel="noopener noreferrer"
+      title="Share on Facebook">
+      <ion-icon class="group-hover:text-primary-content" name="logo-facebook"></ion-icon>
+    </a>
+  
+    <a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary"
+      href="https://wa.me/?text=%e6%b8%90%e8%bf%9b%e5%bc%8f%e4%ba%91%e5%8e%9f%e7%94%9f%e5%ae%9e%e8%b7%b5:%20%e4%bd%bf%e7%94%a8%20podman%20%e5%ae%b9%e5%99%a8%e5%8c%96%e4%bd%a0%e7%9a%84%e5%ba%94%e7%94%a8%20http://localhost:1313/p/progressive-cloud-native-with-podman/" target="_blank" rel="noopener noreferrer"
+      title="Share on WhatsApp">
+      <ion-icon class="group-hover:text-primary-content" name="logo-whatsapp"></ion-icon>
+    </a>
+  
+
+  
+  
+</div>
+
+        </div>
+      </header>
+
+      
+
+      <h2 id="何为云原生">何为云原生</h2>
+
+
+
+  <blockquote>
+    <p><code>云原生</code>一词可谓是大红大紫, 老板见面不说一下都觉得落伍了,技术人员更是要与时俱进,学习这<code>一系列</code>的新技术</p>
+
+  </blockquote>
+
+<p>先看看 <a href="cncf.io">CNCF</a> 对云原生的最新定义,注意<code>云原生</code>的定义一直是演进的,随着新技术,新架构的发展,定义也会变化.</p>
+
+
+
+  <blockquote>
+    <p>云原生技术有利于各组织在公有云、私有云和混合云等新型动态环境中，构建和运行可弹性扩展的应用。云原生的代表技术包括容器、服务网格、微服务、不可变基础设施和声明式API。</p>
+
+  </blockquote>
+
+
+
+
+  <blockquote>
+    <p>这些技术能够构建容错性好、易于管理和便于观察的松耦合系统。结合可靠的自动化手段，云原生技术使工程师能够轻松地对系统作出频繁和可预测的重大变更。</p>
+
+  </blockquote>
+
+<p>以上这两段话来自 CNCF 的<a href="https://github.com/cncf/toc/blob/main/DEFINITION.md#%E4%B8%AD%E6%96%87%E7%89%88%E6%9C%AC">云原生定义</a>.</p>
 <p>简单的说就是用各种技术实现了大多数人梦寐以求的理想系统方案!</p>
 <p>但是,如果一个传统技术栈的团队,要向<code>云原生</code>迁移,代价会是多大呢? 这是个值得思考的问题.</p>
-<p>CNCF 有两个子站点 <a class="link" href="https://glossary.cncf.io/"  target="_blank" rel="noopener"
-    >https://glossary.cncf.io/</a> 和 <a class="link" href="https://landscape.cncf.io/"  target="_blank" rel="noopener"
-    >https://landscape.cncf.io/</a></p>
+<p>CNCF 有两个子站点 <a href="https://glossary.cncf.io/">https://glossary.cncf.io/</a> 和 <a href="https://landscape.cncf.io/">https://landscape.cncf.io/</a></p>
 <p>这两个站点可以大致了解<code>云原生</code>涉及到新概念以及生态图谱, 如此多的概念和繁杂的生态,对于传统技术团队来说将会带来额外的心智负担以及新的挑战.</p>
 <h2 id="渐进式云原生">渐进式云原生</h2>
 <p>因此针对我们小团队以及小部门,我提出了<code>渐进式云原生</code> 和 <code>轻量化云原生</code> 的概念,以便云原生落地.</p>
@@ -335,20 +378,7 @@ CNCF 有两个子站点 https://glossary.cncf.io/ 和 https://landscape.cncf.io/
 <p>两套 Spring Boot 应用监听不同端口, 使用 Systemd 作为系统服务配置, 上传新 jar 包后, 重启一个项目后, 再重启另外一个项目, 可以通过简单脚本实现.</p>
 <p>前端静态页面</p>
 <p>拓扑图如下:
-<img src="/p/progressive-cloud-native-with-podman/assets/podman/topology-centos.png"
-	width="1008"
-	height="834"
-	srcset="/p/progressive-cloud-native-with-podman/assets/podman/topology-centos_hu17cd03f73cff741eba97e5b97641a5a6_32682_480x0_resize_box_3.png 480w, /p/progressive-cloud-native-with-podman/assets/podman/topology-centos_hu17cd03f73cff741eba97e5b97641a5a6_32682_1024x0_resize_box_3.png 1024w"
-	loading="lazy"
-	
-		alt="传统架构"
-	
-	
-		class="gallery-image" 
-		data-flex-grow="120"
-		data-flex-basis="290px"
-	
-></p>
+<img src="assets/podman/topology-centos.png" alt="传统架构"></p>
 <h3 id="实践过程">实践过程</h3>
 <h4 id="系统和-podman-的版本选择">系统和 podman 的版本选择</h4>
 <p>原先部署在 CentOS 8 上, 这次容器化对 HOST 系统就没有特别的要求了, 所以选择了 Fedora Server, 三个原因: 一, 本人工作电脑使用 Fedora . 二, 容器技术依赖于 Linux 内核的 cgroup 和 namespace 技术,新内核会比老内核有优势, 虽然 Fedora 内核很新, 但是我相信 Linux 内核的稳定性. 三, CentOS 已经不再维护.</p>
@@ -382,20 +412,7 @@ CNCF 有两个子站点 https://glossary.cncf.io/ 和 https://landscape.cncf.io/
 </div><p>在使用上版本 4 和版本 3 没有直接区别</p>
 <h4 id="新的拓扑架构">新的拓扑架构</h4>
 <p>还没有完全想好 nginx 这个前端代理以及前端静态页面是否要容器化,所以这里先保留之前的部署方案,拓扑图如下:
-<img src="/p/progressive-cloud-native-with-podman/assets/podman/topology-container.png"
-	width="1008"
-	height="834"
-	srcset="/p/progressive-cloud-native-with-podman/assets/podman/topology-container_hu014f1fc03311151c148de2fdf829b7af_44215_480x0_resize_box_3.png 480w, /p/progressive-cloud-native-with-podman/assets/podman/topology-container_hu014f1fc03311151c148de2fdf829b7af_44215_1024x0_resize_box_3.png 1024w"
-	loading="lazy"
-	
-		alt="传统架构"
-	
-	
-		class="gallery-image" 
-		data-flex-grow="120"
-		data-flex-basis="290px"
-	
-></p>
+<img src="assets/podman/topology-container.png" alt="传统架构"></p>
 <h4 id="创建容器网络和基础容器">创建容器网络和基础容器</h4>
 <p>根据新的拓扑设计, Spring Boot 应用, MySQL , Redis 将会是以独立容器存在,所以需要创建一个网络将他们链接.</p>
 <div class="highlight"><div class="chroma">
@@ -463,12 +480,10 @@ CNCF 有两个子站点 https://glossary.cncf.io/ 和 https://landscape.cncf.io/
 </div>
 </div><p><code>-e MYSQL_ROOT_PASSWORD=12345678</code> 指定了容器中 mysql root 用户的密码</p>
 <p><code>-v /opt/deploy/mysql/data:/var/lib/mysql</code> 将 host 机器 /opt/&hellip;./data 目录挂载到容器中 <code>/var/lib/mysql</code> 中, 这样 mysql 数据才能正常保存,如果缺少这个, 容器重启后, 数据将会被重置.</p>
-<p>更多配置查看 <a class="link" href="https://hub.docker.com/_/mysql"  target="_blank" rel="noopener"
-    >https://hub.docker.com/_/mysql</a></p>
+<p>更多配置查看 <a href="https://hub.docker.com/_/mysql">https://hub.docker.com/_/mysql</a></p>
 <h4 id="创建-spring-boot-容器">创建 Spring Boot 容器</h4>
 <p>应用容器比较特殊,因为是内部应用, 也没法将应用发布到公共镜像上, 正常的流程是将应用打包,发布到私有镜像服务器中,再在 podman 中使用, 这里先跳过这一步,不然内容太多了!!!</p>
-<p>我这里创建了一个公共镜像 <a class="link" href="https://github.com/Liangdi/spring-boot-launcher"  target="_blank" rel="noopener"
-    >https://github.com/Liangdi/spring-boot-launcher</a></p>
+<p>我这里创建了一个公共镜像 <a href="https://github.com/Liangdi/spring-boot-launcher">https://github.com/Liangdi/spring-boot-launcher</a></p>
 <p>这个镜像主要就是 jdk 环境,可以通过配置端口和 jar 名称,运行指定的 Spring Boot 项目</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -525,220 +540,114 @@ CNCF 有两个子站点 https://glossary.cncf.io/ 和 https://landscape.cncf.io/
 <li>这次交付产物使用 -v 路径的方式告知容器,后续可以使用命名 volume 替代.</li>
 </ul>
 
-</section>
+
+      
+    </article>
+  </div>
+
+  
+</div>
 
 
-    <footer class="article-footer">
-    
-    <section class="article-tags">
-        
-            <a href="/tags/podman/">podman</a>
-        
-            <a href="/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/">云原生</a>
-        
-            <a href="/tags/%E5%AE%B9%E5%99%A8%E6%8A%80%E6%9C%AF/">容器技术</a>
-        
-    </section>
+            
+            <footer class="flex justify-between items-center gap-2 px-4 py-12">
+            
+              <div>
+  
+  <p>© 2024 Liangdi&#39;s Blog</p>
+  
 
+  
+  <p class="text-sm">
+    🌱
+    <span class="text-base-content/60">
+      Powered by <a class="hover:underline" href="https://gohugo.io/" target="_blank">Hugo</a> with theme
+      <a class="hover:underline" href="https://github.com/g1eny0ung/hugo-theme-dream" target="_blank">Dream</a>.</span
+    >
+  </p>
+  
+</div>
 
-    
-    <section class="article-copyright">
-        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="12" r="9" />
-  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
-</svg>
+              <div
+  x-data="{ icons: [
+    { name: 'moon', status: 'y' },
+    { name: 'sunny', status: 'n' },
+    { name: 'desktop', status: 'auto' }
+  ] }"
+  class="flex items-center h-[32px] px-2 gap-2 border border-base-content/30 rounded-full"
+>
+  <template x-for="icon in icons">
+    <div
+      role="button"
+      tabindex="0"
+      :aria-label="'Select ' + icon.name + ' mode'"
+      class="group inline-flex justify-center items-center p-1 rounded-full cursor-pointer hover:bg-primary"
+      :class="$store.darkMode.icon() === icon.name && 'bg-primary'"
+      @click="$store.darkMode.toggle(icon.status)"
+    >
+      <ion-icon
+        :name="`${icon.name}-outline`"
+        class="group-hover:text-primary-content"
+        :class="$store.darkMode.icon() === icon.name && 'text-primary-content'"
+      >
+      </ion-icon>
+    </div>
+  </template>
+</div>
 
-
-
-        <span>Licensed under CC BY-NC-SA 4.0</span>
-    </section>
-    </footer>
-
-
-    
-</article>
-
-    
-
-    
-
-     
-    
-        
-    
-
-    <footer class="site-footer">
-    <section class="copyright">
-        &copy; 
-        
-            2022 - 
-        
-        2023 Liangdi&#39;s Blog
-    </section>
-    
-    <section class="powerby">
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.11.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
-    </section>
-</footer>
-<script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?f334264cb8da1148de7654289682087c";
-      var s = document.getElementsByTagName("script")[0]; 
-      s.parentNode.insertBefore(hm, s);
-    })();
-    </script>
-    
-
-    
-<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
-
-    
-    <div class="pswp__bg"></div>
-
-    
-    <div class="pswp__scroll-wrap">
-
-        
-        <div class="pswp__container">
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
+            </footer>
+          </div>
         </div>
+        <div class="back">
+          <div class="container">
+            
+            <div class="dream-grid">
+  
 
-        
-        <div class="pswp__ui pswp__ui--hidden">
+  
 
-            <div class="pswp__top-bar">
+  
+</div>
 
-                
-
-                <div class="pswp__counter"></div>
-
-                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-
-                <button class="pswp__button pswp__button--share" title="Share"></button>
-
-                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-
-                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
-
-                
-                
-                <div class="pswp__preloader">
-                    <div class="pswp__preloader__icn">
-                        <div class="pswp__preloader__cut">
-                            <div class="pswp__preloader__donut"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-                <div class="pswp__share-tooltip"></div>
-            </div>
-
-            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
-            </button>
-
-            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
-            </button>
-
-            <div class="pswp__caption">
-                <div class="pswp__caption__center"></div>
-            </div>
-
+            
+          </div>
         </div>
-
+      </div>
     </div>
 
-</div><script 
-                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
-                defer
-                >
-            </script><script 
-                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
-                defer
-                >
-            </script><link 
-                rel="stylesheet" 
-                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
-            ><link 
-                rel="stylesheet" 
-                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
-            >
-
-            </main>
-    <aside class="sidebar right-sidebar sticky">
-        
-            
-                
-    <section class="widget archives">
-        <div class="widget-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <line x1="5" y1="9" x2="19" y2="9" />
-  <line x1="5" y1="15" x2="19" y2="15" />
-  <line x1="11" y1="4" x2="7" y2="20" />
-  <line x1="17" y1="4" x2="13" y2="20" />
-</svg>
-
-
-
-        </div>
-        <h2 class="widget-title section-title">目录</h2>
-        
-        <div class="widget--toc">
-            <nav id="TableOfContents">
-  <ol>
-    <li><a href="#何为云原生">何为云原生</a></li>
-    <li><a href="#渐进式云原生">渐进式云原生</a></li>
-    <li><a href="#使用-podman-容器化你的应用">使用 podman 容器化你的应用</a>
-      <ol>
-        <li><a href="#实践目标">实践目标</a></li>
-        <li><a href="#实践过程">实践过程</a>
-          <ol>
-            <li><a href="#系统和-podman-的版本选择">系统和 podman 的版本选择</a></li>
-            <li><a href="#安装-podman">安装 podman</a></li>
-            <li><a href="#新的拓扑架构">新的拓扑架构</a></li>
-            <li><a href="#创建容器网络和基础容器">创建容器网络和基础容器</a></li>
-            <li><a href="#创建-spring-boot-容器">创建 Spring Boot 容器</a></li>
-            <li><a href="#创建-systemd-服务">创建 systemd 服务</a></li>
-          </ol>
-        </li>
-      </ol>
-    </li>
-    <li><a href="#容器化总结">容器化总结</a></li>
-  </ol>
-</nav>
-        </div>
-    </section>
-
-            
-        
-    </aside>
-
-
-        </div>
-        <script 
-                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
-                
-                >
-            </script><script type="text/javascript" src="/ts/main.js" defer></script>
-<script>
-    (function () {
-        const customFont = document.createElement('link');
-        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
-
-        customFont.type = "text/css";
-        customFont.rel = "stylesheet";
-
-        document.head.appendChild(customFont);
-    }());
+    <script>
+  window.lightTheme =  null 
+  window.darkTheme =  null 
 </script>
 
-    </body>
+
+  <script src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script>
+
+  
+  
+  <script src="/js/grid.js"></script>
+
+
+
+
+<script src="/js/main.js"></script>
+
+    
+
+
+
+
+
+
+
+    
+
+    
+
+    
+
+    <script type="module" src="https://unpkg.com/ionicons@7.4.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.4.0/dist/ionicons/ionicons.js"></script>
+  </body>
 </html>
